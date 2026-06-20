@@ -21,6 +21,28 @@ export function WorktreeGraphChart(props: RelationGraphChartProps) {
   return <RelationGraphChart {...props} />;
 }
 
+function hasCycle(links: { source: number; target: number }[], nodeCount: number): boolean {
+  const adj: number[][] = Array.from({ length: nodeCount }, () => []);
+  for (const l of links) {
+    if (l.source >= 0 && l.source < nodeCount && l.target >= 0 && l.target < nodeCount) {
+      adj[l.source].push(l.target);
+    }
+  }
+  const visited = new Uint8Array(nodeCount);
+  const stack = new Uint8Array(nodeCount);
+  function dfs(n: number): boolean {
+    visited[n] = 1; stack[n] = 1;
+    for (const nb of adj[n]) {
+      if (!visited[nb] && dfs(nb)) return true;
+      if (stack[nb]) return true;
+    }
+    stack[n] = 0;
+    return false;
+  }
+  for (let i = 0; i < nodeCount; i++) if (!visited[i] && dfs(i)) return true;
+  return false;
+}
+
 function RelationGraphChart({
   title,
   description,
@@ -35,6 +57,16 @@ function RelationGraphChart({
       <ChartCard title={title} description={description} lastUpdated={lastUpdated}>
         <p className="flex h-full items-center justify-center text-sm text-muted-foreground">
           No graph data
+        </p>
+      </ChartCard>
+    );
+  }
+
+  if (hasCycle(data.links, data.nodes.length)) {
+    return (
+      <ChartCard title={title} description={description} lastUpdated={lastUpdated}>
+        <p className="flex h-full items-center justify-center text-sm text-muted-foreground">
+          Cyclic graph — Sankey requires a DAG
         </p>
       </ChartCard>
     );

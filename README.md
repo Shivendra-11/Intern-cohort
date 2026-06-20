@@ -61,8 +61,8 @@ Also available via [GitHub README](https://github.com/Shivendra-11/Intern-cohort
 |---------|-----------|-------------|
 | **DevOps-Infra Eval** (D1–D6) | [devopsinfra-dash.vercel.app](https://devopsinfra-dash.vercel.app/) | [Services hub](https://devopsinfra-dash.vercel.app/hub) |
 | **ParallelOps Eval** (A1–A6) | [parallelops-eval-dash.vercel.app](https://parallelops-eval-dash.vercel.app/) | — |
-| **Polyglot Eval** (I1–I6) | [polyglot-eval.vercel.app](https://polyglot-eval.vercel.app/) | [I1 ER viewer](https://polyglot-eval-i1.vercel.app/) · [I2 Flow viewer](https://polyglot-eval-i2.vercel.app/) |
 | **RepoBuilder** (B1–B6) | [repobuilder-dash.vercel.app](https://repobuilder-dash.vercel.app/) | [API](https://repobuilder-dash.vercel.app/api) |
+| **Polyglot Eval** (I1–I6) | [polyglot-eval.vercel.app](https://polyglot-eval.vercel.app/) | [I1 ER viewer](https://polyglot-eval-i1.vercel.app/) · [I2 Flow viewer](https://polyglot-eval-i2.vercel.app/) |
 
 > Open any link above in your browser — no local setup required.
 
@@ -108,27 +108,7 @@ cd ParallelOps
 
 ---
 
-### 3. [Polyglot Eval](./polyglot-builder/)
-
-Repo-agnostic AI agent that runs six intermediate engineering eval tasks (I1–I6) on any target repository using the Claude Agent SDK.
-
-| | |
-|---|---|
-| **Command** | `/polyglot-eval` |
-| **Tasks** | I1 ER Diagram · I2 Flow Trace · I3 Safe Change · I4 Polyglot Pair · I5 Dockerize · I6 Bug Diagnosis |
-| **GitHub** | [Shivendra-11/PolyGlot-eval](https://github.com/Shivendra-11/PolyGlot-eval) |
-| **Live** | [polyglot-eval.vercel.app](https://polyglot-eval.vercel.app/) |
-
-```bash
-cd polyglot-builder
-pip install -e .
-/polyglot-eval             # in Cursor
-polyglot-eval deploy-ui --repo /path/to/target-repo
-```
-
----
-
-### 4. [RepoBuilder](./RepoBuilder/)
+### 3. [RepoBuilder](./RepoBuilder/)
 
 Reusable repo-independent agent that reads any repository and scaffolds runnable greenfield services (B1–B6).
 
@@ -148,6 +128,26 @@ repo-intelligence analyze /path/to/target-repo
 
 ---
 
+### 4. [Polyglot Eval](./polyglot-builder/)
+
+Repo-agnostic AI agent that runs six intermediate engineering eval tasks (I1–I6) on any target repository using the Claude Agent SDK.
+
+| | |
+|---|---|
+| **Command** | `/polyglot-eval` |
+| **Tasks** | I1 ER Diagram · I2 Flow Trace · I3 Safe Change · I4 Polyglot Pair · I5 Dockerize · I6 Bug Diagnosis |
+| **GitHub** | [Shivendra-11/PolyGlot-eval](https://github.com/Shivendra-11/PolyGlot-eval) |
+| **Live** | [polyglot-eval.vercel.app](https://polyglot-eval.vercel.app/) |
+
+```bash
+cd polyglot-builder
+pip install -e .
+/polyglot-eval             # in Cursor
+polyglot-eval deploy-ui --repo /path/to/target-repo
+```
+
+---
+
 ## Repository layout
 
 ```
@@ -156,8 +156,8 @@ Intern-cohort/
 ├── .gitignore
 ├── Devops-eval/              ← D1–D6 DevOps-Infra eval
 ├── ParallelOps/              ← A1–A6 ParallelOps eval
-├── polyglot-builder/         ← I1–I6 Polyglot eval
-└── RepoBuilder/              ← B1–B6 Repo intelligence & scaffolding
+├── RepoBuilder/              ← B1–B6 Repo intelligence & scaffolding
+└── polyglot-builder/         ← I1–I6 Polyglot eval
 ```
 
 Each subfolder is a self-contained project with its own README, eval reports, dashboard, and deploy scripts. See the project README for prerequisites, task details, and verification steps.
@@ -186,8 +186,8 @@ cd Intern-cohort
 # Pick a project and follow its README
 cd Devops-eval && cat README.md
 cd ../ParallelOps && cat README.md
-cd ../polyglot-builder && cat README.md
 cd ../RepoBuilder && cat README.md
+cd ../polyglot-builder && cat README.md
 ```
 
 ---
