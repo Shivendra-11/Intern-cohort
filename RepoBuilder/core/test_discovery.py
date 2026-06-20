@@ -14,6 +14,7 @@ SUPPORTED = {"jest", "vitest", "mocha", "pytest", "junit", "cargo test"}
 
 @dataclass
 class TestFrameworkSetup:
+    __test__ = False  # production dataclass, not a pytest test class
     framework: str
     language: str
     config_file: Optional[str]
@@ -34,6 +35,8 @@ class TestFrameworkSetup:
 
 class TestDiscovery:
     """Detect Jest, Vitest, Mocha, pytest, JUnit, and cargo test in a repository."""
+
+    __test__ = False  # production discovery class, not a pytest test class
 
     def __init__(self, scanner: Optional[FileScanner] = None) -> None:
         self.scanner = scanner or FileScanner()

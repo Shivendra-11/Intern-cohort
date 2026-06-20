@@ -8,6 +8,7 @@ from typing import List, Optional
 
 @dataclass
 class TestCounts:
+    __test__ = False  # production dataclass, not a pytest test class
     passed: Optional[int] = None
     failed: Optional[int] = None
     skipped: Optional[int] = None

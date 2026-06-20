@@ -97,6 +97,9 @@ credentials.json
 reports/
 !examples/proof-of-execution/reports/
 !examples/proof-of-execution/reports/**
+# …but never the Python build cache under the proof artifacts
+examples/proof-of-execution/reports/**/__pycache__/
+examples/proof-of-execution/reports/**/*.pyc
 
 # ── IDE & editor ──────────────────────────────────────────────────────────────
 .vscode/

@@ -10,6 +10,16 @@ A combined portfolio of four AI agent evaluation frameworks built during the int
 
 This hub page links to all four live eval dashboards. No login or local setup required.
 
+## Verify everything (one command)
+
+```bash
+make install   # first time only — editable-installs the Python packages
+make test      # runs all 182 tests (Python + Node + Rust); Node/Rust skip gracefully if absent
+```
+
+Independently reproduced results — 172 Python + 4 Node + 6 Rust tests, 0 failures —
+are recorded in [VERIFICATION.md](./VERIFICATION.md).
+
 To redeploy after changes:
 
 ```bash
@@ -184,4 +194,5 @@ cd ../RepoBuilder && cat README.md
 
 ## Author
 
-**Shivendra Kesari** — Intern Cohort AI Agent Evaluation Projects
+**Shivendra Keshari** — Intern Cohort AI Agent Evaluation Projects
+

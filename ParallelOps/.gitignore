@@ -26,6 +26,9 @@ target/
 # A6 perf eval source (exception — not a Cargo target dir)
 !a6-perf-profiling/target/
 !a6-perf-profiling/target/**
+# …but never the Python build cache under it
+a6-perf-profiling/target/**/__pycache__/
+a6-perf-profiling/target/**/*.pyc
 
 # ── Environment & secrets ─────────────────────────────────────────────────────
 .env

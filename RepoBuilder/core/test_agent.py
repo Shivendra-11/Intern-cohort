@@ -16,6 +16,7 @@ from core.test_interpreter import interpret_failures, parse_counts
 
 @dataclass
 class TestExecutionResult:
+    __test__ = False  # production dataclass, not a pytest test class
     command: str = ""
     exit_code: int = 0
     stdout: str = ""
@@ -59,6 +60,7 @@ class TestExecutionResult:
 
 @dataclass
 class TestAgentResult:
+    __test__ = False  # production dataclass, not a pytest test class
     repo: str
     repo_name: str
     frameworks: List[TestFrameworkSetup] = field(default_factory=list)
@@ -86,6 +88,8 @@ class TestAgentResult:
 
 class TestAgent:
     """Discover test setup, execute tests, write workspace/{repo_name}/B3_tests/."""
+
+    __test__ = False  # production agent class, not a pytest test class
 
     def __init__(
         self,
