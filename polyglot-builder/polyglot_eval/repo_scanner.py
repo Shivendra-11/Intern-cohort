@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ast
 import json
 import re
 from pathlib import Path
@@ -70,19 +71,21 @@ def scan_entities(repo: Path) -> list[dict[str, Any]]:
     entities: list[dict[str, Any]] = []
     seen: set[str] = set()
 
-    def add(name: str, source: Path, line: int, fields: list[str]) -> None:
+    def add(name: str, source: Path, line: int, fields: list[Any]) -> None:
         if name in seen or name.startswith("_"):
             return
         seen.add(name)
+        # Accept either bare names (legacy callers) or (name, type) pairs.
+        norm = [f if isinstance(f, tuple) else (f, "string") for f in fields]
         cols = [
             {
-                "name": f,
-                "type": "string",
-                "isPK": f in ("id", "uuid") or f.endswith("Id") and f == "id",
-                "isFK": f.endswith("_id") or (f.endswith("Id") and f != "id"),
+                "name": fname,
+                "type": ftype or "string",
+                "isPK": fname in ("id", "uuid"),
+                "isFK": fname.endswith("_id") or (fname.endswith("Id") and fname != "id"),
                 "references": None,
             }
-            for f in fields[:12]
+            for fname, ftype in norm[:12]
         ] or [{"name": "id", "type": "string", "isPK": True, "isFK": False, "references": None}]
         entities.append({
             "name": name,
@@ -94,10 +97,43 @@ def scan_entities(repo: Path) -> list[dict[str, Any]]:
     for p in walk_sources(repo):
         text = p.read_text(encoding="utf-8", errors="ignore")
         if p.suffix == ".py":
-            for m in re.finditer(r"^class\s+(\w+)", text, re.MULTILINE):
-                body = text[m.start(): m.start() + 800]
-                fields = re.findall(r"^\s+(\w+)\s*[:=]", body, re.MULTILINE)
-                add(m.group(1), p, text[: m.start()].count("\n") + 1, fields)
+            tree: ast.Module | None = None
+            try:
+                tree = ast.parse(text)
+            except SyntaxError:
+                tree = None
+            if tree is not None:
+                # Walk classes and collect only *class-level* attributes (dataclass
+                # fields / annotations / assignments). Method-local variables live
+                # inside FunctionDef nodes, so they never leak in as columns.
+                for node in ast.walk(tree):
+                    if not isinstance(node, ast.ClassDef):
+                        continue
+                    pairs: list[tuple[str, str]] = []
+                    fseen: set[str] = set()
+                    for stmt in node.body:
+                        if isinstance(stmt, ast.AnnAssign) and isinstance(stmt.target, ast.Name):
+                            fname = stmt.target.id
+                            try:
+                                ftype = ast.unparse(stmt.annotation) if stmt.annotation else "string"
+                            except Exception:
+                                ftype = "string"
+                            cand = [(fname, ftype)]
+                        elif isinstance(stmt, ast.Assign):
+                            cand = [(t.id, "string") for t in stmt.targets if isinstance(t, ast.Name)]
+                        else:
+                            continue
+                        for fname, ftype in cand:
+                            if fname.startswith("_") or fname in fseen:
+                                continue
+                            fseen.add(fname)
+                            pairs.append((fname, ftype))
+                    add(node.name, p, node.lineno, pairs)
+            else:
+                for m in re.finditer(r"^class\s+(\w+)", text, re.MULTILINE):
+                    body = text[m.start(): m.start() + 800]
+                    fields = re.findall(r"^\s+(\w+)\s*[:=]", body, re.MULTILINE)
+                    add(m.group(1), p, text[: m.start()].count("\n") + 1, fields)
         elif p.suffix in {".js", ".jsx", ".ts", ".tsx"}:
             if "createContext" in text or "useState" in text:
                 name = p.stem.replace("Context", "") or p.stem

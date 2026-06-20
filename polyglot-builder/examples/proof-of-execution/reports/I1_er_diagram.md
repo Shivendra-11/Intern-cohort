@@ -7,7 +7,7 @@
 ## primary_keys
 
 - **Task**: ['id']
-- **TaskStore**: []
+- **TaskStore**: ['id']
 
 ## relationships
 
@@ -23,17 +23,12 @@
 ```mermaid
 erDiagram
     Task {
-        string id PK
-        string title
-        string done
-        string _tasks
-        string task
-        string total
+        int id PK
+        str title
+        bool done
     }
     TaskStore {
-        string _tasks
-        string task
-        string total
+        string id PK
     }
     Task }o--o{ TaskStore : "relates_to"
 ```

@@ -4,11 +4,18 @@ Independently reproduced test results for every project in this monorepo.
 Run everything yourself from a clean checkout with a single command:
 
 ```bash
-make install   # editable-install the two Python packages (first time only)
+make install   # builds an isolated .venv and installs every dependency (first time only)
 make test      # runs every suite below; Node/Rust skip gracefully if absent
 ```
 
 `make test` exits non-zero if any suite fails.
+
+**Reproducible from a fresh clone.** `make install` auto-selects a Python ≥3.10
+interpreter (verified here with `python3.12`), creates a self-contained `.venv`, and
+editable-installs both packages — including RepoBuilder's tree-sitter `inventory`
+extra — plus every lane dependency. It never depends on, or writes to, the system
+Python. The full `rm -rf .venv && make install && make test` cycle was re-run on
+2026-06-21 and exits 0 with **201 passed, 0 failed, 0 skipped**.
 
 ## Results (last verified 2026-06-21)
 
@@ -33,6 +40,18 @@ verification note).
 The A3 polyglot system (FastAPI → file-queue → Node worker → Rust scorer) is
 green in all three languages simultaneously — the cross-language data contract
 is documented at [`ParallelOps/a3-polyglot/contract.md`](ParallelOps/a3-polyglot/contract.md).
+
+The I1 ER-diagram scanner ([`polyglot-builder/polyglot_eval/repo_scanner.py`](polyglot-builder/polyglot_eval/repo_scanner.py))
+now extracts Python entity columns with the `ast` module instead of a line regex, so
+**only class-level fields** are reported (method-local variables no longer leak in as
+columns) and each column carries its real annotated type (`int`/`str`/`bool`). The
+committed proof artifact
+([`polyglot-builder/examples/proof-of-execution/reports/I1_er_diagram.md`](polyglot-builder/examples/proof-of-execution/reports/I1_er_diagram.md))
+was regenerated from the fixture to match.
+
+The four live dashboards were reachability-checked on 2026-06-21 — all return HTTP 200
+with their correct app shells (DevOps-Infra / ParallelOps / Repo Intelligence /
+polyglot-eval). They are client-rendered SPAs, so panel contents render in-browser.
 
 ## Agent-suggested vs. independently verified
 
