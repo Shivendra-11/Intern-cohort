@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Intern Cohort — AI Agent Eval Suite</title>
+  <meta name="description" content="Live dashboards for DevOps-Infra, ParallelOps, Polyglot, and RepoBuilder AI agent evaluations." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --border: rgba(255,255,255,0.08);
+      --text: #f4f4f5;
+      --muted: #a1a1aa;
+      --accent: #6366f1;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+    .glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99,102,241,0.18), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(16,185,129,0.08), transparent);
+    }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 3rem 1.5rem 4rem; position: relative; }
+    header { text-align: center; margin-bottom: 3rem; }
+    .badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(99,102,241,0.12);
+      border: 1px solid rgba(99,102,241,0.25);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+    h1 {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+    .subtitle { color: var(--muted); font-size: 1.05rem; max-width: 36rem; margin: 0 auto; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.25rem 1.35rem;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .card:hover {
+      border-color: rgba(99,102,241,0.35);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+    }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem; }
+    .card-id {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--muted);
+      background: rgba(255,255,255,0.04);
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.35rem;
+    }
+    .card h2 { font-size: 1.1rem; font-weight: 600; }
+    .card p { color: var(--muted); font-size: 0.875rem; flex: 1; }
+    .tasks {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: #71717a;
+      line-height: 1.6;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1rem;
+      border-radius: 0.6rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+    .btn-primary:hover { background: #5558e3; }
+    .btn-ghost {
+      color: var(--muted);
+      border: 1px solid var(--border);
+      font-size: 0.8rem;
+      padding: 0.45rem 0.75rem;
+    }
+    .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.15); }
+    .extra-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="glow"></div>
+  <div class="wrap">
+    <header>
+      <div class="badge">Live portfolio</div>
+      <h1>AI Agent Evaluation Suite</h1>
+      <p class="subtitle">Four agent evaluation frameworks — DevOps, parallel engineering, polyglot repo analysis, and repo intelligence. One link, all dashboards.</p>
+    </header>
+
+    <div class="grid">
+      <article class="card">
+        <div class="card-top">
+          <h2>DevOps-Infra Eval</h2>
+          <span class="card-id">D1–D6</span>
+        </div>
+        <p>Infrastructure eval harness — Terraform, Docker Compose, CI, Kubernetes, dev environments, and observability.</p>
+        <div class="tasks">D1 Terraform · D2 Compose · D3 CI · D4 K8s · D5 Dev Env · D6 Observability</div>
+        <a class="btn btn-primary" href="https://devopsinfra-dash.vercel.app/" target="_blank" rel="noopener">Open dashboard →</a>
+        <div class="extra-links">
+          <a class="btn btn-ghost" href="https://devopsinfra-dash.vercel.app/hub" target="_blank" rel="noopener">Services hub</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-top">
+          <h2>ParallelOps Eval</h2>
+          <span class="card-id">A1–A6</span>
+        </div>
+        <p>Parallel engineering battery — worktrees, polyglot systems, modernization, adversarial review, and perf profiling.</p>
+        <div class="tasks">A1 Worktree · A2 Execute · A3 Polyglot · A4 Modernize · A5 Review · A6 Perf</div>
+        <a class="btn btn-primary" href="https://parallelops-eval-dash.vercel.app/" target="_blank" rel="noopener">Open dashboard →</a>
+      </article>
+
+      <article class="card">
+        <div class="card-top">
+          <h2>Polyglot Eval</h2>
+          <span class="card-id">I1–I6</span>
+        </div>
+        <p>Repo-agnostic eval on any codebase — ER diagrams, flow traces, safe changes, Docker proofs, and bug diagnosis.</p>
+        <div class="tasks">I1 ER · I2 Flow · I3 Safe Change · I4 Polyglot · I5 Docker · I6 Bug Fix</div>
+        <a class="btn btn-primary" href="https://polyglot-eval.vercel.app/" target="_blank" rel="noopener">Open dashboard →</a>
+        <div class="extra-links">
+          <a class="btn btn-ghost" href="https://polyglot-eval-i1.vercel.app/" target="_blank" rel="noopener">I1 viewer</a>
+          <a class="btn btn-ghost" href="https://polyglot-eval-i2.vercel.app/" target="_blank" rel="noopener">I2 viewer</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-top">
+          <h2>RepoBuilder</h2>
+          <span class="card-id">B1–B6</span>
+        </div>
+        <p>Repo intelligence agent — inventory, API maps, test discovery, and greenfield FastAPI, Node, and Rust scaffolds.</p>
+        <div class="tasks">B1 Inventory · B2 Endpoints · B3 Tests · B4 FastAPI · B5 Node · B6 Rust</div>
+        <a class="btn btn-primary" href="https://repobuilder-dash.vercel.app/" target="_blank" rel="noopener">Open dashboard →</a>
+        <div class="extra-links">
+          <a class="btn btn-ghost" href="https://repobuilder-dash.vercel.app/api" target="_blank" rel="noopener">API</a>
+        </div>
+      </article>
+    </div>
+
+    <footer>
+      <p>
+        Source on
+        <a href="https://github.com/Shivendra-11/Intern-cohort" target="_blank" rel="noopener">GitHub</a>
+        · Shivendra Kesari · Intern Cohort
+      </p>
+    </footer>
+  </div>
+</body>
+</html>

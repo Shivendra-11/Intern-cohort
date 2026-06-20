@@ -4,6 +4,24 @@ A combined portfolio of four AI agent evaluation frameworks built during the int
 
 ---
 
+## Combined link (share this)
+
+**One URL for all four dashboards:** [https://hub-ten-swart.vercel.app](https://hub-ten-swart.vercel.app)
+
+This hub page links to all four live eval dashboards. No login or local setup required.
+
+To redeploy after changes:
+
+```bash
+export VERCEL_TOKEN=your_token   # https://vercel.com/account/tokens
+export VERCEL_INSECURE_TLS=1     # only if corporate VPN SSL errors
+./deploy-hub.sh
+```
+
+Also available via [GitHub README](https://github.com/Shivendra-11/Intern-cohort) if the repo is public.
+
+---
+
 ## Live deployments
 
 | Project | Dashboard | Extra links |

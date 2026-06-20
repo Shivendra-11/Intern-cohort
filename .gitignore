@@ -2,6 +2,10 @@
 # Intern-cohort — combined .gitignore (Devops-eval · ParallelOps · polyglot-builder · RepoBuilder)
 # =============================================================================
 
+# ── Portfolio hub deploy (local only) ─────────────────────────────────────────
+.intern-cohort/
+hub/.vercel/
+
 # ── OS & editors ──────────────────────────────────────────────────────────────
 .DS_Store
 .DS_Store?
