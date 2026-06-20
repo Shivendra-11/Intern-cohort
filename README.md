@@ -6,9 +6,7 @@ A combined portfolio of four AI agent evaluation frameworks built during the int
 
 ## Combined link (share this)
 
-**One URL for all four dashboards:** [https://hub-ten-swart.vercel.app](https://hub-ten-swart.vercel.app)
-
-> Project name on Vercel: **ai-agent-eval-suite** · Production URL: `hub-ten-swart.vercel.app`
+**One URL for all four dashboards:** [https://ai-agent-eval-suite.vercel.app](https://ai-agent-eval-suite.vercel.app)
 
 This hub page links to all four live eval dashboards. No login or local setup required.
 
