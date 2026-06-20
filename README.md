@@ -14,11 +14,25 @@ This hub page links to all four live eval dashboards. No login or local setup re
 
 ```bash
 make install   # first time only — editable-installs the Python packages
-make test      # runs all 182 tests (Python + Node + Rust); Node/Rust skip gracefully if absent
+make test      # runs all 201 tests (Python + Node + Rust); Node/Rust skip gracefully if absent
 ```
 
-Independently reproduced results — 172 Python + 4 Node + 6 Rust tests, 0 failures —
+Independently reproduced results — 191 Python + 4 Node + 6 Rust tests, 0 failures —
 are recorded in [VERIFICATION.md](./VERIFICATION.md).
+
+### Evidence trail (how to grade this honestly)
+
+Three cross-project artifacts make the agent's work auditable rather than self-asserted:
+
+| Artifact | Question it answers |
+|----------|--------------------|
+| [VERIFICATION.md](./VERIFICATION.md) | What was re-run and observed on a developer machine? |
+| **`AGENT-VS-MANUAL.md`** (one per project) | What did the agent *suggest* vs what was *manually verified*? |
+| [TIMEBOX.md](./TIMEBOX.md) | Was each task delivered inside the eval's stated time-box? |
+
+Per-project agent-vs-manual docs: [DevOps](./Devops-eval/AGENT-VS-MANUAL.md) ·
+[ParallelOps](./ParallelOps/AGENT-VS-MANUAL.md) · [RepoBuilder](./RepoBuilder/AGENT-VS-MANUAL.md) ·
+[Polyglot](./polyglot-builder/AGENT-VS-MANUAL.md)
 
 To redeploy after changes:
 

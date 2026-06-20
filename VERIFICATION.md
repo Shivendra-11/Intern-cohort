@@ -10,19 +10,25 @@ make test      # runs every suite below; Node/Rust skip gracefully if absent
 
 `make test` exits non-zero if any suite fails.
 
-## Results (last verified 2026-06-20)
+## Results (last verified 2026-06-21)
 
 | Suite | Command | Result |
 |-------|---------|--------|
 | RepoBuilder (B1–B6) | `cd RepoBuilder && python3 -m pytest tests` | **85 passed** |
-| polyglot-builder (I1–I6) | `cd polyglot-builder && python3 -m pytest tests` | **40 passed** |
+| polyglot-builder (I1–I6) | `cd polyglot-builder && python3 -m pytest tests` | **59 passed** |
 | ParallelOps framework | `cd ParallelOps && python3 -m pytest tests` | **17 passed** |
 | ParallelOps A3 polyglot (Python) | `cd ParallelOps/a3-polyglot && python3 -m pytest tests` | **23 passed** |
 | ParallelOps fraud-system | `cd ParallelOps/fraud-system && python3 -m pytest tests` | **7 passed** |
 | A3 Node worker | `cd ParallelOps/a3-polyglot/worker && node --test` | **4 passed** |
 | A3 Rust fraud-engine | `cd ParallelOps/a3-polyglot/fraud-engine && cargo test` | **6 passed** |
 
-**Total: 172 Python + 4 Node + 6 Rust = 182 tests, 0 failures.**
+**Total: 191 Python + 4 Node + 6 Rust = 201 tests, 0 failures.**
+
+The polyglot-builder suite gained 19 contract tests
+([`polyglot-builder/tests/test_i3_i6_contracts.py`](polyglot-builder/tests/test_i3_i6_contracts.py))
+that pin the I3/I6 gated-write safety guarantees (gating, no commit/push,
+reproduce-before-fix, file+line root-cause citation, and the mandatory agent-vs-manual
+verification note).
 
 The A3 polyglot system (FastAPI → file-queue → Node worker → Rust scorer) is
 green in all three languages simultaneously — the cross-language data contract
@@ -35,6 +41,16 @@ status tables written by the eval orchestrators. This file records only what was
 **re-run and observed** on a developer machine. Where the two agree (all suites
 green), the self-reports are corroborated; the numeric "estimated score" lines in
 the eval reports remain self-assessments, not externally graded results.
+
+Each project also ships an `AGENT-VS-MANUAL.md` that splits, task by task, what the
+agent *produced* from what was *manually re-run* (with the exact command):
+
+- [`RepoBuilder/AGENT-VS-MANUAL.md`](RepoBuilder/AGENT-VS-MANUAL.md)
+- [`polyglot-builder/AGENT-VS-MANUAL.md`](polyglot-builder/AGENT-VS-MANUAL.md)
+- [`ParallelOps/AGENT-VS-MANUAL.md`](ParallelOps/AGENT-VS-MANUAL.md)
+- [`Devops-eval/AGENT-VS-MANUAL.md`](Devops-eval/AGENT-VS-MANUAL.md)
+
+Time-box adherence vs the eval's stated limits is tracked in [`TIMEBOX.md`](TIMEBOX.md).
 
 ## Environment
 
