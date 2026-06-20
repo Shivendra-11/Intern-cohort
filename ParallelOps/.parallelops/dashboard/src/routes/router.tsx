@@ -5,6 +5,7 @@ import { A2Page } from "@/pages/agents/A2Page";
 import { A3Page } from "@/pages/agents/A3Page";
 import { A4Page } from "@/pages/agents/A4Page";
 import { A5Page } from "@/pages/agents/A5Page";
+import { A6Page } from "@/pages/agents/A6Page";
 import { OverviewPage } from "@/pages/OverviewPage";
 import { PlaceholderPage } from "@/pages/PlaceholderPage";
 import { RunsPage } from "@/pages/RunsPage";
@@ -26,6 +27,7 @@ export const router = createBrowserRouter([
       { path: "agents/A3", element: <A3Page /> },
       { path: "agents/A4", element: <A4Page /> },
       { path: "agents/A5", element: <A5Page /> },
+      { path: "agents/A6", element: <A6Page /> },
       {
         path: "logs",
         element: (

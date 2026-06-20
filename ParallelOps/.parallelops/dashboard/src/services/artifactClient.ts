@@ -1,4 +1,4 @@
-export type AgentId = "A1" | "A2" | "A3" | "A4" | "A5";
+export type AgentId = "A1" | "A2" | "A3" | "A4" | "A5" | "A6";
 
 const ARTIFACTS_API = "/api/artifacts";
 

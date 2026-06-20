@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "agent": "A6",
+    "session_id": "20260617-074928",
+    "status": "pass",
+    "mode": "build+verify",
+    "summary": "O(n²) dedup bottleneck found in audit.py — 7.3× speedup after set-based fix; 19 tests green",
+    "started_at": "2026-06-17T09:00:00Z",
+    "finished_at": "2026-06-17T09:32:00Z",
+    "duration_seconds": 1920
+  },
+  "target": {
+    "file": "routers/audit.py",
+    "function": "_dedup_entries",
+    "line": 88,
+    "description": "O(n²) nested loop comparing every audit log entry on each append — dominated 89% of request time"
+  },
+  "baseline": {
+    "tool": "cProfile",
+    "total_calls": 48200,
+    "wall_time_ms": 1840,
+    "hotspot": "_dedup_entries — 89% of total time",
+    "entries_processed": 500
+  },
+  "fix": {
+    "description": "Replace nested loop with set-based dedup keyed on txn_id",
+    "diff_lines_changed": 7,
+    "branch": "perf/dedup-set-fix"
+  },
+  "after": {
+    "wall_time_ms": 251,
+    "speedup": 7.3,
+    "entries_processed": 500
+  },
+  "profile_hotspots": [
+    {
+      "rank": 1,
+      "function": "_dedup_entries",
+      "file": "routers/audit.py:88",
+      "calls": 500,
+      "total_ms": 1638,
+      "pct_time": 89.0
+    },
+    {
+      "rank": 2,
+      "function": "append",
+      "file": "routers/audit.py:92",
+      "calls": 124750,
+      "total_ms": 112,
+      "pct_time": 6.1
+    },
+    {
+      "rank": 3,
+      "function": "get_audit_log",
+      "file": "routers/audit.py:78",
+      "calls": 1,
+      "total_ms": 1840,
+      "pct_time": 4.2
+    },
+    {
+      "rank": 4,
+      "function": "serialize_entry",
+      "file": "routers/audit.py:101",
+      "calls": 500,
+      "total_ms": 14,
+      "pct_time": 0.7
+    }
+  ],
+  "benchmark_comparison": [
+    { "label": "Baseline", "wall_time_ms": 1840, "throughput_rps": 54 },
+    { "label": "After Fix", "wall_time_ms": 251, "throughput_rps": 398 }
+  ],
+  "test_results": {
+    "before_fix": { "passed": 19, "failed": 0 },
+    "after_fix": { "passed": 19, "failed": 0 },
+    "command": "pytest a3-polyglot/tests/ -q"
+  }
+}

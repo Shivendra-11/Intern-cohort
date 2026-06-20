@@ -17,7 +17,7 @@ const routeTitles: Record<string, string> = {
 
 function getPageTitle(pathname: string): string {
   if (routeTitles[pathname]) return routeTitles[pathname];
-  const agentMatch = pathname.match(/^\/agents\/(A[1-5])$/);
+  const agentMatch = pathname.match(/^\/agents\/(A[1-6])$/);
   if (agentMatch) return `Agent ${agentMatch[1]}`;
   return "Dashboard";
 }

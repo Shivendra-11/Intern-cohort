@@ -1,27 +1,39 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-06-17T12:44:04Z",
-  "selected_session_id": "20260617-121517",
+  "updated_at": "2026-06-20T10:14:45Z",
+  "selected_session_id": "20260620-093000",
   "execution_status": "pass",
-  "repo_root": "/Users/shivendrakeshari/Desktop/ParallelOps",
+  "repo_root": "/Users/shivendrakeshari/Desktop/Intern-cohort/ParallelOps",
   "repo_name": "ParallelOps",
   "sessions": [
     {
-      "session_id": "20260617-121517",
-      "task": "Migrated legacy eval artifacts",
+      "session_id": "20260620-093000",
+      "task": "Full A1–A6 battery: parallel worktrees, polyglot stack, modernization, code review, perf profiling",
       "mode": "build+verify",
-      "repo_root": "/Users/shivendrakeshari/Desktop/ParallelOps",
+      "repo_root": "/Users/shivendrakeshari/Desktop/Intern-cohort/ParallelOps",
+      "repo_name": "ParallelOps",
+      "started_at": "2026-06-20T09:30:00Z",
+      "finished_at": "2026-06-20T10:14:45Z",
+      "agents": ["A1", "A2", "A3", "A4", "A5", "A6"],
+      "overall_status": "pass",
+      "agent_status": {
+        "A1": "pass",
+        "A2": "pass",
+        "A3": "pass",
+        "A4": "pass",
+        "A5": "pass",
+        "A6": "pass"
+      }
+    },
+    {
+      "session_id": "20260617-121517",
+      "task": "CSV export + threshold config + audit log via parallel lanes",
+      "mode": "build+verify",
+      "repo_root": "/Users/shivendrakeshari/Desktop/Intern-cohort/ParallelOps",
       "repo_name": "ParallelOps",
       "started_at": "2026-06-17T07:49:28Z",
       "finished_at": "2026-06-17T12:44:04Z",
-      "agents": [
-        "A1",
-        "A2",
-        "A3",
-        "A4",
-        "A5",
-        "A6"
-      ],
+      "agents": ["A1", "A2", "A3", "A4", "A5", "A6"],
       "overall_status": "pass",
       "agent_status": {
         "A1": "pass",
@@ -33,130 +45,58 @@
       }
     },
     {
-      "session_id": "20260617-115543",
-      "task": "Migrated legacy eval artifacts",
+      "session_id": "20260616-143022",
+      "task": "A2 worktree demo on sample-repo",
       "mode": "build+verify",
-      "repo_root": "",
-      "repo_name": "",
-      "started_at": "2026-06-17T07:49:28Z",
-      "finished_at": "2026-06-17T11:55:43Z",
-      "agents": [
-        "A1",
-        "A2",
-        "A3",
-        "A4",
-        "A5",
-        "A6"
-      ],
+      "repo_root": "/Users/shivendrakeshari/Desktop/Intern-cohort/ParallelOps",
+      "repo_name": "ParallelOps",
+      "started_at": "2026-06-16T14:30:22Z",
+      "finished_at": "2026-06-16T15:45:10Z",
+      "agents": ["A1", "A2"],
       "overall_status": "pass",
       "agent_status": {
         "A1": "pass",
-        "A2": "pass",
-        "A3": "pass",
-        "A4": "pass",
-        "A5": "pass",
-        "A6": "pass"
+        "A2": "pass"
       }
     },
     {
-      "session_id": "20260617-115258",
-      "task": "Migrated legacy eval artifacts",
+      "session_id": "20260615-091500",
+      "task": "A3 polyglot fraud pipeline — full rebuild",
       "mode": "build+verify",
-      "repo_root": "",
-      "repo_name": "",
-      "started_at": "2026-06-17T07:49:28Z",
-      "finished_at": "2026-06-17T11:52:58Z",
-      "agents": [
-        "A1",
-        "A2",
-        "A3",
-        "A4",
-        "A5",
-        "A6"
-      ],
+      "repo_root": "/Users/shivendrakeshari/Desktop/Intern-cohort/ParallelOps",
+      "repo_name": "ParallelOps",
+      "started_at": "2026-06-15T09:15:00Z",
+      "finished_at": "2026-06-15T11:02:33Z",
+      "agents": ["A3"],
       "overall_status": "pass",
       "agent_status": {
-        "A1": "pass",
-        "A2": "pass",
-        "A3": "pass",
-        "A4": "pass",
-        "A5": "pass",
-        "A6": "pass"
+        "A3": "pass"
       }
     },
     {
-      "session_id": "20260617-112601",
-      "task": "Migrated legacy eval artifacts",
+      "session_id": "20260614-160000",
+      "task": "A4 textkit modernization — PEP 621 migration",
       "mode": "build+verify",
-      "repo_root": "",
-      "repo_name": "",
-      "started_at": "2026-06-17T07:49:28Z",
-      "finished_at": "2026-06-17T11:51:01Z",
-      "agents": [
-        "A1",
-        "A2",
-        "A3",
-        "A4",
-        "A5",
-        "A6"
-      ],
+      "repo_root": "/Users/shivendrakeshari/Desktop/Intern-cohort/ParallelOps",
+      "repo_name": "ParallelOps",
+      "started_at": "2026-06-14T16:00:00Z",
+      "finished_at": "2026-06-14T17:30:00Z",
+      "agents": ["A4"],
       "overall_status": "pass",
       "agent_status": {
-        "A1": "pass",
-        "A2": "pass",
-        "A3": "pass",
-        "A4": "pass",
-        "A5": "pass",
-        "A6": "pass"
-      }
-    },
-    {
-      "session_id": "20260617-074928",
-      "task": "Migrated legacy eval artifacts",
-      "mode": "build+verify",
-      "repo_root": "",
-      "repo_name": "",
-      "started_at": "2026-06-17T07:49:28Z",
-      "finished_at": "2026-06-17T11:21:06Z",
-      "agents": [
-        "A1",
-        "A2",
-        "A3",
-        "A4",
-        "A5"
-      ],
-      "overall_status": "partial",
-      "agent_status": {
-        "A1": "pass",
-        "A2": "pass",
-        "A3": "pass",
-        "A4": "pass",
-        "A5": "partial"
+        "A4": "pass"
       }
     }
   ],
-  "agents": [
-    "A1",
-    "A2",
-    "A3",
-    "A4",
-    "A5",
-    "A6"
-  ],
+  "agents": ["A1", "A2", "A3", "A4", "A5", "A6"],
   "selected_evaluation": {
-    "session_id": "20260617-121517",
-    "task": "Migrated legacy eval artifacts",
+    "session_id": "20260620-093000",
+    "task": "Full A1–A6 battery: parallel worktrees, polyglot stack, modernization, code review, perf profiling",
     "mode": "build+verify",
-    "repo_root": "/Users/shivendrakeshari/Desktop/ParallelOps",
+    "repo_root": "/Users/shivendrakeshari/Desktop/Intern-cohort/ParallelOps",
     "repo_name": "ParallelOps",
     "overall_status": "pass",
-    "agents": [
-      "A1",
-      "A2",
-      "A3",
-      "A4",
-      "A5"
-    ]
+    "agents": ["A1", "A2", "A3", "A4", "A5", "A6"]
   },
   "chart_plan": {
     "schema_version": "1.0",
@@ -164,117 +104,68 @@
       {
         "id": "metrics",
         "component": "execution_metrics",
-        "title": "Execution Metrics",
-        "bindings": {
-          "data": "$.charts.execution_metrics"
-        }
+        "title": "Agent Artifacts Generated",
+        "description": "Artifact count per agent",
+        "bindings": { "data": "$.charts.execution_metrics" }
       },
       {
         "id": "timeline",
         "component": "timeline",
         "title": "Session Timeline",
-        "bindings": {
-          "data": "$.charts.timeline"
-        }
+        "description": "Key events across A1–A6",
+        "bindings": { "data": "$.charts.timeline" }
       },
       {
         "id": "severity",
         "component": "severity_distribution",
         "title": "Agent Status Distribution",
-        "bindings": {
-          "data": "$.charts.severity_distribution"
-        }
+        "description": "Pass/partial/fail breakdown",
+        "bindings": { "data": "$.charts.severity_distribution" }
       },
       {
         "id": "agent_success",
         "component": "success_rate",
         "title": "Session Success Rate",
-        "bindings": {
-          "data": "$.charts.success_rate"
-        }
-      },
-      {
-        "id": "run_history",
-        "component": "execution_metrics",
-        "title": "Recent Runs",
-        "bindings": {
-          "data": "$.charts.run_history"
-        }
+        "description": "Per-agent pass rate",
+        "bindings": { "data": "$.charts.success_rate" }
       }
     ]
   },
   "charts": {
     "execution_metrics": [
-      {
-        "name": "A1",
-        "value": 1
-      },
-      {
-        "name": "A2",
-        "value": 1
-      },
-      {
-        "name": "A3",
-        "value": 1
-      },
-      {
-        "name": "A4",
-        "value": 1
-      },
-      {
-        "name": "A5",
-        "value": 1
-      }
+      { "name": "A1", "value": 4 },
+      { "name": "A2", "value": 5 },
+      { "name": "A3", "value": 6 },
+      { "name": "A4", "value": 4 },
+      { "name": "A5", "value": 4 },
+      { "name": "A6", "value": 5 }
     ],
-    "timeline": [],
-    "severity_distribution": [],
+    "timeline": [
+      { "timestamp": "2026-06-20T09:30:00Z", "agent": "orchestrator", "label": "Session start", "status": "info" },
+      { "timestamp": "2026-06-20T09:38:00Z", "agent": "A1", "label": "3-lane plan complete", "status": "pass" },
+      { "timestamp": "2026-06-20T09:48:00Z", "agent": "A2", "label": "3 lanes merged; verify PASS", "status": "pass" },
+      { "timestamp": "2026-06-20T09:57:00Z", "agent": "A3", "label": "19 tests green across all stacks", "status": "pass" },
+      { "timestamp": "2026-06-20T10:03:00Z", "agent": "A4", "label": "PEP 621 applied; 5 tests green", "status": "pass" },
+      { "timestamp": "2026-06-20T10:09:00Z", "agent": "A5", "label": "5 issues found; 2 critical fixed", "status": "pass" },
+      { "timestamp": "2026-06-20T10:14:00Z", "agent": "A6", "label": "7.3× speedup; 19 tests green", "status": "pass" },
+      { "timestamp": "2026-06-20T10:14:45Z", "agent": "orchestrator", "label": "Session complete — 6/6 PASS", "status": "pass" }
+    ],
+    "severity_distribution": [
+      { "name": "pass", "value": 6, "color": "#22c55e" },
+      { "name": "partial", "value": 0, "color": "#f59e0b" },
+      { "name": "fail", "value": 0, "color": "#ef4444" }
+    ],
     "success_rate": {
       "current": 100.0,
-      "label": "Session 20260617-121517",
+      "label": "Session 20260620-093000",
       "history": [
-        {
-          "label": "A1",
-          "rate": 100
-        },
-        {
-          "label": "A2",
-          "rate": 100
-        },
-        {
-          "label": "A3",
-          "rate": 100
-        },
-        {
-          "label": "A4",
-          "rate": 100
-        },
-        {
-          "label": "A5",
-          "rate": 100
-        }
+        { "label": "A1", "rate": 100 },
+        { "label": "A2", "rate": 100 },
+        { "label": "A3", "rate": 100 },
+        { "label": "A4", "rate": 100 },
+        { "label": "A5", "rate": 100 },
+        { "label": "A6", "rate": 100 }
       ]
-    },
-    "run_history": [
-      {
-        "name": "121517",
-        "value": 50
-      },
-      {
-        "name": "115543",
-        "value": 50
-      },
-      {
-        "name": "115258",
-        "value": 50
-      },
-      {
-        "name": "112601",
-        "value": 50
-      },
-      {
-        "name": "074928",
-        "value": 50
-      }
-    ]
+    }
   }
 }

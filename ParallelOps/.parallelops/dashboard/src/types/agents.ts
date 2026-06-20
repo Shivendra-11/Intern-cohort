@@ -1,7 +1,7 @@
 import type { AgentStatus } from "./overview";
 
 export interface AgentMeta {
-  agent: "A1" | "A2" | "A3" | "A4" | "A5";
+  agent: "A1" | "A2" | "A3" | "A4" | "A5" | "A6";
   session_id: string;
   status: AgentStatus;
   mode: "plan" | "build" | "build+verify";
@@ -204,5 +204,54 @@ export interface A5Data {
     low: number;
     blocking: number;
     non_blocking: number;
+  };
+}
+
+export interface ProfileHotspot {
+  rank: number;
+  function: string;
+  file: string;
+  calls: number;
+  total_ms: number;
+  pct_time: number;
+}
+
+export interface BenchmarkPoint {
+  label: string;
+  wall_time_ms: number;
+  throughput_rps: number;
+}
+
+export interface A6Data {
+  meta: AgentMeta;
+  target: {
+    file: string;
+    function: string;
+    line: number;
+    description: string;
+  };
+  baseline: {
+    tool: string;
+    total_calls: number;
+    wall_time_ms: number;
+    hotspot: string;
+    entries_processed: number;
+  };
+  fix: {
+    description: string;
+    diff_lines_changed: number;
+    branch: string;
+  };
+  after: {
+    wall_time_ms: number;
+    speedup: number;
+    entries_processed: number;
+  };
+  profile_hotspots: ProfileHotspot[];
+  benchmark_comparison: BenchmarkPoint[];
+  test_results: {
+    before_fix: { passed: number; failed: number };
+    after_fix: { passed: number; failed: number };
+    command: string;
   };
 }

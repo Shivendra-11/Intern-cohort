@@ -20,6 +20,7 @@ const AGENT_LABELS: Record<string, string> = {
   A3: "Polyglot System",
   A4: "Modernization",
   A5: "Code Review",
+  A6: "Perf Profiler",
 };
 
 export function OverviewPage() {
@@ -131,11 +132,11 @@ export function OverviewPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">All Agents (A1–A5)</CardTitle>
+          <CardTitle className="text-base">All Agents (A1–A6)</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-            {(["A1", "A2", "A3", "A4", "A5"] as const).map((agent) => {
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
+            {(["A1", "A2", "A3", "A4", "A5", "A6"] as const).map((agent) => {
               const inSession = evaluation.agents.includes(agent);
               const status = currentSession?.agent_status?.[agent];
               return (
