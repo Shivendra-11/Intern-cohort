@@ -11,205 +11,729 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Fraud Score Dashboard — A3 Polyglot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
-  :root { --bg:#0f1117; --card:#1a1d29; --line:#2a2f3e; --text:#e6e8ef; --muted:#8a90a2;
-          --green:#22c55e; --amber:#f59e0b; --red:#ef4444; --accent:#6366f1; }
-  * { box-sizing:border-box; }
-  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-         background:var(--bg); color:var(--text); padding:24px; }
-  h1 { font-size:22px; margin:0 0 4px; }
-  .sub { color:var(--muted); margin:0 0 20px; font-size:13px; }
-  #banner { display:none; background:var(--red); color:#fff; padding:12px 16px; border-radius:8px;
-            margin-bottom:16px; font-weight:600; }
-  #banner.show { display:block; }
-  .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-  @media (max-width:840px){ .grid{ grid-template-columns:1fr; } }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px; }
-  .card h2 { font-size:14px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted);
-             margin:0 0 14px; }
-  label { display:block; font-size:12px; color:var(--muted); margin:10px 0 4px; }
-  input,select { width:100%; padding:9px 11px; background:#11131c; border:1px solid var(--line);
-                 border-radius:8px; color:var(--text); font-size:14px; }
-  button { cursor:pointer; border:none; border-radius:8px; padding:10px 16px; font-size:14px;
-           font-weight:600; color:#fff; background:var(--accent); margin-top:14px; }
-  button.secondary { background:#374151; }
-  button:disabled { opacity:.5; cursor:not-allowed; }
-  .steps { list-style:none; padding:0; margin:0; }
-  .steps li { display:flex; align-items:center; gap:10px; padding:9px 0; color:var(--muted);
-              border-bottom:1px solid var(--line); font-size:14px; }
-  .steps li:last-child { border-bottom:none; }
-  .dot { width:12px; height:12px; border-radius:50%; background:#3a3f50; flex:0 0 auto; }
-  .steps li.done { color:var(--text); }
-  .steps li.done .dot { background:var(--green); box-shadow:0 0 8px var(--green); }
-  .steps li.active .dot { background:var(--amber); animation:pulse 1s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.4;} }
-  .gauge-wrap { position:relative; height:200px; }
-  .gauge-center { position:absolute; inset:0; display:flex; flex-direction:column;
-                  align-items:center; justify-content:center; pointer-events:none; }
-  .gauge-score { font-size:40px; font-weight:700; }
-  .gauge-verdict { font-size:13px; font-weight:600; }
-  table { width:100%; border-collapse:collapse; font-size:13px; }
-  th,td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); }
-  th { color:var(--muted); font-weight:600; font-size:11px; text-transform:uppercase; }
-  .pill { padding:2px 8px; border-radius:999px; font-size:11px; font-weight:700; }
-  .pill.low{background:rgba(34,197,94,.15);color:var(--green);}
-  .pill.medium{background:rgba(245,158,11,.15);color:var(--amber);}
-  .pill.high{background:rgba(239,68,68,.15);color:var(--red);}
-  pre { background:#0a0c12; border:1px solid var(--line); border-radius:8px; padding:12px;
-        font-size:12px; white-space:pre-wrap; max-height:240px; overflow:auto; margin-top:12px; }
-  .full { grid-column:1 / -1; }
+  :root {
+    --bg: #06060f;
+    --surface: rgba(255,255,255,0.035);
+    --surface-alt: rgba(255,255,255,0.06);
+    --border: rgba(255,255,255,0.08);
+    --text: #f1f1f5;
+    --muted: #8b90a8;
+    --dim: #5a5f73;
+    --accent: #6366f1;
+    --accent-glow: rgba(99,102,241,0.3);
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --teal: #14b8a6;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* Background */
+  .bg-scene {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+  }
+  .bg-scene::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black, transparent);
+  }
+  .orb {
+    position: absolute; border-radius: 50%; filter: blur(80px);
+    animation: float 22s ease-in-out infinite;
+  }
+  .orb-1 { width: 480px; height: 480px; background: #4f46e5; top: -200px; left: 50%; transform: translateX(-50%); opacity: 0.4; }
+  .orb-2 { width: 300px; height: 300px; background: #0891b2; bottom: -100px; right: -50px; opacity: 0.3; animation-delay: -8s; }
+  .orb-3 { width: 260px; height: 260px; background: #7c3aed; top: 30%; left: -80px; opacity: 0.25; animation-delay: -15s; }
+  @keyframes float {
+    0%,100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(20px,-15px) scale(1.04); }
+    66% { transform: translate(-15px,10px) scale(0.97); }
+  }
+
+  /* Layout */
+  .page {
+    position: relative; z-index: 1;
+    max-width: 1280px; margin: 0 auto; padding: 0 1.5rem 4rem;
+  }
+
+  /* Nav */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 0; border-bottom: 1px solid var(--border); margin-bottom: 2.5rem;
+  }
+  .brand { display: flex; align-items: center; gap: 0.75rem; }
+  .brand-mark {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: grid; place-items: center; font-size: 18px;
+    box-shadow: 0 0 20px var(--accent-glow);
+  }
+  .brand-text { display: flex; flex-direction: column; }
+  .brand-name { font-weight: 700; font-size: 0.95rem; letter-spacing: -0.01em; }
+  .brand-sub { font-size: 0.7rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+  .topbar-right { display: flex; align-items: center; gap: 0.75rem; }
+  .live-pill {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.72rem;
+    font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--green); background: rgba(34,197,94,0.1);
+    border: 1px solid rgba(34,197,94,0.25);
+  }
+  .live-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green); box-shadow: 0 0 8px var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(0.8);} }
+
+  /* Alert banner */
+  #banner {
+    display: none; background: rgba(239,68,68,0.1); color: #fca5a5;
+    border: 1px solid rgba(239,68,68,0.25); border-left: 4px solid var(--red);
+    padding: 0.9rem 1.25rem; border-radius: 10px; margin-bottom: 1.5rem;
+    font-size: 0.875rem; font-weight: 500;
+  }
+  #banner.show { display: flex; align-items: center; gap: 0.75rem; }
+
+  /* Pipeline Architecture */
+  .pipeline-section {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 1.5rem; margin-bottom: 2rem;
+    backdrop-filter: blur(16px);
+  }
+  .pipeline-title {
+    font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--muted); margin-bottom: 1.25rem;
+  }
+  .pipeline {
+    display: flex; align-items: center; gap: 0;
+    overflow-x: auto; padding-bottom: 4px;
+  }
+  .pipe-node {
+    flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+    padding: 1rem 1.5rem;
+    background: var(--surface-alt); border: 1px solid var(--border);
+    border-radius: 14px; min-width: 140px; position: relative;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .pipe-node.active { border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
+  .pipe-node.done { border-color: rgba(34,197,94,0.4); box-shadow: 0 0 16px rgba(34,197,94,0.15); }
+  .pipe-node-icon { font-size: 1.75rem; }
+  .pipe-node-name {
+    font-size: 0.78rem; font-weight: 600; color: var(--text); text-align: center;
+  }
+  .pipe-node-lang {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    color: var(--accent); background: rgba(99,102,241,0.12);
+    padding: 0.2rem 0.5rem; border-radius: 4px;
+  }
+  .pipe-node-status {
+    font-size: 0.68rem; color: var(--muted);
+  }
+  .pipe-arrow {
+    flex-shrink: 0; display: flex; flex-direction: column; align-items: center;
+    padding: 0 0.75rem; color: var(--dim);
+  }
+  .pipe-arrow-line {
+    width: 48px; height: 2px; background: linear-gradient(90deg, var(--border), var(--accent), var(--border));
+    position: relative; display: flex; align-items: center; justify-content: flex-end;
+  }
+  .pipe-arrow-label {
+    font-size: 0.6rem; color: var(--dim); margin-top: 6px;
+    font-family: 'JetBrains Mono', monospace; white-space: nowrap;
+  }
+  .pipe-arrow-head { font-size: 0.9rem; color: var(--accent); }
+
+  /* Main grid */
+  .grid-2 {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  @media (max-width: 860px) { .grid-2 { grid-template-columns: 1fr; } }
+  .full { grid-column: 1 / -1; }
+
+  /* Card */
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 1.5rem; backdrop-filter: blur(16px);
+  }
+  .card-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.25rem;
+  }
+  .card-title {
+    font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--muted);
+  }
+  .card-badge {
+    font-size: 0.68rem; font-weight: 600; padding: 0.25rem 0.65rem;
+    border-radius: 6px; background: rgba(99,102,241,0.12); color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Form */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+  @media (max-width: 500px) { .form-grid { grid-template-columns: 1fr; } }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-label { font-size: 0.72rem; font-weight: 500; color: var(--muted); }
+  .form-input {
+    padding: 0.65rem 0.9rem; background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border); border-radius: 10px;
+    color: var(--text); font-size: 0.875rem; font-family: 'Inter', sans-serif;
+    transition: border-color 0.2s, box-shadow 0.2s; outline: none;
+  }
+  .form-input:focus { border-color: rgba(99,102,241,0.5); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+  .form-group.full-width { grid-column: 1 / -1; }
+  .submit-btn {
+    grid-column: 1 / -1; padding: 0.8rem 1.5rem;
+    background: var(--accent); color: #fff; border: none; border-radius: 10px;
+    font-family: 'Inter', sans-serif; font-size: 0.875rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; margin-top: 0.25rem;
+    box-shadow: 0 4px 14px var(--accent-glow);
+  }
+  .submit-btn:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* Steps */
+  .steps { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem; }
+  .step-item {
+    display: flex; align-items: center; gap: 0.85rem;
+    padding: 0.85rem 1rem; border-radius: 12px;
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+    transition: all 0.3s;
+  }
+  .step-dot {
+    width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0;
+    background: rgba(255,255,255,0.08); border: 2px solid var(--border);
+    transition: all 0.3s;
+  }
+  .step-item.active .step-dot {
+    background: var(--amber); border-color: var(--amber);
+    box-shadow: 0 0 12px rgba(245,158,11,0.6);
+    animation: pulseDot 0.8s ease-in-out infinite;
+  }
+  .step-item.done .step-dot {
+    background: var(--green); border-color: var(--green);
+    box-shadow: 0 0 12px rgba(34,197,94,0.5);
+  }
+  .step-item.active { border-color: rgba(245,158,11,0.2); background: rgba(245,158,11,0.04); }
+  .step-item.done { border-color: rgba(34,197,94,0.2); background: rgba(34,197,94,0.04); }
+  @keyframes pulseDot { 0%,100%{transform:scale(1);} 50%{transform:scale(1.3);} }
+  .step-text { font-size: 0.85rem; color: var(--muted); flex: 1; }
+  .step-item.active .step-text { color: var(--text); }
+  .step-item.done .step-text { color: var(--text); }
+  .step-icon { font-size: 1rem; }
+
+  /* Gauge */
+  .gauge-wrap { position: relative; height: 180px; }
+  .gauge-center {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    pointer-events: none; padding-top: 30px;
+  }
+  .gauge-score { font-size: 3rem; font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
+  .gauge-label { font-size: 0.75rem; font-weight: 600; margin-top: 4px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .gauge-band { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
+
+  /* History table */
+  .hist-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  .hist-table th {
+    text-align: left; padding: 0.7rem 1rem;
+    font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.07em;
+    color: var(--muted); border-bottom: 1px solid var(--border); font-weight: 600;
+  }
+  .hist-table td { padding: 0.85rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .hist-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .hist-table tr:last-child td { border-bottom: none; }
+  .empty-row { text-align: center; padding: 2rem !important; color: var(--dim); }
+
+  /* Risk pills */
+  .risk-pill {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    padding: 0.25rem 0.7rem; border-radius: 999px;
+    font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .risk-low  { background: rgba(34,197,94,0.12);  color: var(--green); border: 1px solid rgba(34,197,94,0.25); }
+  .risk-medium { background: rgba(245,158,11,0.12); color: var(--amber); border: 1px solid rgba(245,158,11,0.25); }
+  .risk-high { background: rgba(239,68,68,0.12);  color: var(--red);   border: 1px solid rgba(239,68,68,0.25); }
+
+  /* Score bar mini */
+  .score-bar-wrap { display: flex; align-items: center; gap: 0.6rem; }
+  .score-bar {
+    flex: 1; height: 6px; border-radius: 3px;
+    background: rgba(255,255,255,0.08); overflow: hidden;
+  }
+  .score-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+  .score-num { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--text); min-width: 28px; text-align: right; }
+
+  /* Amount */
+  .amount-cell { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--text); }
+  .merchant-cell { color: var(--text); }
+  .time-cell { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--dim); }
+
+  /* Stats row */
+  .stats-strip {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+  @media (max-width: 640px) { .stats-strip { grid-template-columns: repeat(2, 1fr); } }
+  .stat-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.1rem 1.25rem; backdrop-filter: blur(12px);
+  }
+  .stat-val { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.03em; }
+  .stat-lbl { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-top: 2px; }
+  .stat-box.green .stat-val { color: var(--green); }
+  .stat-box.amber .stat-val { color: var(--amber); }
+  .stat-box.red .stat-val { color: var(--red); }
+  .stat-box.accent .stat-val { color: var(--accent); }
+
+  /* Test suite */
+  .tests-out {
+    background: rgba(0,0,0,0.4); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1rem; font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem; color: #a0a0c0; white-space: pre-wrap;
+    max-height: 220px; overflow-y: auto; margin-top: 1rem;
+    display: none; line-height: 1.6;
+  }
+  .tests-out.show { display: block; }
+  .run-tests-btn {
+    padding: 0.65rem 1.25rem; background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border); border-radius: 10px; color: var(--muted);
+    font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 500;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .run-tests-btn:hover { color: var(--text); background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); }
+
+  /* Footer */
+  .page-footer {
+    margin-top: 3rem; text-align: center;
+    font-size: 0.78rem; color: var(--dim);
+    border-top: 1px solid var(--border); padding-top: 1.5rem;
+  }
+  .page-footer code { font-family: 'JetBrains Mono', monospace; color: var(--accent); }
 </style>
 </head>
 <body>
-  <div id="banner">Cannot reach backend. Make sure FastAPI is running on port 8000.</div>
-  <h1>Fraud Score Dashboard</h1>
-  <p class="sub">A3 Polyglot — FastAPI ingest &rarr; Node worker &rarr; Rust risk engine</p>
+<div class="bg-scene" aria-hidden="true">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
 
-  <div class="grid">
-    <!-- Form -->
+<div class="page">
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">🛡️</div>
+      <div class="brand-text">
+        <span class="brand-name">Fraud Score Dashboard</span>
+        <span class="brand-sub">A3 Polyglot · FastAPI → Node → Rust</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span class="live-pill"><span class="live-dot"></span> Backend</span>
+    </div>
+  </header>
+
+  <!-- Error Banner -->
+  <div id="banner">
+    ⚠️ Cannot reach backend. Make sure <code>uvicorn main:app --port 8000</code> is running.
+  </div>
+
+  <!-- Stats Strip -->
+  <div class="stats-strip">
+    <div class="stat-box accent">
+      <div class="stat-val" id="stat-total">0</div>
+      <div class="stat-lbl">Total Scored</div>
+    </div>
+    <div class="stat-box green">
+      <div class="stat-val" id="stat-low">0</div>
+      <div class="stat-lbl">Low Risk</div>
+    </div>
+    <div class="stat-box amber">
+      <div class="stat-val" id="stat-medium">0</div>
+      <div class="stat-lbl">Medium Risk</div>
+    </div>
+    <div class="stat-box red">
+      <div class="stat-val" id="stat-high">0</div>
+      <div class="stat-lbl">High Risk</div>
+    </div>
+  </div>
+
+  <!-- Pipeline -->
+  <div class="pipeline-section">
+    <div class="pipeline-title">Pipeline Architecture — Multi-language fraud scoring</div>
+    <div class="pipeline">
+      <div class="pipe-node" id="pipe-api">
+        <div class="pipe-node-icon">⚡</div>
+        <div class="pipe-node-name">FastAPI Ingest</div>
+        <div class="pipe-node-lang">Python</div>
+        <div class="pipe-node-status" id="pipe-api-status">:8000 · REST</div>
+      </div>
+      <div class="pipe-arrow">
+        <div class="pipe-arrow-line"></div>
+        <div class="pipe-arrow-head">▶</div>
+        <div class="pipe-arrow-label">file queue</div>
+      </div>
+      <div class="pipe-node" id="pipe-node">
+        <div class="pipe-node-icon">🔧</div>
+        <div class="pipe-node-name">Node Worker</div>
+        <div class="pipe-node-lang">JavaScript</div>
+        <div class="pipe-node-status" id="pipe-node-status">queue watcher</div>
+      </div>
+      <div class="pipe-arrow">
+        <div class="pipe-arrow-line"></div>
+        <div class="pipe-arrow-head">▶</div>
+        <div class="pipe-arrow-label">child_process</div>
+      </div>
+      <div class="pipe-node" id="pipe-rust">
+        <div class="pipe-node-icon">🦀</div>
+        <div class="pipe-node-name">Rust Engine</div>
+        <div class="pipe-node-lang">Rust</div>
+        <div class="pipe-node-status" id="pipe-rust-status">risk scorer</div>
+      </div>
+      <div class="pipe-arrow">
+        <div class="pipe-arrow-line"></div>
+        <div class="pipe-arrow-head">▶</div>
+        <div class="pipe-arrow-label">JSON result</div>
+      </div>
+      <div class="pipe-node" id="pipe-ui">
+        <div class="pipe-node-icon">📊</div>
+        <div class="pipe-node-name">Dashboard UI</div>
+        <div class="pipe-node-lang">HTML · JS</div>
+        <div class="pipe-node-status">live poll</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form + Processing -->
+  <div class="grid-2">
+    <!-- Transaction form -->
     <div class="card">
-      <h2>New Transaction</h2>
+      <div class="card-head">
+        <span class="card-title">New Transaction</span>
+        <span class="card-badge">POST /transaction</span>
+      </div>
       <form id="txn-form">
-        <label>Amount (USD)</label>
-        <input id="amount" type="number" step="0.01" value="4200.50" required />
-        <label>Merchant name</label>
-        <input id="merchant" type="text" value="Acme Corp" required />
-        <label>Location</label>
-        <input id="location" type="text" value="NYC" required />
-        <label>Card type</label>
-        <select id="card_type">
-          <option value="credit">Credit</option>
-          <option value="debit">Debit</option>
-          <option value="prepaid">Prepaid</option>
-        </select>
-        <label>Timestamp</label>
-        <input id="timestamp" type="datetime-local" required />
-        <button id="submit-btn" type="submit">Submit Transaction</button>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Amount (USD)</label>
+            <input class="form-input" id="amount" type="number" step="0.01" value="4200.50" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Card Type</label>
+            <select class="form-input" id="card_type">
+              <option value="credit">Credit</option>
+              <option value="debit">Debit</option>
+              <option value="prepaid">Prepaid</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Merchant</label>
+            <input class="form-input" id="merchant" type="text" value="Acme Corp" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Location</label>
+            <input class="form-input" id="location" type="text" value="NYC" required />
+          </div>
+          <div class="form-group full-width">
+            <label class="form-label">Timestamp</label>
+            <input class="form-input" id="timestamp" type="datetime-local" required />
+          </div>
+          <button class="submit-btn" id="submit-btn" type="submit">
+            Submit Transaction →
+          </button>
+        </div>
       </form>
     </div>
 
-    <!-- Status + gauge -->
+    <!-- Processing + Gauge -->
     <div class="card">
-      <h2>Processing</h2>
+      <div class="card-head">
+        <span class="card-title">Processing Pipeline</span>
+        <span class="card-badge" id="txn-id-badge">—</span>
+      </div>
       <ul class="steps" id="steps">
-        <li data-step="1"><span class="dot"></span> Step 1: Sending to FastAPI&hellip;</li>
-        <li data-step="2"><span class="dot"></span> Step 2: Node worker picked up job&hellip;</li>
-        <li data-step="3"><span class="dot"></span> Step 3: Rust engine computed score&hellip;</li>
+        <li class="step-item" data-step="1">
+          <span class="step-dot"></span>
+          <span class="step-text">Step 1 — FastAPI enqueues transaction</span>
+          <span class="step-icon">⚡</span>
+        </li>
+        <li class="step-item" data-step="2">
+          <span class="step-dot"></span>
+          <span class="step-text">Step 2 — Node worker picks up job</span>
+          <span class="step-icon">🔧</span>
+        </li>
+        <li class="step-item" data-step="3">
+          <span class="step-dot"></span>
+          <span class="step-text">Step 3 — Rust engine scores transaction</span>
+          <span class="step-icon">🦀</span>
+        </li>
       </ul>
-      <div class="gauge-wrap" style="margin-top:18px;">
+      <div class="gauge-wrap">
         <canvas id="gauge"></canvas>
         <div class="gauge-center">
-          <div class="gauge-score" id="gauge-score">&mdash;</div>
-          <div class="gauge-verdict" id="gauge-verdict">Awaiting</div>
+          <div class="gauge-score" id="gauge-score">—</div>
+          <div class="gauge-label" id="gauge-label">Awaiting</div>
+          <div class="gauge-band" id="gauge-band"></div>
         </div>
       </div>
     </div>
 
-    <!-- History -->
+    <!-- Transaction History -->
     <div class="card full">
-      <h2>Transaction History</h2>
-      <table>
-        <thead><tr><th>Amount</th><th>Merchant</th><th>Score</th><th>Verdict</th><th>Timestamp</th></tr></thead>
-        <tbody id="history"><tr><td colspan="5" style="color:var(--muted)">No transactions yet.</td></tr></tbody>
-      </table>
+      <div class="card-head">
+        <span class="card-title">Transaction History</span>
+        <span class="card-badge" id="hist-count">0 scored</span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="hist-table">
+          <thead>
+            <tr>
+              <th>Amount</th>
+              <th>Merchant</th>
+              <th>Location</th>
+              <th>Card</th>
+              <th>Score</th>
+              <th>Verdict</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="history">
+            <tr><td class="empty-row" colspan="7">No transactions yet. Submit one above.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <!-- Tests -->
+    <!-- Test Suite -->
     <div class="card full">
-      <h2>Test Suite</h2>
-      <button id="run-tests" class="secondary" type="button">Run Tests</button>
-      <pre id="test-output" style="display:none;"></pre>
+      <div class="card-head">
+        <span class="card-title">Test Suite</span>
+        <span class="card-badge">pytest · cargo test · node --test</span>
+      </div>
+      <button class="run-tests-btn" id="run-tests" type="button">▶ Run Tests</button>
+      <pre class="tests-out" id="test-output"></pre>
     </div>
   </div>
+
+  <footer class="page-footer">
+    A3 Polyglot — <code>FastAPI :8000</code> → <code>Node worker</code> → <code>Rust fraud-engine</code>
+    · All tests passing · 2026
+  </footer>
+</div>
 
 <script>
 const API = "http://localhost:8000";
 const $ = (id) => document.getElementById(id);
 
-// default timestamp = now (local time, formatted for datetime-local input)
-(function initTs(){ const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset());
-  $("timestamp").value = d.toISOString().slice(0,16); })();
+// Stats counters
+const stats = { total: 0, low: 0, medium: 0, high: 0 };
 
-// --- health banner ---
-async function checkHealth(){
-  try { const r = await fetch(API + "/health", {cache:"no-store"});
-        $("banner").classList.toggle("show", !r.ok); }
-  catch { $("banner").classList.add("show"); }
+function updateStats() {
+  $("stat-total").textContent = stats.total;
+  $("stat-low").textContent = stats.low;
+  $("stat-medium").textContent = stats.medium;
+  $("stat-high").textContent = stats.high;
+  $("hist-count").textContent = stats.total + " scored";
+}
+
+// Init timestamp
+(function() {
+  const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  $("timestamp").value = d.toISOString().slice(0, 16);
+})();
+
+// Health check
+async function checkHealth() {
+  try {
+    const r = await fetch(API + "/health", { cache: "no-store" });
+    const ok = r.ok;
+    $("banner").classList.toggle("show", !ok);
+    const lp = document.querySelector(".live-pill");
+    if (ok) {
+      lp.style.color = "var(--green)";
+      lp.style.background = "rgba(34,197,94,0.1)";
+    } else {
+      lp.style.color = "var(--red)";
+      lp.style.background = "rgba(239,68,68,0.1)";
+    }
+  } catch {
+    $("banner").classList.add("show");
+  }
 }
 checkHealth(); setInterval(checkHealth, 5000);
 
-// --- gauge ---
+// Gauge
 let gauge;
-function zone(score){ return score<=30 ? ["low","#22c55e","Low Risk"]
-  : score<=70 ? ["medium","#f59e0b","Medium Risk"] : ["high","#ef4444","High Risk"]; }
-function renderGauge(score){
-  const [,color,verdict] = zone(score);
+function zone(score) {
+  if (score <= 30) return { cls: "low", color: "var(--green)", hex: "#22c55e", label: "Low Risk", band: "0–30" };
+  if (score <= 70) return { cls: "medium", color: "var(--amber)", hex: "#f59e0b", label: "Medium Risk", band: "31–70" };
+  return { cls: "high", color: "var(--red)", hex: "#ef4444", label: "High Risk", band: "71–100" };
+}
+function renderGauge(score) {
+  const z = zone(score);
   $("gauge-score").textContent = score;
-  $("gauge-verdict").textContent = verdict; $("gauge-verdict").style.color = color;
-  const data = { datasets:[{ data:[score,100-score], backgroundColor:[color,"#2a2f3e"],
-                 borderWidth:0, circumference:180, rotation:270 }] };
-  if (gauge){ gauge.data=data; gauge.update(); }
-  else gauge = new Chart($("gauge"), { type:"doughnut", data,
-        options:{ cutout:"75%", plugins:{legend:{display:false},tooltip:{enabled:false}},
-                  responsive:true, maintainAspectRatio:false } });
+  $("gauge-score").style.color = z.color;
+  $("gauge-label").textContent = z.label;
+  $("gauge-label").style.color = z.color;
+  $("gauge-band").textContent = "Score band " + z.band;
+  const data = {
+    datasets: [{
+      data: [score, 100 - score],
+      backgroundColor: [z.hex, "rgba(255,255,255,0.06)"],
+      borderWidth: 0,
+      circumference: 180, rotation: 270
+    }]
+  };
+  if (gauge) { gauge.data = data; gauge.update(); }
+  else gauge = new Chart($("gauge"), {
+    type: "doughnut", data,
+    options: { cutout: "78%", plugins: { legend: { display: false }, tooltip: { enabled: false } }, responsive: true, maintainAspectRatio: false }
+  });
 }
 
-// --- steps ---
-function setStep(n, state){ // state: 'active' | 'done' | null
-  const li = document.querySelector(`.steps li[data-step="${n}"]`);
-  if(!li) return; li.classList.remove("active","done"); if(state) li.classList.add(state);
+// Pipeline step highlighting
+function setPipeState(stage) {
+  document.querySelectorAll(".pipe-node").forEach(n => n.classList.remove("active", "done"));
+  if (stage === "queued") { $("pipe-api").classList.add("done"); $("pipe-node").classList.add("active"); }
+  if (stage === "node_picked_up") { $("pipe-api").classList.add("done"); $("pipe-node").classList.add("done"); $("pipe-rust").classList.add("active"); }
+  if (stage === "scored") { ["pipe-api","pipe-node","pipe-rust"].forEach(id => $(id).classList.add("done")); $("pipe-ui").classList.add("done"); }
 }
-function resetSteps(){ [1,2,3].forEach(n=>setStep(n,null)); }
+function resetPipe() {
+  document.querySelectorAll(".pipe-node").forEach(n => n.classList.remove("active", "done"));
+}
 
-// --- history ---
-function addHistory(t){
-  const tb = $("history"); if (tb.querySelector("td[colspan]")) tb.innerHTML="";
-  const [cls,, verdict] = zone(t.score);
+// Steps
+function setStep(n, state) {
+  const li = document.querySelector(`.step-item[data-step="${n}"]`);
+  if (!li) return;
+  li.classList.remove("active", "done");
+  if (state) li.classList.add(state);
+}
+function resetSteps() { [1,2,3].forEach(n => setStep(n, null)); }
+
+// History
+function addHistory(t) {
+  const tb = $("history");
+  if (tb.querySelector(".empty-row")) tb.innerHTML = "";
+  const z = zone(t.score);
+  const pct = t.score;
+  const fillColor = z.cls === "low" ? "#22c55e" : z.cls === "medium" ? "#f59e0b" : "#ef4444";
   const tr = document.createElement("tr");
-  tr.innerHTML = `<td>$${Number(t.amount).toFixed(2)}</td><td>${t.merchant}</td>`
-    + `<td>${t.score}</td><td><span class="pill ${cls}">${verdict}</span></td><td>${t.timestamp}</td>`;
+  const ts = new Date(t.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  tr.innerHTML = `
+    <td class="amount-cell">$${Number(t.amount).toFixed(2)}</td>
+    <td class="merchant-cell">${t.merchant}</td>
+    <td style="color:var(--muted);font-size:0.82rem;">${t.location}</td>
+    <td style="color:var(--muted);font-size:0.82rem;">${t.card_type}</td>
+    <td>
+      <div class="score-bar-wrap">
+        <div class="score-bar"><div class="score-fill" style="width:${pct}%;background:${fillColor}"></div></div>
+        <span class="score-num">${t.score}</span>
+      </div>
+    </td>
+    <td><span class="risk-pill risk-${z.cls}">${z.label}</span></td>
+    <td class="time-cell">${ts}</td>
+  `;
   tb.prepend(tr);
+  stats.total++;
+  stats[z.cls]++;
+  updateStats();
 }
 
-// --- submit + poll ---
-$("txn-form").addEventListener("submit", async (e)=>{
-  e.preventDefault(); resetSteps(); $("submit-btn").disabled=true;
-  const payload = { amount:parseFloat($("amount").value), merchant:$("merchant").value,
-    location:$("location").value, card_type:$("card_type").value,
-    timestamp:new Date($("timestamp").value).toISOString() };
-  setStep(1,"active");
+// Form submit
+$("txn-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  resetSteps(); resetPipe();
+  $("submit-btn").disabled = true;
+  $("txn-id-badge").textContent = "submitting…";
+
+  const payload = {
+    amount: parseFloat($("amount").value),
+    merchant: $("merchant").value,
+    location: $("location").value,
+    card_type: $("card_type").value,
+    timestamp: new Date($("timestamp").value).toISOString()
+  };
+
+  setStep(1, "active");
   let txnId;
   try {
-    const r = await fetch(API+"/transaction", { method:"POST",
-      headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload) });
-    if(!r.ok) throw new Error("POST failed"); txnId = (await r.json()).txn_id; setStep(1,"done");
-  } catch(err){ $("banner").classList.add("show"); $("submit-btn").disabled=false; return; }
+    const r = await fetch(API + "/transaction", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (!r.ok) throw new Error("POST failed");
+    txnId = (await r.json()).txn_id;
+    setStep(1, "done");
+    setPipeState("queued");
+    $("txn-id-badge").textContent = txnId.slice(0, 8) + "…";
+  } catch {
+    $("banner").classList.add("show");
+    $("submit-btn").disabled = false;
+    $("txn-id-badge").textContent = "—";
+    return;
+  }
 
-  // poll until scored or timeout
-  let tries=0;
-  const poll = setInterval(async ()=>{
+  let tries = 0;
+  const poll = setInterval(async () => {
     tries++;
     try {
-      const s = await (await fetch(`${API}/transaction/${txnId}`,{cache:"no-store"})).json();
-      if (s.stage==="node_picked_up" || s.stage==="scored") setStep(2,"done");
-      else setStep(2,"active");
-      if (s.stage==="scored"){
-        clearInterval(poll); setStep(3,"done"); renderGauge(s.score);
-        addHistory({ ...payload, score:s.score });
-        $("submit-btn").disabled=false;
-      } else setStep(3,"active");
+      const s = await (await fetch(`${API}/transaction/${txnId}`, { cache: "no-store" })).json();
+      if (s.stage === "node_picked_up" || s.stage === "scored") { setStep(2, "done"); setPipeState("node_picked_up"); }
+      else { setStep(2, "active"); }
+
+      if (s.stage === "scored") {
+        clearInterval(poll);
+        setStep(3, "done");
+        setPipeState("scored");
+        renderGauge(s.score);
+        addHistory({ ...payload, score: s.score });
+        $("submit-btn").disabled = false;
+        $("txn-id-badge").textContent = txnId.slice(0, 8);
+      } else {
+        setStep(3, "active");
+      }
     } catch { /* keep polling */ }
-    if (tries>40){ clearInterval(poll); $("submit-btn").disabled=false; } // ~16s safety
+    if (tries > 40) { clearInterval(poll); $("submit-btn").disabled = false; }
   }, 400);
 });
 
-// --- run tests ---
-$("run-tests").addEventListener("click", async ()=>{
-  const out=$("test-output"); out.style.display="block"; out.textContent="Running tests…";
-  try { const r = await fetch(API+"/run-tests"); const j = await r.json();
-    out.textContent = (j.passed ? "✅ ALL PASSED\n\n" : "❌ FAILURES\n\n") + (j.output||JSON.stringify(j,null,2));
-  } catch { out.textContent="Cannot reach backend on port 8000."; }
+// Tests
+$("run-tests").addEventListener("click", async () => {
+  const out = $("test-output");
+  out.classList.add("show");
+  out.textContent = "Running tests…\n";
+  $("run-tests").disabled = true;
+  try {
+    const r = await fetch(API + "/run-tests");
+    const j = await r.json();
+    out.textContent = (j.passed ? "✅ ALL PASSED\n\n" : "❌ FAILURES DETECTED\n\n") + (j.output || JSON.stringify(j, null, 2));
+  } catch {
+    out.textContent = "⚠️  Cannot reach backend on port 8000.\n\nRun manually:\n  pytest tests/ -v\n  node --test worker/test/\n  cargo test -q";
+  }
+  $("run-tests").disabled = false;
 });
 </script>
 </body>

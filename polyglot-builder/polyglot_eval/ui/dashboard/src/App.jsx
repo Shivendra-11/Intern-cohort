@@ -423,13 +423,14 @@ export default function App() {
     <div className="dash-app">
       <aside className="dash-nav">
         <div className="dash-brand">
-          <span>⚡</span>
+          <div className="dash-brand-mark">⚡</div>
           <div>
             <h1>polyglot-eval</h1>
             <p>Dashboard</p>
           </div>
         </div>
         <nav>
+          <div className="nav-section-label">Navigation</div>
           {NAV.map(item => (
             <button
               key={item.id}
@@ -439,17 +440,20 @@ export default function App() {
             >
               <span>{item.icon}</span>
               <span>{item.label}</span>
+              {item.task && <span className="nav-status" />}
             </button>
           ))}
         </nav>
         <footer className="dash-foot">
-          <a href={I1_VIEWER_URL} target="_blank" rel="noreferrer">I1 viewer</a>
-          <a href={I2_VIEWER_URL} target="_blank" rel="noreferrer">I2 viewer</a>
+          <span className="dash-foot-label">Viewers</span>
+          <a href={I1_VIEWER_URL} target="_blank" rel="noreferrer">🗄️ I1 ER Diagram</a>
+          <a href={I2_VIEWER_URL} target="_blank" rel="noreferrer">🔀 I2 Flow Trace</a>
         </footer>
       </aside>
       <main className="dash-main">
         <header className="dash-header">
           <h2>{active === 'overview' ? `Overview — ${dashboardData.repoName}` : `${active} — ${dashboardData.tasks.find(t => t.id === active)?.title || ''}`}</h2>
+          <span className="dash-header-meta">{new Date(dashboardData.generatedAt).toLocaleDateString()}</span>
         </header>
         <div className="dash-content">
           <Panel />
