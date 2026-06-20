@@ -1,6 +1,16 @@
 import { useTheme } from "../context/ThemeContext";
 import { RepoSelector } from "./RepoSelector";
 
+const PAGE_ICONS: Record<string, string> = {
+  Overview: "◉",
+  Inventory: "▣",
+  Routes: "⇄",
+  Tests: "✓",
+  Projects: "◫",
+  Graphs: "◎",
+  Architecture: "⬡",
+};
+
 interface HeaderProps {
   title: string;
   onMenuToggle: () => void;
@@ -8,10 +18,11 @@ interface HeaderProps {
 
 export function Header({ title, onMenuToggle }: HeaderProps) {
   const { theme, toggleTheme } = useTheme();
+  const icon = PAGE_ICONS[title] ?? "◉";
 
   return (
     <header className="topbar">
-      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+      <div className="topbar-left">
         <button
           type="button"
           className="icon-btn menu-toggle"
@@ -20,7 +31,14 @@ export function Header({ title, onMenuToggle }: HeaderProps) {
         >
           ☰
         </button>
-        <span className="topbar-title">{title}</span>
+        <div className="topbar-breadcrumb">
+          <span>Repo Intelligence</span>
+          <span className="topbar-sep">/</span>
+          <span>
+            <span aria-hidden style={{ marginRight: "0.3em" }}>{icon}</span>
+            {title}
+          </span>
+        </div>
       </div>
       <div className="topbar-actions">
         <RepoSelector />
