@@ -8,6 +8,8 @@ A combined portfolio of four AI agent evaluation frameworks built during the int
 
 **One URL for all four dashboards:** [https://hub-ten-swart.vercel.app](https://hub-ten-swart.vercel.app)
 
+> Project name on Vercel: **ai-agent-eval-suite** · Production URL: `hub-ten-swart.vercel.app`
+
 This hub page links to all four live eval dashboards. No login or local setup required.
 
 To redeploy after changes:
@@ -17,6 +19,29 @@ export VERCEL_TOKEN=your_token   # https://vercel.com/account/tokens
 export VERCEL_INSECURE_TLS=1     # only if corporate VPN SSL errors
 ./deploy-hub.sh
 ```
+
+### Change the deployed URL name
+
+Your share link is `https://<project-name>.vercel.app`. To rename it:
+
+**Option A — Vercel dashboard (easiest)**
+
+1. Open [vercel.com/dashboard](https://vercel.com/dashboard) → project **hub**
+2. **Settings → General → Project Name**
+3. Change to something like `intern-cohort` (lowercase, hyphens only)
+4. Save — your new link becomes `https://intern-cohort.vercel.app`
+5. Run `./deploy-hub.sh` again
+
+**Option B — from terminal**
+
+```bash
+export HUB_PROJECT_NAME=intern-cohort   # pick your name
+export VERCEL_TOKEN=your_token
+export VERCEL_INSECURE_TLS=1
+./deploy-hub.sh
+```
+
+Then update the README combined link to match your new URL.
 
 Also available via [GitHub README](https://github.com/Shivendra-11/Intern-cohort) if the repo is public.
 

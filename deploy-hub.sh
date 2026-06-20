@@ -11,10 +11,13 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 HUB="$ROOT/hub"
 # Force portfolio hub project name (do not inherit from subproject .env files)
 unset VERCEL_PROJECT_NAME 2>/dev/null || true
-PROJECT_NAME="intern-cohort"
+# Set your desired URL: https://<HUB_PROJECT_NAME>.vercel.app
+# Example: export HUB_PROJECT_NAME=ai-agent-eval-suite
+PROJECT_NAME="${HUB_PROJECT_NAME:-ai-agent-eval-suite}"
 VERCEL_SCOPE="${VERCEL_SCOPE:-shivendra-11s-projects}"
 CANONICAL_URL="https://${PROJECT_NAME}.vercel.app"
 LOG="$ROOT/.intern-cohort/deploy.log"
+VERCEL_DIR="$HUB/.vercel"
 
 mkdir -p "$ROOT/.intern-cohort"
 
@@ -34,6 +37,13 @@ if [ -z "${VERCEL_TOKEN:-}" ] && ! npx vercel whoami &>/dev/null 2>&1; then
 fi
 
 setup_node_tls
+
+link_args=(link "$HUB" --yes --project "$PROJECT_NAME" --scope "$VERCEL_SCOPE")
+if [ -n "${VERCEL_TOKEN:-}" ]; then
+  link_args+=(--token "$VERCEL_TOKEN")
+fi
+echo "Linking Vercel project: $PROJECT_NAME ..."
+npx --yes vercel "${link_args[@]}" >>"$LOG" 2>&1 || true
 
 echo "Deploying portfolio hub from $HUB ..."
 echo "Target URL: $CANONICAL_URL"
