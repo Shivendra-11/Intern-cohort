@@ -1,0 +1,123 @@
+{
+  "meta": {
+    "agent": "A1",
+    "session_id": "20260617-074928",
+    "status": "pass",
+    "mode": "plan",
+    "summary": "3 lanes for CSV export, thresholds, and audit log — zero file overlap",
+    "started_at": "2026-06-17T07:49:28Z",
+    "finished_at": "2026-06-17T07:87:28Z",
+    "duration_seconds": 2280
+  },
+  "decomposition": [
+    {
+      "lane_id": "lane-a",
+      "name": "CSV Export",
+      "goal": "GET /transactions/export.csv streams scored transactions",
+      "branch": "feat/lane-a-export",
+      "worktree": "wt-lane-a",
+      "files_owned": ["a3-polyglot/routers/export.py", "a3-polyglot/tests/test_export.py"],
+      "files_forbidden": ["a3-polyglot/main.py", "a3-polyglot/routers/thresholds.py"]
+    },
+    {
+      "lane_id": "lane-b",
+      "name": "Threshold Config",
+      "goal": "GET/PUT /config/thresholds for fraud band boundaries",
+      "branch": "feat/lane-b-thresholds",
+      "worktree": "wt-lane-b",
+      "files_owned": ["a3-polyglot/routers/thresholds.py", "a3-polyglot/tests/test_thresholds.py"],
+      "files_forbidden": ["a3-polyglot/main.py", "a3-polyglot/routers/export.py"]
+    },
+    {
+      "lane_id": "lane-c",
+      "name": "Audit Log",
+      "goal": "Log HIGH RISK transactions + GET /audit/log",
+      "branch": "feat/lane-c-audit",
+      "worktree": "wt-lane-c",
+      "files_owned": ["a3-polyglot/routers/audit.py", "a3-polyglot/tests/test_audit.py"],
+      "files_forbidden": ["a3-polyglot/main.py"]
+    }
+  ],
+  "branches": [
+    { "name": "feat/lane-a-export", "lane_id": "lane-a", "base": "main" },
+    { "name": "feat/lane-b-thresholds", "lane_id": "lane-b", "base": "main" },
+    { "name": "feat/lane-c-audit", "lane_id": "lane-c", "base": "main" }
+  ],
+  "worktrees": [
+    {
+      "name": "wt-lane-a",
+      "path": ".parallelops/worktrees/wt-lane-a",
+      "branch": "feat/lane-a-export",
+      "lane_id": "lane-a"
+    },
+    {
+      "name": "wt-lane-b",
+      "path": ".parallelops/worktrees/wt-lane-b",
+      "branch": "feat/lane-b-thresholds",
+      "lane_id": "lane-b"
+    },
+    {
+      "name": "wt-lane-c",
+      "path": ".parallelops/worktrees/wt-lane-c",
+      "branch": "feat/lane-c-audit",
+      "lane_id": "lane-c"
+    }
+  ],
+  "merge_order": ["lane-a", "lane-b", "lane-c"],
+  "risk_plan": [
+    {
+      "id": "R1",
+      "category": "shared_hot_file",
+      "description": "main.py is integrator-only — all lanes register routers here",
+      "mitigation": "Merge lane-a first; integrator resolves wiring conflicts only",
+      "affected_lanes": ["lane-a", "lane-b", "lane-c"],
+      "severity": "high"
+    },
+    {
+      "id": "R2",
+      "category": "schema_drift",
+      "description": "Threshold JSON shape must match Rust engine expectations",
+      "mitigation": "Shared contract in contract.md; lane-b signs off before merge",
+      "affected_lanes": ["lane-b"],
+      "severity": "medium"
+    },
+    {
+      "id": "R3",
+      "category": "test_gate",
+      "description": "Lane tests pass in isolation but integration may fail post-merge",
+      "mitigation": "Run verify.sh after each merge step",
+      "affected_lanes": ["lane-a", "lane-b", "lane-c"],
+      "severity": "medium"
+    }
+  ],
+  "verification_plan": [
+    {
+      "id": "V1",
+      "phase": "per_lane",
+      "command": "pytest a3-polyglot/tests/test_<lane>.py -q",
+      "required": true,
+      "status": "pass"
+    },
+    {
+      "id": "V2",
+      "phase": "post_merge_lane_a",
+      "command": "bash shared/lib/verify.sh a3-polyglot",
+      "required": true,
+      "status": "pass"
+    },
+    {
+      "id": "V3",
+      "phase": "post_merge_all",
+      "command": "bash shared/lib/verify.sh a3-polyglot",
+      "required": true,
+      "status": "pass"
+    },
+    {
+      "id": "V4",
+      "phase": "manual_smoke",
+      "command": "curl -sf http://localhost:8000/health",
+      "required": false,
+      "status": "n/a"
+    }
+  ]
+}

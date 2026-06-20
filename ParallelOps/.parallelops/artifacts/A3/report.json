@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "agent": "A3",
+  "session_id": "20260617-074928",
+  "status": "pass",
+  "summary": "FastAPI + Node + Rust; 19 tests passing",
+  "chart_plan": {
+    "schema_version": "1.0",
+    "sections": [
+      {
+        "id": "metrics",
+        "component": "execution_metrics",
+        "title": "Stack Metrics",
+        "bindings": { "data": "$.charts.execution_metrics" }
+      },
+      {
+        "id": "timeline",
+        "component": "timeline",
+        "title": "Build Timeline",
+        "bindings": { "data": "$.charts.timeline" }
+      },
+      {
+        "id": "branch_graph",
+        "component": "branch_graph",
+        "title": "Pipeline Flow",
+        "description": "Component data flow",
+        "bindings": { "data": "$.charts.branch_graph" }
+      },
+      {
+        "id": "success",
+        "component": "success_rate",
+        "title": "Test Success Rate",
+        "bindings": { "data": "$.charts.success_rate" }
+      }
+    ]
+  },
+  "charts": {
+    "execution_metrics": [
+      { "name": "Rust Tests", "value": 6 },
+      { "name": "Python Tests", "value": 9 },
+      { "name": "Node Tests", "value": 4 },
+      { "name": "Contracts", "value": 5 },
+      { "name": "Components", "value": 3 }
+    ],
+    "timeline": [
+      { "id": "t1", "label": "cargo build", "phase": "rust", "timestamp": "2026-06-17T08:15:00Z", "status": "pass" },
+      { "id": "t2", "label": "cargo test", "phase": "rust", "timestamp": "2026-06-17T08:20:00Z", "status": "pass" },
+      { "id": "t3", "label": "pytest", "phase": "python", "timestamp": "2026-06-17T08:28:00Z", "status": "pass" },
+      { "id": "t4", "label": "npm test", "phase": "node", "timestamp": "2026-06-17T08:35:00Z", "status": "pass" },
+      { "id": "t5", "label": "verify.sh", "phase": "verify", "timestamp": "2026-06-17T08:45:00Z", "status": "pass" }
+    ],
+    "branch_graph": {
+      "nodes": [
+        { "name": "UI" },
+        { "name": "FastAPI" },
+        { "name": "Queue" },
+        { "name": "Node Worker" },
+        { "name": "Rust Engine" }
+      ],
+      "links": [
+        { "source": 0, "target": 1, "value": 2 },
+        { "source": 1, "target": 2, "value": 2 },
+        { "source": 2, "target": 3, "value": 2 },
+        { "source": 3, "target": 4, "value": 2 },
+        { "source": 4, "target": 2, "value": 1 },
+        { "source": 2, "target": 1, "value": 1 }
+      ]
+    },
+    "success_rate": {
+      "current": 100,
+      "history": [
+        { "label": "Rust", "rate": 100 },
+        { "label": "Python", "rate": 100 },
+        { "label": "Node", "rate": 100 },
+        { "label": "E2E", "rate": 100 }
+      ]
+    }
+  }
+}

@@ -1,0 +1,45 @@
+import { NavLink } from "react-router-dom";
+
+const NAV = [
+  { to: "/", label: "Overview", icon: "◉" },
+  { to: "/inventory", label: "Inventory", icon: "▣" },
+  { to: "/routes", label: "Routes", icon: "⇄" },
+  { to: "/tests", label: "Tests", icon: "✓" },
+  { to: "/projects", label: "Projects", icon: "◫" },
+  { to: "/graphs", label: "Graphs", icon: "◎" },
+  { to: "/architecture", label: "Architecture", icon: "⬡" },
+];
+
+interface SidebarProps {
+  repoName?: string;
+  open: boolean;
+  onClose: () => void;
+}
+
+export function Sidebar({ repoName, open, onClose }: SidebarProps) {
+  return (
+    <aside className={`sidebar ${open ? "open" : ""}`}>
+      <div className="sidebar-brand">
+        <h1>Repo Intelligence</h1>
+        <p>{repoName ?? "Loading…"}</p>
+      </div>
+      <nav className="sidebar-nav" onClick={onClose}>
+        {NAV.map((item) => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            end={item.to === "/"}
+            className={({ isActive }) =>
+              `nav-link${isActive ? " active" : ""}`
+            }
+          >
+            <span className="nav-icon" aria-hidden>
+              {item.icon}
+            </span>
+            {item.label}
+          </NavLink>
+        ))}
+      </nav>
+    </aside>
+  );
+}

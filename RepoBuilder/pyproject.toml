@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "repo-intelligence"
+version = "1.0.0"
+description = "Repo Intelligence Platform — analyze repos and serve the dashboard"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "fastapi>=0.110",
+  "uvicorn>=0.27",
+  "networkx>=3.0",
+]
+
+[project.optional-dependencies]
+inventory = [
+  "tree-sitter>=0.22",
+  "tree-sitter-python>=0.23",
+  "tree-sitter-javascript>=0.23",
+  "tree-sitter-java>=0.23",
+  "tree-sitter-go>=0.23",
+]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+repo-intelligence = "cli.main:main"
+
+[tool.setuptools.packages.find]
+include = ["core*", "cli*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-q"

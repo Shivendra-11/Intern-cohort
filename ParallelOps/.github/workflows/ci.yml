@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Install framework deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-framework.txt
+
+      - name: Framework unit tests
+        run: python -m pytest tests/ -q
+
+      - name: A3 polyglot stack
+        run: |
+          cd a3-polyglot
+          python -m venv .venv
+          .venv/bin/pip install -r requirements.txt
+          cargo build --quiet --manifest-path fraud-engine/Cargo.toml
+          bash ../shared/lib/verify.sh .
+
+      - name: A4 modernization target-repo
+        run: |
+          cd a4-modernization/target-repo
+          python -m venv .venv
+          .venv/bin/pip install -e ".[dev]"
+          .venv/bin/pytest -q
+          .venv/bin/ruff check .
+
+      - name: A5 adversarial verification
+        run: |
+          cd a5-code-review/pr-under-review
+          PYTHONPATH=. ../../a3-polyglot/.venv/bin/python -m pytest tests/test_pagination.py -q --tb=no || true
+          test -f ../REVIEW.md
+          test -f ../verification.md
+
+      - name: A6 perf target tests
+        run: |
+          cd a6-perf-profiling/target
+          python -m pytest tests/ -q
+
+      - name: Dashboard build
+        run: |
+          cd .parallelops/dashboard
+          npm ci
+          npm run build

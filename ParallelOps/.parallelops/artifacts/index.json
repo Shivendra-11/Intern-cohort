@@ -1,0 +1,280 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-06-17T12:44:04Z",
+  "selected_session_id": "20260617-121517",
+  "execution_status": "pass",
+  "repo_root": "/Users/shivendrakeshari/Desktop/ParallelOps",
+  "repo_name": "ParallelOps",
+  "sessions": [
+    {
+      "session_id": "20260617-121517",
+      "task": "Migrated legacy eval artifacts",
+      "mode": "build+verify",
+      "repo_root": "/Users/shivendrakeshari/Desktop/ParallelOps",
+      "repo_name": "ParallelOps",
+      "started_at": "2026-06-17T07:49:28Z",
+      "finished_at": "2026-06-17T12:44:04Z",
+      "agents": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6"
+      ],
+      "overall_status": "pass",
+      "agent_status": {
+        "A1": "pass",
+        "A2": "pass",
+        "A3": "pass",
+        "A4": "pass",
+        "A5": "pass",
+        "A6": "pass"
+      }
+    },
+    {
+      "session_id": "20260617-115543",
+      "task": "Migrated legacy eval artifacts",
+      "mode": "build+verify",
+      "repo_root": "",
+      "repo_name": "",
+      "started_at": "2026-06-17T07:49:28Z",
+      "finished_at": "2026-06-17T11:55:43Z",
+      "agents": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6"
+      ],
+      "overall_status": "pass",
+      "agent_status": {
+        "A1": "pass",
+        "A2": "pass",
+        "A3": "pass",
+        "A4": "pass",
+        "A5": "pass",
+        "A6": "pass"
+      }
+    },
+    {
+      "session_id": "20260617-115258",
+      "task": "Migrated legacy eval artifacts",
+      "mode": "build+verify",
+      "repo_root": "",
+      "repo_name": "",
+      "started_at": "2026-06-17T07:49:28Z",
+      "finished_at": "2026-06-17T11:52:58Z",
+      "agents": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6"
+      ],
+      "overall_status": "pass",
+      "agent_status": {
+        "A1": "pass",
+        "A2": "pass",
+        "A3": "pass",
+        "A4": "pass",
+        "A5": "pass",
+        "A6": "pass"
+      }
+    },
+    {
+      "session_id": "20260617-112601",
+      "task": "Migrated legacy eval artifacts",
+      "mode": "build+verify",
+      "repo_root": "",
+      "repo_name": "",
+      "started_at": "2026-06-17T07:49:28Z",
+      "finished_at": "2026-06-17T11:51:01Z",
+      "agents": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6"
+      ],
+      "overall_status": "pass",
+      "agent_status": {
+        "A1": "pass",
+        "A2": "pass",
+        "A3": "pass",
+        "A4": "pass",
+        "A5": "pass",
+        "A6": "pass"
+      }
+    },
+    {
+      "session_id": "20260617-074928",
+      "task": "Migrated legacy eval artifacts",
+      "mode": "build+verify",
+      "repo_root": "",
+      "repo_name": "",
+      "started_at": "2026-06-17T07:49:28Z",
+      "finished_at": "2026-06-17T11:21:06Z",
+      "agents": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5"
+      ],
+      "overall_status": "partial",
+      "agent_status": {
+        "A1": "pass",
+        "A2": "pass",
+        "A3": "pass",
+        "A4": "pass",
+        "A5": "partial"
+      }
+    }
+  ],
+  "agents": [
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6"
+  ],
+  "selected_evaluation": {
+    "session_id": "20260617-121517",
+    "task": "Migrated legacy eval artifacts",
+    "mode": "build+verify",
+    "repo_root": "/Users/shivendrakeshari/Desktop/ParallelOps",
+    "repo_name": "ParallelOps",
+    "overall_status": "pass",
+    "agents": [
+      "A1",
+      "A2",
+      "A3",
+      "A4",
+      "A5"
+    ]
+  },
+  "chart_plan": {
+    "schema_version": "1.0",
+    "sections": [
+      {
+        "id": "metrics",
+        "component": "execution_metrics",
+        "title": "Execution Metrics",
+        "bindings": {
+          "data": "$.charts.execution_metrics"
+        }
+      },
+      {
+        "id": "timeline",
+        "component": "timeline",
+        "title": "Session Timeline",
+        "bindings": {
+          "data": "$.charts.timeline"
+        }
+      },
+      {
+        "id": "severity",
+        "component": "severity_distribution",
+        "title": "Agent Status Distribution",
+        "bindings": {
+          "data": "$.charts.severity_distribution"
+        }
+      },
+      {
+        "id": "agent_success",
+        "component": "success_rate",
+        "title": "Session Success Rate",
+        "bindings": {
+          "data": "$.charts.success_rate"
+        }
+      },
+      {
+        "id": "run_history",
+        "component": "execution_metrics",
+        "title": "Recent Runs",
+        "bindings": {
+          "data": "$.charts.run_history"
+        }
+      }
+    ]
+  },
+  "charts": {
+    "execution_metrics": [
+      {
+        "name": "A1",
+        "value": 1
+      },
+      {
+        "name": "A2",
+        "value": 1
+      },
+      {
+        "name": "A3",
+        "value": 1
+      },
+      {
+        "name": "A4",
+        "value": 1
+      },
+      {
+        "name": "A5",
+        "value": 1
+      }
+    ],
+    "timeline": [],
+    "severity_distribution": [],
+    "success_rate": {
+      "current": 100.0,
+      "label": "Session 20260617-121517",
+      "history": [
+        {
+          "label": "A1",
+          "rate": 100
+        },
+        {
+          "label": "A2",
+          "rate": 100
+        },
+        {
+          "label": "A3",
+          "rate": 100
+        },
+        {
+          "label": "A4",
+          "rate": 100
+        },
+        {
+          "label": "A5",
+          "rate": 100
+        }
+      ]
+    },
+    "run_history": [
+      {
+        "name": "121517",
+        "value": 50
+      },
+      {
+        "name": "115543",
+        "value": 50
+      },
+      {
+        "name": "115258",
+        "value": 50
+      },
+      {
+        "name": "112601",
+        "value": 50
+      },
+      {
+        "name": "074928",
+        "value": 50
+      }
+    ]
+  }
+}

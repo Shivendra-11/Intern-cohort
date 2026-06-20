@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: devops-eval
+    orgId: 1
+    folder: DevOps Eval
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    options:
+      path: /var/lib/grafana/dashboards

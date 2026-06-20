@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" role="img" aria-label="Three parallel lanes merging to main.py">
+  <rect width="640" height="200" fill="#f8fafc"/>
+  <text x="320" y="24" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#64748b">Parallel Lanes ’ Integrator</text>
+  <rect x="40" y="60" width="120" height="56" rx="8" fill="#8b5cf6" opacity="0.15" stroke="#8b5cf6"/>
+  <text x="100" y="92" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#5b21b6">lane-a</text>
+  <rect x="260" y="60" width="120" height="56" rx="8" fill="#3b82f6" opacity="0.15" stroke="#3b82f6"/>
+  <text x="320" y="92" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#1d4ed8">lane-b</text>
+  <rect x="480" y="60" width="120" height="56" rx="8" fill="#06b6d4" opacity="0.15" stroke="#06b6d4"/>
+  <text x="540" y="92" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#0e7490">lane-c</text>
+  <path d="M100 116 L100 140 L320 140 L320 156" stroke="#94a3b8" fill="none" stroke-width="2"/>
+  <path d="M320 116 L320 140" stroke="#94a3b8" fill="none" stroke-width="2"/>
+  <path d="M540 116 L540 140 L320 140" stroke="#94a3b8" fill="none" stroke-width="2"/>
+  <rect x="260" y="156" width="120" height="32" rx="6" fill="#f59e0b" opacity="0.2" stroke="#f59e0b"/>
+  <text x="320" y="176" text-anchor="middle" font-family="ui-monospace,monospace" font-size="12" fill="#b45309">main.py</text>
+</svg>

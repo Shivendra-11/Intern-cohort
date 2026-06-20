@@ -1,0 +1,25 @@
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+lambda.zip
+.venv/
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+.dashboard/dist/
+dashboard/dist/
+dashboard-dist.zip
+
+# Secrets & local env (commit .env.example only)
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Local runtime: deploy logs, tunnel URLs, pids, certs, prometheus data
+.devopsinfra/
+
+# Vercel CLI link metadata (machine-specific)
+dashboard/.vercel/

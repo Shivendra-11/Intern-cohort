@@ -1,0 +1,16 @@
+workspace/
+dashboard/node_modules/
+api/node_modules/
+dashboard/dist/
+.venv/
+venv/
+**/__pycache__/
+*.pyc
+.git/
+tests/
+examples/
+templates/
+agents/
+/tmp-scaffold/
+target/
+*.egg-info/

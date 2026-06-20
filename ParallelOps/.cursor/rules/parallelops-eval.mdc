@@ -1,0 +1,67 @@
+---
+description: "/parallelops-eval — one combined picker (A1–A6 + dashboard UI + custom). NEVER start with repo/branch/14 questions."
+alwaysApply: false
+---
+
+# parallelops-eval
+
+When the user types **`/parallelops-eval`**, load **only**:
+
+1. `.cursor/skills/parallelops-eval/SKILL.md` (this repo)
+2. `~/.cursor/skills/parallelops-eval/SKILL.md`
+
+Do **NOT** load legacy 14-question worktree flow unless user picks **Custom worktree pipeline**.
+
+---
+
+## FORBIDDEN on `/parallelops-eval`
+
+Stop if you were about to:
+
+- Ask **two separate** agent + mode pickers (old Step 1a / 1b split)
+- Ask "Which repository?" / "Base branch?" / 14 discovery questions (unless `custom`)
+
+---
+
+## mandatory flow — ONE AskQuestion (multi-select, 10 options)
+
+**Prompt:** `What do you want to run? (select one or more)`
+
+| ID | Label |
+|----|-------|
+| `A1` | A1 — Multi-Worktree Parallel Plan |
+| `A2` | A2 — Execute Parallel Worktrees |
+| `A3` | A3 — Polyglot Mini-System |
+| `A4` | A4 — Repository Modernization |
+| `A5` | A5 — Agent Code Review |
+| `A6` | A6 — Performance Profiling |
+| `all` | All — full battery (A1→A2→A3→A5→A6→A4) |
+| `dashboard-ui` | **Dashboard UI** — after agent run, open localhost dashboard for this repo |
+| `dashboard-md` | Dashboard from existing MD only (no agent run) |
+| `custom` | Custom worktree pipeline (14 questions) |
+
+### routing
+
+| Selection | Next |
+|-----------|------|
+| `custom` | 14-question wizard → `plan` / `approve` / `execute` |
+| only `dashboard-md` | `eval-dashboard-from-md --dashboard` → URL |
+| `dashboard-ui` alone | **Full battery** → mode → dispatch → `eval-finish` → URL |
+| `all` + `dashboard-ui` | Full battery → mode → dispatch → `eval-finish` → URL |
+| agents + `dashboard-ui` | Selected agents → mode → dispatch → `eval-finish` → URL |
+| agents only | Selected agents → mode → dispatch → `eval-finish` → URL |
+
+After agent runs: **`python -m parallelops.cli eval-finish`** → sync MD → dashboard for **current repo** → **Open Dashboard: http://localhost:3000/?session=…**
+
+---
+
+## agent → subagent map
+
+| Agent | Subagent |
+|-------|----------|
+| A1 | `worktree-planner` (plan) |
+| A2 | `worktree-planner` (execute) |
+| A3 | `polyglot-builder` |
+| A4 | `modernization-analyst` |
+| A5 | `adversarial-reviewer` |
+| A6 | `perf-profiler` |

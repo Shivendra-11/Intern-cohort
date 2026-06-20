@@ -1,0 +1,255 @@
+{
+  "updated_at": "2026-06-17T08:42:11Z",
+  "execution_status": "pass",
+  "selected_evaluation": {
+    "session_id": "20260617-074928",
+    "task": "Add CSV export + threshold config to a3-polyglot",
+    "mode": "build+verify",
+    "repo_root": "/Users/shivendrakeshari/Desktop/ParallelOps",
+    "base_branch": "main",
+    "overall_status": "pass",
+    "started_at": "2026-06-17T07:49:28Z",
+    "finished_at": "2026-06-17T08:42:11Z",
+    "duration_seconds": 3163,
+    "agents": ["A1", "A2", "A3", "A4", "A5"]
+  },
+  "metrics": {
+    "total_runs": 12,
+    "agents_executed": 5,
+    "artifacts_generated": 20,
+    "avg_duration_seconds": 2840,
+    "success_rate_percent": 83.3,
+    "running_count": 0
+  },
+  "agent_cards": [
+    {
+      "agent": "A1",
+      "label": "Multi-Worktree Plan",
+      "status": "pass",
+      "summary": "3 lanes, zero file overlap, merge order defined",
+      "duration_seconds": 2280,
+      "mode": "plan",
+      "artifact_count": 4
+    },
+    {
+      "agent": "A2",
+      "label": "Parallel Worktrees",
+      "status": "pass",
+      "summary": "2 lanes merged; 1 conflict resolved; verify PASS",
+      "duration_seconds": 5400,
+      "mode": "build+verify",
+      "artifact_count": 4
+    },
+    {
+      "agent": "A3",
+      "label": "Polyglot System",
+      "status": "pass",
+      "summary": "FastAPI + Node + Rust; 19 tests passing",
+      "duration_seconds": 9000,
+      "mode": "build+verify",
+      "artifact_count": 4
+    },
+    {
+      "agent": "A4",
+      "label": "Modernization",
+      "status": "pass",
+      "summary": "PEP 621 migration applied; pytest 5 passed",
+      "duration_seconds": 5400,
+      "mode": "build+verify",
+      "artifact_count": 4
+    },
+    {
+      "agent": "A5",
+      "label": "Code Review",
+      "status": "partial",
+      "summary": "5 issues found; 2 adversarial proofs verified",
+      "duration_seconds": 3600,
+      "mode": "build+verify",
+      "artifact_count": 4
+    }
+  ],
+  "generated_artifacts": [
+    {
+      "id": "art-001",
+      "agent": "A1",
+      "label": "metadata.json",
+      "kind": "json",
+      "path": "artifacts/A1/20260617-074928/metadata.json",
+      "updated_at": "2026-06-17T07:49:28Z"
+    },
+    {
+      "id": "art-002",
+      "agent": "A1",
+      "label": "report.md",
+      "kind": "markdown",
+      "path": "artifacts/A1/20260617-074928/report.md",
+      "updated_at": "2026-06-17T07:49:28Z"
+    },
+    {
+      "id": "art-003",
+      "agent": "A2",
+      "label": "report.json",
+      "kind": "json",
+      "path": "artifacts/A2/20260617-074928/report.json",
+      "updated_at": "2026-06-17T08:10:00Z"
+    },
+    {
+      "id": "art-004",
+      "agent": "A2",
+      "label": "logs.txt",
+      "kind": "log",
+      "path": "artifacts/A2/20260617-074928/logs.txt",
+      "updated_at": "2026-06-17T08:35:00Z"
+    },
+    {
+      "id": "art-005",
+      "agent": "A3",
+      "label": "report.md",
+      "kind": "markdown",
+      "path": "artifacts/A3/20260617-074928/report.md",
+      "updated_at": "2026-06-17T08:20:00Z"
+    },
+    {
+      "id": "art-006",
+      "agent": "A4",
+      "label": "first-step.patch",
+      "kind": "attachment",
+      "path": "artifacts/A4/20260617-074928/attachments/first-step.patch",
+      "updated_at": "2026-06-17T08:30:00Z"
+    },
+    {
+      "id": "art-007",
+      "agent": "A5",
+      "label": "issues.json",
+      "kind": "json",
+      "path": "artifacts/A5/20260617-074928/report.json",
+      "updated_at": "2026-06-17T08:42:00Z"
+    }
+  ],
+  "timeline": [
+    {
+      "id": "tl-001",
+      "timestamp": "2026-06-17T07:49:28Z",
+      "agent": "orchestrator",
+      "phase": "session_start",
+      "message": "Session 20260617-074928 started",
+      "level": "info"
+    },
+    {
+      "id": "tl-002",
+      "timestamp": "2026-06-17T07:52:00Z",
+      "agent": "A1",
+      "phase": "plan_complete",
+      "message": "3-lane decomposition written; overlap check PASS",
+      "level": "success"
+    },
+    {
+      "id": "tl-003",
+      "timestamp": "2026-06-17T08:05:00Z",
+      "agent": "A2",
+      "phase": "worktree_add",
+      "message": "Created wt-lane-a and wt-lane-b",
+      "level": "info"
+    },
+    {
+      "id": "tl-004",
+      "timestamp": "2026-06-17T08:18:00Z",
+      "agent": "A2",
+      "phase": "merge",
+      "message": "Conflict on app.py resolved",
+      "level": "warning"
+    },
+    {
+      "id": "tl-005",
+      "timestamp": "2026-06-17T08:22:00Z",
+      "agent": "A2",
+      "phase": "verify",
+      "message": "VERIFY: PASS — 7 tests",
+      "level": "success"
+    },
+    {
+      "id": "tl-006",
+      "timestamp": "2026-06-17T08:28:00Z",
+      "agent": "A3",
+      "phase": "verify",
+      "message": "Polyglot stack verified — Rust 6 / Python 9 / Node 4",
+      "level": "success"
+    },
+    {
+      "id": "tl-007",
+      "timestamp": "2026-06-17T08:35:00Z",
+      "agent": "A4",
+      "phase": "apply_patch",
+      "message": "First modernization step applied",
+      "level": "success"
+    },
+    {
+      "id": "tl-008",
+      "timestamp": "2026-06-17T08:42:00Z",
+      "agent": "A5",
+      "phase": "review",
+      "message": "Adversarial verification — 2 bugs reproduced",
+      "level": "warning"
+    },
+    {
+      "id": "tl-009",
+      "timestamp": "2026-06-17T08:42:11Z",
+      "agent": "orchestrator",
+      "phase": "session_complete",
+      "message": "Session finished — overall PASS",
+      "level": "success"
+    }
+  ],
+  "recent_runs": [
+    {
+      "session_id": "20260617-074928",
+      "task": "Add CSV export + threshold config to a3-polyglot",
+      "overall_status": "pass",
+      "agents": ["A1", "A2", "A3", "A4", "A5"],
+      "started_at": "2026-06-17T07:49:28Z",
+      "finished_at": "2026-06-17T08:42:11Z",
+      "duration_seconds": 3163,
+      "success_rate": 100
+    },
+    {
+      "session_id": "20260616-143022",
+      "task": "A2 worktree demo on sample-repo",
+      "overall_status": "pass",
+      "agents": ["A1", "A2"],
+      "started_at": "2026-06-16T14:30:22Z",
+      "finished_at": "2026-06-16T15:45:10Z",
+      "duration_seconds": 4488,
+      "success_rate": 100
+    },
+    {
+      "session_id": "20260615-091500",
+      "task": "A3 polyglot fraud pipeline rebuild",
+      "overall_status": "pass",
+      "agents": ["A3"],
+      "started_at": "2026-06-15T09:15:00Z",
+      "finished_at": "2026-06-15T11:02:33Z",
+      "duration_seconds": 6453,
+      "success_rate": 100
+    },
+    {
+      "session_id": "20260614-160000",
+      "task": "A4 textkit modernization analysis",
+      "overall_status": "partial",
+      "agents": ["A4"],
+      "started_at": "2026-06-14T16:00:00Z",
+      "finished_at": "2026-06-14T17:30:00Z",
+      "duration_seconds": 5400,
+      "success_rate": 50
+    },
+    {
+      "session_id": "20260613-103000",
+      "task": "Full battery A1→A5 dry run",
+      "overall_status": "fail",
+      "agents": ["A1", "A2", "A3", "A4", "A5"],
+      "started_at": "2026-06-13T10:30:00Z",
+      "finished_at": "2026-06-13T14:12:00Z",
+      "duration_seconds": 13320,
+      "success_rate": 60
+    }
+  ]
+}

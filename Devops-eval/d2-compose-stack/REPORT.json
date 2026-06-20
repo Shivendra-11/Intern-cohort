@@ -1,0 +1,23 @@
+{
+  "task": "D2",
+  "status": "PASS",
+  "description": "docker-compose API + Postgres + worker with e2e tests",
+  "duration_seconds": 76,
+  "services": ["api", "db", "worker"],
+  "tests_total": 5,
+  "tests_passed": 5,
+  "tests_failed": 0,
+  "cross_service_log_lines": 2,
+  "verify_mode": "docker-compose",
+  "teardown_command": "docker compose down -v",
+  "clean_reup_command": "docker compose down -v && docker compose up -d --build",
+  "artifacts": [
+    "d2-compose-stack/docker-compose.yml",
+    "d2-compose-stack/tests/e2e_test.sh",
+    "d2-compose-stack/scripts/verify.sh",
+    "d2-compose-stack/tests/e2e_test.log",
+    "d2-compose-stack/PROOF.md"
+  ],
+  "proof_excerpt": "processed job 2 — ALL 5 ASSERTIONS PASSED",
+  "timestamp": "2026-06-18T16:52:03Z"
+}

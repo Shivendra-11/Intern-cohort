@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "agent": "A2",
+  "session_id": "20260617-074928",
+  "status": "pass",
+  "summary": "2 lanes merged; 1 conflict resolved; verify PASS",
+  "chart_plan": {
+    "schema_version": "1.0",
+    "sections": [
+      {
+        "id": "metrics",
+        "component": "execution_metrics",
+        "title": "Execution Metrics",
+        "bindings": { "data": "$.charts.execution_metrics" }
+      },
+      {
+        "id": "timeline",
+        "component": "timeline",
+        "title": "Execution Timeline",
+        "bindings": { "data": "$.charts.timeline" }
+      },
+      {
+        "id": "branches",
+        "component": "branch_graph",
+        "title": "Branch Graph",
+        "bindings": { "data": "$.charts.branch_graph" }
+      },
+      {
+        "id": "worktrees",
+        "component": "worktree_graph",
+        "title": "Worktree Graph",
+        "bindings": { "data": "$.charts.worktree_graph" }
+      },
+      {
+        "id": "success",
+        "component": "success_rate",
+        "title": "Merge Success Rate",
+        "bindings": { "data": "$.charts.success_rate" }
+      }
+    ]
+  },
+  "charts": {
+    "execution_metrics": [
+      { "name": "Worktrees", "value": 2 },
+      { "name": "Commits", "value": 3 },
+      { "name": "Merges", "value": 2 },
+      { "name": "Conflicts", "value": 1 },
+      { "name": "Tests Passed", "value": 7 }
+    ],
+    "timeline": [
+      { "id": "t1", "label": "Worktree add", "phase": "worktree_add", "timestamp": "2026-06-17T08:02:00Z", "status": "pass" },
+      { "id": "t2", "label": "Lane A commit", "phase": "lane_a", "timestamp": "2026-06-17T08:15:00Z", "status": "pass" },
+      { "id": "t3", "label": "Lane B commit", "phase": "lane_b", "timestamp": "2026-06-17T08:22:00Z", "status": "pass" },
+      { "id": "t4", "label": "Merge lane A", "phase": "merge_a", "timestamp": "2026-06-17T08:30:00Z", "status": "pass" },
+      { "id": "t5", "label": "Merge lane B", "phase": "merge_b", "timestamp": "2026-06-17T08:35:00Z", "status": "warning" },
+      { "id": "t6", "label": "Resolve conflict", "phase": "resolve", "timestamp": "2026-06-17T08:38:00Z", "status": "pass" },
+      { "id": "t7", "label": "Verify", "phase": "verify", "timestamp": "2026-06-17T08:40:00Z", "status": "pass" }
+    ],
+    "branch_graph": {
+      "nodes": [
+        { "name": "feat/lane-a" },
+        { "name": "feat/lane-b" },
+        { "name": "main" }
+      ],
+      "links": [
+        { "source": 0, "target": 2, "value": 1 },
+        { "source": 1, "target": 2, "value": 1 }
+      ]
+    },
+    "worktree_graph": {
+      "nodes": [
+        { "name": "wt-lane-a" },
+        { "name": "wt-lane-b" },
+        { "name": "feat/lane-a" },
+        { "name": "feat/lane-b" }
+      ],
+      "links": [
+        { "source": 0, "target": 2, "value": 1 },
+        { "source": 1, "target": 3, "value": 1 }
+      ]
+    },
+    "success_rate": {
+      "current": 100,
+      "label": "Post-merge verification",
+      "history": [
+        { "label": "Lane A", "rate": 100 },
+        { "label": "Lane B", "rate": 100 },
+        { "label": "Merge A", "rate": 100 },
+        { "label": "Merge B", "rate": 100 },
+        { "label": "Verify", "rate": 100 }
+      ]
+    }
+  }
+}

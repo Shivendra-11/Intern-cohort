@@ -1,0 +1,18 @@
+         284953 function calls (284535 primitive calls) in 10.161 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+     16/1    0.000    0.000   10.161   10.161 {built-in method builtins.exec}
+        1    0.000    0.000   10.161   10.161 bench.py:1(<module>)
+        1    0.000    0.000   10.128   10.128 bench.py:32(main)
+        2    0.001    0.001   10.126    5.063 bench.py:21(_median_seconds)
+        9   10.083    1.120   10.092    1.121 dedup_slow.py:5(dedup_txn_ids)
+     28/5    0.000    0.000    0.033    0.007 <frozen importlib._bootstrap>:1349(_find_and_load)
+     28/5    0.000    0.000    0.032    0.006 <frozen importlib._bootstrap>:1304(_find_and_load_unlocked)
+        9    0.018    0.002    0.032    0.004 dedup.py:5(dedup_txn_ids)
+     21/5    0.000    0.000    0.031    0.006 <frozen importlib._bootstrap>:911(_load_unlocked)
+     14/5    0.000    0.000    0.031    0.006 <frozen importlib._bootstrap_external>:993(exec_module)
+    56/10    0.000    0.000    0.029    0.003 <frozen importlib._bootstrap>:480(_call_with_frames_removed)
+
+Hotspot: dedup_slow.dedup_txn_ids — ~99% cumulative time in bench run.

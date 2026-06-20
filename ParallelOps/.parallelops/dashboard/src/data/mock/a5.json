@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "agent": "A5",
+    "session_id": "20260617-074928",
+    "status": "partial",
+    "mode": "build+verify",
+    "summary": "5 issues found — 2 blocking, 3 non-blocking; 2 adversarial proofs verified",
+    "started_at": "2026-06-17T08:40:00Z",
+    "finished_at": "2026-06-17T08:58:00Z",
+    "duration_seconds": 1080
+  },
+  "issues": [
+    {
+      "id": "ISS-001",
+      "title": "Missing auth on admin export route",
+      "category": "security",
+      "severity": "critical",
+      "blocking": true,
+      "location": "routers/export.py:28",
+      "description": "GET /transactions/export.csv has no authentication dependency",
+      "fix_suggestion": "Add require_admin Depends() to export endpoint",
+      "verified": true
+    },
+    {
+      "id": "ISS-002",
+      "title": "Off-by-one in pagination helper",
+      "category": "correctness",
+      "severity": "high",
+      "blocking": true,
+      "location": "utils/pagination.py:42",
+      "description": "Upper bound uses len(items) inclusive instead of exclusive",
+      "fix_suggestion": "Change slice to items[start:end] with end = min(start + size, len(items))",
+      "verified": true
+    },
+    {
+      "id": "ISS-003",
+      "title": "Untested error branch in threshold validation",
+      "category": "tests",
+      "severity": "medium",
+      "blocking": false,
+      "location": "routers/thresholds.py:55",
+      "description": "Invalid threshold range returns 422 but no test covers it",
+      "fix_suggestion": "Add test_put_thresholds_invalid_range_returns_422",
+      "verified": false
+    },
+    {
+      "id": "ISS-004",
+      "title": "O(n²) duplicate scan in audit log",
+      "category": "performance",
+      "severity": "medium",
+      "blocking": false,
+      "location": "routers/audit.py:88",
+      "description": "Nested loop compares all entries on each append",
+      "fix_suggestion": "Use set for seen txn_ids or append-only without dedup scan",
+      "verified": false
+    },
+    {
+      "id": "ISS-005",
+      "title": "Inconsistent handler naming",
+      "category": "maintainability",
+      "severity": "low",
+      "blocking": false,
+      "location": "routers/*.py",
+      "description": "Mix of get_* and fetch_* prefixes across routers",
+      "fix_suggestion": "Standardize on get_* for read handlers per project convention",
+      "verified": false
+    }
+  ],
+  "severity_summary": {
+    "critical": 1,
+    "high": 1,
+    "medium": 2,
+    "low": 1,
+    "blocking": 2,
+    "non_blocking": 3
+  }
+}

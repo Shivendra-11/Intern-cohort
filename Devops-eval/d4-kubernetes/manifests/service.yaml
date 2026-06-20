@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: devops-eval-svc
+  namespace: devops-eval
+spec:
+  selector:
+    app: devops-eval-app
+  ports:
+    - port: 80
+      targetPort: 80
+  type: ClusterIP

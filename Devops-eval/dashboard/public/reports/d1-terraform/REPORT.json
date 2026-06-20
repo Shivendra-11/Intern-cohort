@@ -1,0 +1,33 @@
+{
+  "task": "D1",
+  "status": "PASS",
+  "description": "Terraform plan for S3 + Lambda + API Gateway",
+  "duration_seconds": 120,
+  "validate_exit_code": 0,
+  "plan_exit_code": 0,
+  "resource_count": 11,
+  "resources": [
+    "aws_s3_bucket.main",
+    "aws_s3_bucket_versioning.main",
+    "aws_s3_bucket_public_access_block.main",
+    "aws_iam_role.lambda_exec",
+    "aws_iam_role_policy_attachment.lambda_basic",
+    "aws_lambda_function.handler",
+    "aws_lambda_permission.api_gateway",
+    "aws_apigatewayv2_api.main",
+    "aws_apigatewayv2_integration.lambda",
+    "aws_apigatewayv2_route.hello",
+    "aws_apigatewayv2_stage.default"
+  ],
+  "artifacts": [
+    "d1-terraform/main.tf",
+    "d1-terraform/variables.tf",
+    "d1-terraform/outputs.tf",
+    "d1-terraform/provider.tf",
+    "d1-terraform/backend.tf",
+    "d1-terraform/README.md",
+    "d1-terraform/PROOF.md"
+  ],
+  "proof_excerpt": "Plan: 11 to add, 0 to change, 0 to destroy.",
+  "timestamp": "2026-06-17T12:00:00Z"
+}

@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Node
+node_modules/
+
+# Rust
+target/
+
+# Scaffolded output / scratch
+/tmp-scaffold/
+workspace/
+.DS_Store
+.vercel

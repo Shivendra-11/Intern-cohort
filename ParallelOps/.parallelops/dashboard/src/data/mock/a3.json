@@ -1,0 +1,123 @@
+{
+  "meta": {
+    "agent": "A3",
+    "session_id": "20260617-074928",
+    "status": "pass",
+    "mode": "build+verify",
+    "summary": "FastAPI + Node worker + Rust engine — 19 tests passing",
+    "started_at": "2026-06-17T08:10:00Z",
+    "finished_at": "2026-06-17T08:55:00Z",
+    "duration_seconds": 2700
+  },
+  "architecture": {
+    "flow": ["UI", "FastAPI", "File Queue", "Node Worker", "Rust Engine", "File Queue", "FastAPI"],
+    "components": [
+      {
+        "id": "fastapi",
+        "name": "FastAPI",
+        "role": "Ingest + poll results",
+        "lang": "Python",
+        "path": "a3-polyglot/main.py",
+        "port": 8000,
+        "status": "pass",
+        "tests_passed": 9,
+        "tests_failed": 0
+      },
+      {
+        "id": "node_worker",
+        "name": "Node Worker",
+        "role": "Queue pickup + pipe to Rust",
+        "lang": "Node.js",
+        "path": "a3-polyglot/worker/",
+        "status": "pass",
+        "tests_passed": 4,
+        "tests_failed": 0
+      },
+      {
+        "id": "rust_engine",
+        "name": "Rust Engine",
+        "role": "Fraud scoring via stdin/stdout",
+        "lang": "Rust",
+        "path": "a3-polyglot/fraud-engine/",
+        "status": "pass",
+        "tests_passed": 6,
+        "tests_failed": 0
+      }
+    ]
+  },
+  "data_contracts": [
+    {
+      "id": "DC1",
+      "from": "UI",
+      "to": "FastAPI",
+      "format": "POST /transaction JSON",
+      "description": "amount, merchant, location, card_type, timestamp → txn_id + stage queued"
+    },
+    {
+      "id": "DC2",
+      "from": "FastAPI",
+      "to": "File Queue",
+      "format": "queue/incoming/<txn_id>.json",
+      "description": "Transaction enqueued for worker pickup"
+    },
+    {
+      "id": "DC3",
+      "from": "Node Worker",
+      "to": "Rust Engine",
+      "format": "stdin JSON",
+      "description": "Worker pipes transaction JSON to fraud-engine binary"
+    },
+    {
+      "id": "DC4",
+      "from": "Rust Engine",
+      "to": "Node Worker",
+      "format": "stdout JSON",
+      "description": "score, verdict, factors returned on stdout"
+    },
+    {
+      "id": "DC5",
+      "from": "Node Worker",
+      "to": "File Queue",
+      "format": "queue/results/<txn_id>.json",
+      "description": "Scored result written; incoming file removed"
+    }
+  ],
+  "integration_tests": [
+    {
+      "id": "IT1",
+      "name": "Rust unit tests",
+      "suite": "cargo test",
+      "status": "pass",
+      "passed": 6,
+      "failed": 0,
+      "command": "cd fraud-engine && cargo test"
+    },
+    {
+      "id": "IT2",
+      "name": "Python API tests",
+      "suite": "pytest",
+      "status": "pass",
+      "passed": 9,
+      "failed": 0,
+      "command": "pytest a3-polyglot/tests/ -q"
+    },
+    {
+      "id": "IT3",
+      "name": "Node worker tests",
+      "suite": "node:test",
+      "status": "pass",
+      "passed": 4,
+      "failed": 0,
+      "command": "cd worker && npm test"
+    },
+    {
+      "id": "IT4",
+      "name": "Full stack verify",
+      "suite": "verify.sh",
+      "status": "pass",
+      "passed": 19,
+      "failed": 0,
+      "command": "bash shared/lib/verify.sh a3-polyglot"
+    }
+  ]
+}

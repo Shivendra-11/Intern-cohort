@@ -1,0 +1,81 @@
+diff --git a/README.md b/README.md
+index c64a315..4c7df94 100644
+--- a/README.md
++++ b/README.md
+@@ -4,7 +4,7 @@ Small string utilities.
+ 
+ ## Install
+ 
+-    python setup.py install
++    pip install -e ".[dev]"
+ 
+ ## Test
+ 
+diff --git a/pyproject.toml b/pyproject.toml
+new file mode 100644
+index 0000000..e1506c0
+--- /dev/null
++++ b/pyproject.toml
+@@ -0,0 +1,36 @@
++[build-system]
++requires = ["setuptools>=69.0.0", "wheel"]
++build-backend = "setuptools.build_meta"
++
++[project]
++name = "textkit"
++version = "0.1.0"
++description = "Small string utilities."
++readme = "README.md"
++requires-python = ">=3.10"
++classifiers = [
++    "Programming Language :: Python :: 3",
++    "Programming Language :: Python :: 3.10",
++    "Programming Language :: Python :: 3.11",
++    "Programming Language :: Python :: 3.12",
++]
++
++[project.optional-dependencies]
++dev = [
++    "pytest==9.1.0",
++    "ruff==0.15.17",
++]
++
++[tool.setuptools.packages.find]
++where = ["."]
++include = ["textkit*"]
++
++[tool.ruff]
++target-version = "py310"
++line-length = 88
++
++[tool.ruff.lint]
++select = ["E", "F"]
++
++[tool.ruff.lint.per-file-ignores]
++"textkit/__init__.py" = ["F401"]
+diff --git a/requirements.txt b/requirements.txt
+deleted file mode 100644
+index 71cc539..0000000
+--- a/requirements.txt
++++ /dev/null
+@@ -1,2 +0,0 @@
+-pytest
+-ruff
+diff --git a/setup.py b/setup.py
+deleted file mode 100644
+index 00bd2a4..0000000
+--- a/setup.py
++++ /dev/null
+@@ -1,12 +0,0 @@
+-from setuptools import setup, find_packages
+-
+-setup(
+-    name="textkit",
+-    version="0.1.0",
+-    packages=find_packages(),
+-    install_requires=[],
+-    classifiers=[
+-        "Programming Language :: Python :: 2.7",
+-        "Programming Language :: Python :: 3.5",
+-    ],
+-)

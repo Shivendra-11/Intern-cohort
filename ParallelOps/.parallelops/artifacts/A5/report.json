@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "agent": "A5",
+  "session_id": "20260618-gap-closure",
+  "status": "pass",
+  "summary": "5 issues; 2 blocking; 2 verified with pytest evidence",
+  "chart_plan": {
+    "schema_version": "1.0",
+    "sections": [
+      {
+        "id": "metrics",
+        "component": "execution_metrics",
+        "title": "Review Metrics",
+        "bindings": { "data": "$.charts.execution_metrics" }
+      },
+      {
+        "id": "severity",
+        "component": "severity_distribution",
+        "title": "Severity Distribution",
+        "bindings": { "data": "$.charts.severity_distribution" }
+      }
+    ]
+  },
+  "charts": {
+    "execution_metrics": [
+      { "name": "Total Issues", "value": 5 },
+      { "name": "Blocking", "value": 2 },
+      { "name": "Non-blocking", "value": 3 },
+      { "name": "Verified", "value": 2 }
+    ],
+    "severity_distribution": [
+      { "name": "Critical", "value": 1, "fill": "#ef4444" },
+      { "name": "High", "value": 1, "fill": "#f59e0b" },
+      { "name": "Medium", "value": 2, "fill": "#6366f1" },
+      { "name": "Low", "value": 1, "fill": "#94a3b8" }
+    ]
+  }
+}

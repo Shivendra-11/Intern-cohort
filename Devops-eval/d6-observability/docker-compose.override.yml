@@ -1,0 +1,5 @@
+# Use when D2 stack already occupies host port 8000
+services:
+  service:
+    ports:
+      - "8001:8000"

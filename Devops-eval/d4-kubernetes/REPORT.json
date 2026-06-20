@@ -1,0 +1,23 @@
+{
+  "task": "D4",
+  "status": "PASS",
+  "description": "Kubernetes manifests on kind cluster",
+  "duration_seconds": 38,
+  "cluster_tool": "kind",
+  "namespace": "devops-eval",
+  "manifest_files": ["namespace.yaml", "configmap.yaml", "deployment.yaml", "service.yaml", "ingress.yaml"],
+  "dry_run_exit_code": 0,
+  "apply_exit_code": 0,
+  "replicas_ready": 2,
+  "curl_status_code": 200,
+  "curl_response_excerpt": "Welcome to nginx!",
+  "artifacts": [
+    "d4-kubernetes/manifests/",
+    "d4-kubernetes/scripts/verify.sh",
+    "d4-kubernetes/dry-run.log",
+    "d4-kubernetes/apply.log",
+    "d4-kubernetes/curl-proof.log",
+    "d4-kubernetes/PROOF.md"
+  ],
+  "timestamp": "2026-06-18T16:45:00Z"
+}

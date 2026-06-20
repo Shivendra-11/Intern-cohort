@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "agent": "A1",
+  "session_id": "20260617-074928",
+  "status": "pass",
+  "summary": "3 lanes, zero file overlap, merge order defined",
+  "chart_plan": {
+    "schema_version": "1.0",
+    "sections": [
+      {
+        "id": "metrics",
+        "component": "execution_metrics",
+        "title": "Execution Metrics",
+        "description": "Planning phase counts",
+        "bindings": { "data": "$.charts.execution_metrics" }
+      },
+      {
+        "id": "timeline",
+        "component": "timeline",
+        "title": "Planning Timeline",
+        "bindings": { "data": "$.charts.timeline" }
+      },
+      {
+        "id": "branches",
+        "component": "branch_graph",
+        "title": "Branch Graph",
+        "description": "Feature branches merging to main",
+        "bindings": { "data": "$.charts.branch_graph" }
+      },
+      {
+        "id": "worktrees",
+        "component": "worktree_graph",
+        "title": "Worktree Graph",
+        "description": "Worktrees mapped to branches",
+        "bindings": { "data": "$.charts.worktree_graph" }
+      },
+      {
+        "id": "success",
+        "component": "success_rate",
+        "title": "DoD Success Rate",
+        "bindings": { "data": "$.charts.success_rate" }
+      }
+    ]
+  },
+  "charts": {
+    "execution_metrics": [
+      { "name": "Lanes", "value": 3 },
+      { "name": "Branches", "value": 3 },
+      { "name": "Worktrees", "value": 3 },
+      { "name": "Risks", "value": 3 },
+      { "name": "Verify Steps", "value": 4 }
+    ],
+    "timeline": [
+      { "id": "t1", "label": "Analyze repo", "phase": "analyze", "timestamp": "2026-06-17T07:49:28Z", "status": "pass" },
+      { "id": "t2", "label": "Decompose lanes", "phase": "decompose", "timestamp": "2026-06-17T07:55:00Z", "status": "pass" },
+      { "id": "t3", "label": "Write lane prompts", "phase": "prompts", "timestamp": "2026-06-17T08:05:00Z", "status": "pass" },
+      { "id": "t4", "label": "Overlap check", "phase": "overlap", "timestamp": "2026-06-17T08:15:00Z", "status": "pass" },
+      { "id": "t5", "label": "Merge plan", "phase": "merge_plan", "timestamp": "2026-06-17T08:25:00Z", "status": "pass" }
+    ],
+    "branch_graph": {
+      "nodes": [
+        { "name": "feat/lane-a-export" },
+        { "name": "feat/lane-b-thresholds" },
+        { "name": "feat/lane-c-audit" },
+        { "name": "main" }
+      ],
+      "links": [
+        { "source": 0, "target": 3, "value": 1 },
+        { "source": 1, "target": 3, "value": 1 },
+        { "source": 2, "target": 3, "value": 1 }
+      ]
+    },
+    "worktree_graph": {
+      "nodes": [
+        { "name": "wt-lane-a" },
+        { "name": "wt-lane-b" },
+        { "name": "wt-lane-c" },
+        { "name": "feat/lane-a-export" },
+        { "name": "feat/lane-b-thresholds" },
+        { "name": "feat/lane-c-audit" }
+      ],
+      "links": [
+        { "source": 0, "target": 3, "value": 1 },
+        { "source": 1, "target": 4, "value": 1 },
+        { "source": 2, "target": 5, "value": 1 }
+      ]
+    },
+    "success_rate": {
+      "current": 100,
+      "label": "DoD checks passed",
+      "history": [
+        { "label": "Lane count", "rate": 100 },
+        { "label": "No overlap", "rate": 100 },
+        { "label": "Merge plan", "rate": 100 },
+        { "label": "Verify plan", "rate": 100 }
+      ]
+    }
+  }
+}

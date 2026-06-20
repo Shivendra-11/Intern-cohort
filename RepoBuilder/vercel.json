@@ -1,0 +1,10 @@
+{
+  "buildCommand": "bash scripts/prepare-vercel-deploy.sh",
+  "installCommand": "cd dashboard && npm ci",
+  "outputDirectory": "dashboard/dist",
+  "framework": null,
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

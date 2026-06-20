@@ -1,0 +1,141 @@
+{
+  "meta": {
+    "agent": "A2",
+    "session_id": "20260617-074928",
+    "status": "pass",
+    "mode": "build+verify",
+    "summary": "2 worktrees merged with 1 conflict resolved; verify PASS",
+    "started_at": "2026-06-17T08:00:00Z",
+    "finished_at": "2026-06-17T08:42:00Z",
+    "duration_seconds": 2520
+  },
+  "timeline": [
+    {
+      "id": "t1",
+      "timestamp": "2026-06-17T08:00:05Z",
+      "phase": "setup",
+      "message": "Loaded A1 execution plan",
+      "status": "info"
+    },
+    {
+      "id": "t2",
+      "timestamp": "2026-06-17T08:02:00Z",
+      "phase": "worktree_add",
+      "message": "Created wt-lane-a and wt-lane-b",
+      "status": "pass"
+    },
+    {
+      "id": "t3",
+      "timestamp": "2026-06-17T08:15:00Z",
+      "phase": "lane_a_commit",
+      "message": "Lane A committed — 3 tests passed",
+      "status": "pass"
+    },
+    {
+      "id": "t4",
+      "timestamp": "2026-06-17T08:22:00Z",
+      "phase": "lane_b_commit",
+      "message": "Lane B committed — 4 tests passed",
+      "status": "pass"
+    },
+    {
+      "id": "t5",
+      "timestamp": "2026-06-17T08:30:00Z",
+      "phase": "merge_lane_a",
+      "message": "Merged feat/lane-a — clean",
+      "status": "pass"
+    },
+    {
+      "id": "t6",
+      "timestamp": "2026-06-17T08:35:00Z",
+      "phase": "merge_lane_b",
+      "message": "Conflict on app.py detected",
+      "status": "warning"
+    },
+    {
+      "id": "t7",
+      "timestamp": "2026-06-17T08:38:00Z",
+      "phase": "conflict_resolve",
+      "message": "Resolved app.py — combined FEATURES",
+      "status": "pass"
+    },
+    {
+      "id": "t8",
+      "timestamp": "2026-06-17T08:40:00Z",
+      "phase": "verify",
+      "message": "VERIFY: PASS — 7 tests",
+      "status": "pass"
+    },
+    {
+      "id": "t9",
+      "timestamp": "2026-06-17T08:42:00Z",
+      "phase": "cleanup",
+      "message": "Removed 2 worktrees",
+      "status": "pass"
+    }
+  ],
+  "branches": [
+    { "name": "feat/lane-a", "lane_id": "lane-a", "base": "main" },
+    { "name": "feat/lane-b", "lane_id": "lane-b", "base": "main" },
+    { "name": "main", "lane_id": "integrator", "base": "main" }
+  ],
+  "commits": [
+    {
+      "sha": "eb758f1",
+      "message": "feat(export): add lane-a module and register export feature",
+      "lane_id": "lane-a",
+      "branch": "feat/lane-a",
+      "authored_at": "2026-06-17T08:14:00Z"
+    },
+    {
+      "sha": "5be849c",
+      "message": "feat(thresholds): add lane-b module and register thresholds feature",
+      "lane_id": "lane-b",
+      "branch": "feat/lane-b",
+      "authored_at": "2026-06-17T08:21:00Z"
+    },
+    {
+      "sha": "a3f91c2",
+      "message": "merge: resolve app.py conflict from lane-b",
+      "lane_id": "integrator",
+      "branch": "main",
+      "authored_at": "2026-06-17T08:38:00Z"
+    }
+  ],
+  "push_status": {
+    "enabled": false,
+    "pushed": false,
+    "branches": [
+      { "name": "feat/lane-a", "pushed": false },
+      { "name": "feat/lane-b", "pushed": false },
+      { "name": "main", "pushed": false }
+    ],
+    "message": "No pushes (auto_push_lanes=false)"
+  },
+  "merge_status": [
+    {
+      "lane_id": "lane-a",
+      "branch": "feat/lane-a",
+      "status": "pass",
+      "conflict": false,
+      "conflict_files": []
+    },
+    {
+      "lane_id": "lane-b",
+      "branch": "feat/lane-b",
+      "status": "pass",
+      "conflict": true,
+      "conflict_files": ["app.py"],
+      "resolution": "Combined VERSION and FEATURES from both lanes"
+    }
+  ],
+  "conflicts": [
+    {
+      "id": "C1",
+      "file": "app.py",
+      "branches": ["feat/lane-a", "feat/lane-b"],
+      "status": "resolved",
+      "resolution": "Merged FEATURES = ['export', 'thresholds']; VERSION = '0.2.0'"
+    }
+  ]
+}

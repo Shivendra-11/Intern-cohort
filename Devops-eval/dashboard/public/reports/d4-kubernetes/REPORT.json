@@ -1,0 +1,19 @@
+{
+  "task": "D4",
+  "status": "WARN",
+  "description": "Kubernetes manifests on kind cluster",
+  "duration_seconds": 30,
+  "cluster_tool": "kind",
+  "namespace": "devops-eval",
+  "manifest_files": ["namespace.yaml", "configmap.yaml", "deployment.yaml", "service.yaml", "ingress.yaml"],
+  "dry_run_exit_code": 0,
+  "apply_exit_code": -1,
+  "replicas_ready": 0,
+  "curl_status_code": 0,
+  "curl_response_excerpt": "Pending kind cluster apply",
+  "artifacts": [
+    "d4-kubernetes/manifests/",
+    "d4-kubernetes/PROOF.md"
+  ],
+  "timestamp": "2026-06-17T14:20:00Z"
+}

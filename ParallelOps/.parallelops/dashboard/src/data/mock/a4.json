@@ -1,0 +1,83 @@
+{
+  "meta": {
+    "agent": "A4",
+    "session_id": "20260617-074928",
+    "status": "pass",
+    "mode": "build+verify",
+    "summary": "PEP 621 migration selected and applied — pytest 5 passed",
+    "started_at": "2026-06-17T08:25:00Z",
+    "finished_at": "2026-06-17T08:50:00Z",
+    "duration_seconds": 1500
+  },
+  "target_repo": "a4-modernization/target-repo/",
+  "baseline_commit": "eb834b8",
+  "findings": [
+    {
+      "id": "F1",
+      "title": "Legacy setup.py packaging",
+      "severity": "high",
+      "impact": "Non-reproducible installs; blocks modern tooling",
+      "evidence": "setup.py:1-12 — no pyproject.toml",
+      "action": "Migrate to PEP 621 pyproject.toml",
+      "addressed": true
+    },
+    {
+      "id": "F2",
+      "title": "Unpinned dependencies",
+      "severity": "medium",
+      "impact": "CI/local drift on pytest and ruff versions",
+      "evidence": "requirements.txt:1-2 — bare package names",
+      "action": "Pin in [project.optional-dependencies] dev",
+      "addressed": true
+    },
+    {
+      "id": "F3",
+      "title": "Stale Python classifiers",
+      "severity": "low",
+      "impact": "Misleading EOL version support signals",
+      "evidence": "setup.py:9-10 — Python 2.7, 3.5",
+      "action": "Update to Python 3.10+ in pyproject.toml",
+      "addressed": true
+    },
+    {
+      "id": "F4",
+      "title": "No ruff configuration",
+      "severity": "medium",
+      "impact": "6 F401 errors with no project rules",
+      "evidence": "requirements.txt lists ruff; no [tool.ruff]",
+      "action": "Add [tool.ruff] with re-export ignores",
+      "addressed": false
+    },
+    {
+      "id": "F5",
+      "title": "Missing .gitignore",
+      "severity": "low",
+      "impact": "Virtualenv and cache artifacts may be committed",
+      "evidence": "ls — no .gitignore in baseline",
+      "action": "Add standard Python .gitignore",
+      "addressed": false
+    }
+  ],
+  "priority_matrix": [
+    { "finding_id": "F1", "score": 92, "value": "high", "risk": "low", "selected": true },
+    { "finding_id": "F2", "score": 78, "value": "high", "risk": "low", "selected": false },
+    { "finding_id": "F4", "score": 65, "value": "medium", "risk": "low", "selected": false },
+    { "finding_id": "F3", "score": 40, "value": "low", "risk": "low", "selected": false },
+    { "finding_id": "F5", "score": 35, "value": "low", "risk": "low", "selected": false }
+  ],
+  "implemented_step": {
+    "finding_id": "F1",
+    "title": "PEP 621 pyproject.toml migration",
+    "branch": "modernize/first-step",
+    "patch_ref": "attachments/first-step.patch",
+    "status": "pass",
+    "verification": "pytest -q → 5 passed"
+  },
+  "rollback_notes": [
+    "git checkout main && git branch -D modernize/first-step",
+    "Restore setup.py from baseline commit eb834b8",
+    "Remove pyproject.toml if added",
+    "Re-run pytest to confirm baseline state",
+    "See a4-modernization/ROLLBACK.md for full procedure"
+  ]
+}

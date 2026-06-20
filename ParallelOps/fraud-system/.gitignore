@@ -1,0 +1,9 @@
+.venv/
+node_modules/
+fraud-engine/target/
+queue/incoming/*
+queue/status/*
+queue/results/*
+__pycache__/
+*.pyc
+.pytest_cache/

@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "agent": "A4",
+  "session_id": "20260617-074928",
+  "status": "pass",
+  "summary": "PEP 621 migration applied; pytest 5 passed",
+  "chart_plan": {
+    "schema_version": "1.0",
+    "sections": [
+      {
+        "id": "metrics",
+        "component": "execution_metrics",
+        "title": "Findings Metrics",
+        "bindings": { "data": "$.charts.execution_metrics" }
+      },
+      {
+        "id": "severity",
+        "component": "severity_distribution",
+        "title": "Finding Severity",
+        "bindings": { "data": "$.charts.severity_distribution" }
+      },
+      {
+        "id": "priority",
+        "component": "priority_matrix",
+        "title": "Priority Matrix",
+        "description": "Value vs risk — bubble size = score",
+        "bindings": { "data": "$.charts.priority_matrix" }
+      },
+      {
+        "id": "timeline",
+        "component": "timeline",
+        "title": "Modernization Timeline",
+        "bindings": { "data": "$.charts.timeline" }
+      },
+      {
+        "id": "success",
+        "component": "success_rate",
+        "title": "Implementation Success",
+        "bindings": { "data": "$.charts.success_rate" }
+      }
+    ]
+  },
+  "charts": {
+    "execution_metrics": [
+      { "name": "Findings", "value": 5 },
+      { "name": "Addressed", "value": 3 },
+      { "name": "Open", "value": 2 },
+      { "name": "High Severity", "value": 1 },
+      { "name": "Tests Passed", "value": 5 }
+    ],
+    "severity_distribution": [
+      { "name": "High", "value": 1, "fill": "#f59e0b" },
+      { "name": "Medium", "value": 2, "fill": "#6366f1" },
+      { "name": "Low", "value": 2, "fill": "#94a3b8" }
+    ],
+    "priority_matrix": [
+      { "id": "F1", "label": "setup.py → pyproject", "value_score": 92, "risk_score": 15, "score": 92, "selected": true },
+      { "id": "F2", "label": "Pin dependencies", "value_score": 78, "risk_score": 20, "score": 78, "selected": false },
+      { "id": "F4", "label": "Ruff config", "value_score": 65, "risk_score": 18, "score": 65, "selected": false },
+      { "id": "F3", "label": "Classifiers", "value_score": 40, "risk_score": 10, "score": 40, "selected": false },
+      { "id": "F5", "label": ".gitignore", "value_score": 35, "risk_score": 8, "score": 35, "selected": false }
+    ],
+    "timeline": [
+      { "id": "t1", "label": "Baseline scan", "phase": "scan", "timestamp": "2026-06-17T08:25:00Z", "status": "pass" },
+      { "id": "t2", "label": "Prioritize F1", "phase": "prioritize", "timestamp": "2026-06-17T08:32:00Z", "status": "pass" },
+      { "id": "t3", "label": "Apply patch", "phase": "apply", "timestamp": "2026-06-17T08:40:00Z", "status": "pass" },
+      { "id": "t4", "label": "pytest verify", "phase": "verify", "timestamp": "2026-06-17T08:48:00Z", "status": "pass" }
+    ],
+    "success_rate": {
+      "current": 100,
+      "history": [
+        { "label": "F1 step", "rate": 100 },
+        { "label": "pytest", "rate": 100 }
+      ]
+    }
+  }
+}

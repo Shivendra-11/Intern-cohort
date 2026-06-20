@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Run repo-intelligence CLI without pip install
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+export PYTHONPATH="${ROOT}${PYTHONPATH:+:$PYTHONPATH}"
+exec python3 -m cli.main "$@"

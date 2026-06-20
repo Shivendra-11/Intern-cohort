@@ -1,0 +1,103 @@
+# ── Python ──────────────────────────────────────────────────────────────────
+.venv/
+.venv-framework/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ── Node ────────────────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ── Rust ────────────────────────────────────────────────────────────────────
+target/
+# A6 perf eval source (exception — not a Cargo target dir)
+!a6-perf-profiling/target/
+!a6-perf-profiling/target/**
+
+# ── Environment & secrets ─────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.pem
+credentials.env
+**/credentials.env
+
+# ── OS & editors ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.sublime-*
+
+# ── Logs & runtime ──────────────────────────────────────────────────────────
+*.log
+.parallelops/dashboard.pid
+
+# ── Vercel (local link metadata — do not commit) ──────────────────────────────
+.vercel/
+**/.vercel/
+.parallelops/macos-ca-bundle.pem
+
+# ── Dashboard build output (rebuilt by npm run build / deploy script) ─────────
+.parallelops/dashboard/dist/
+.parallelops/dashboard/public/api/
+
+# ── A3 audit runtime log ──────────────────────────────────────────────────────
+a3-polyglot/audit/log.jsonl
+
+# ── A3 file-queue runtime artifacts ───────────────────────────────────────────
+a3-polyglot/queue/incoming/*
+a3-polyglot/queue/results/*
+a3-polyglot/queue/status/*
+!a3-polyglot/queue/incoming/.gitkeep
+!a3-polyglot/queue/results/.gitkeep
+!a3-polyglot/queue/status/.gitkeep
+
+fraud-system/queue/incoming/*
+fraud-system/queue/results/*
+fraud-system/queue/status/*
+!fraud-system/queue/incoming/.gitkeep
+!fraud-system/queue/results/.gitkeep
+!fraud-system/queue/status/.gitkeep
+
+# ── Worktrees created by A2 demo ────────────────────────────────────────────
+wt-lane-*/
+
+# ── ParallelOps framework (added by install-parallelops.sh) ───────────────────
+.parallelops/worktrees/*
+!.parallelops/worktrees/.gitkeep
+.parallelops/logs/*
+!.parallelops/logs/.gitkeep
+.parallelops/sessions/*
+!.parallelops/sessions/.gitkeep
+.parallelops/artifacts/a1_execution_plan.yaml
+.parallelops/artifacts/user_request.json
+.parallelops/artifacts/lane_prompts/*
+!.parallelops/artifacts/.gitkeep
+!.parallelops/artifacts/lane_prompts/.gitkeep
+
+# ── Ephemeral eval run logs (keep top-level A1–A6 reports; ignore session dumps)
+.parallelops/artifacts/runs/
+.parallelops/artifacts/eval_session.json
+.parallelops/artifacts/execution_approved.json
+.parallelops/artifacts/eval_selection.json
+
+# A4 modernization demo venvs (never commit)
+a4-modernization/**/.venv*/
+a4-modernization/**/.venv-*/
