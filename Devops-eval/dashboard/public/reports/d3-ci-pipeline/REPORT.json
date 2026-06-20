@@ -2,16 +2,18 @@
   "task": "D3",
   "status": "PASS",
   "description": "GitHub Actions CI: lint → test (matrix 3.11+3.12) → build image",
-  "duration_seconds": 45,
-  "pipeline_tool": "GitHub Actions (act local runner — simulated locally)",
+  "duration_seconds": 126,
+  "pipeline_tool": "GitHub Actions + act dry-run",
   "stages": ["lint", "test", "build-image"],
   "matrix": ["3.11", "3.12"],
   "cache_configured": true,
+  "docker_image_built": true,
   "green_run_log": "d3-ci-pipeline/act-run.log",
   "failure_demo_log": "d3-ci-pipeline/broken-commit-run.log",
   "artifacts": [
     "d3-ci-pipeline/.github/workflows/ci.yml",
+    "d3-ci-pipeline/scripts/verify.sh",
     "d3-ci-pipeline/PROOF.md"
   ],
-  "timestamp": "2026-06-17T14:20:00Z"
+  "timestamp": "2026-06-18T16:48:20Z"
 }

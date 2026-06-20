@@ -1,19 +1,22 @@
 {
   "task": "D6",
-  "status": "WARN",
+  "status": "PASS",
   "description": "Observability bolt-on: structured logs + /metrics + Prometheus + Grafana",
-  "duration_seconds": 90,
+  "duration_seconds": 130,
   "metrics_endpoint": "http://localhost:8000/metrics",
   "prometheus_url": "http://localhost:9090",
   "grafana_url": "http://localhost:3000",
   "dashboard_panels": ["Requests per second", "p95 Latency"],
   "load_script": "d6-observability/load.sh",
-  "screenshot": "d6-observability/dashboard-screenshot.png",
+  "load_requests": 1250,
+  "prometheus_query_proof": "d6-observability/prometheus-query.json",
+  "dashboard_panels_json": "d6-observability/dashboard-panels.json",
   "log_format": "JSON structured (structlog)",
   "artifacts": [
     "d6-observability/service/app.py",
     "d6-observability/docker-compose.obs.yml",
+    "d6-observability/scripts/verify.sh",
     "d6-observability/PROOF.md"
   ],
-  "timestamp": "2026-06-17T14:20:00Z"
+  "timestamp": "2026-06-18T16:55:00Z"
 }
