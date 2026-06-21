@@ -15,10 +15,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
 
-import inventory  # noqa: E402
 import endpoints  # noqa: E402
-import tests_detect  # noqa: E402
+import inventory  # noqa: E402
 import report  # noqa: E402
+import tests_detect  # noqa: E402
 
 PY_APP = os.path.join(HERE, "fixtures", "py_app")
 TS_APP = os.path.join(HERE, "fixtures", "ts_app")

@@ -9,8 +9,8 @@ from pathlib import Path
 
 from parallelops.eval_artifacts import (
     ARTIFACT_FILES,
-    AgentResult,
     BATTERY_ORDER,
+    AgentResult,
     build_dashboard_from_markdown,
     build_index,
     finalize_eval,

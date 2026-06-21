@@ -9,8 +9,7 @@ import argparse
 import os
 import re
 import sys
-from dataclasses import asdict, dataclass, field
-from typing import Dict, List, Optional, Set, Tuple
+from dataclasses import dataclass, field
 
 from core.file_scanner import FileScanner
 from core.inventory_ast import RawDefinition, available_parsers, parse_definitions
@@ -107,10 +106,10 @@ class InventoryResult:
     repo: str
     repo_name: str
     parser_mode: str
-    parsers_available: List[str]
-    counts: Dict[str, int] = field(default_factory=dict)
-    by_category: Dict[str, List[InventoryItem]] = field(default_factory=dict)
-    items: List[InventoryItem] = field(default_factory=list)
+    parsers_available: list[str]
+    counts: dict[str, int] = field(default_factory=dict)
+    by_category: dict[str, list[InventoryItem]] = field(default_factory=dict)
+    items: list[InventoryItem] = field(default_factory=list)
 
     def to_inventory_json(self) -> dict:
         return {
@@ -143,7 +142,7 @@ class InventoryAgent:
 
     def __init__(
         self,
-        scanner: Optional[FileScanner] = None,
+        scanner: FileScanner | None = None,
         workspace_root: str = "workspace",
     ) -> None:
         self.scanner = scanner or FileScanner()
@@ -151,7 +150,7 @@ class InventoryAgent:
         self.json_writer = JsonWriter()
         self.report_gen = ReportGenerator()
 
-    def run(self, repo_path: str, output_dir: Optional[str] = None) -> InventoryResult:
+    def run(self, repo_path: str, output_dir: str | None = None) -> InventoryResult:
         repo_path = os.path.abspath(repo_path)
         if not os.path.isdir(repo_path):
             raise ValueError(f"not a directory: {repo_path}")
@@ -185,7 +184,7 @@ class InventoryAgent:
         ast_files = 0
         regex_files = 0
 
-        buckets: Dict[str, List[InventoryItem]] = {c: [] for c in CATEGORIES}
+        buckets: dict[str, list[InventoryItem]] = {c: [] for c in CATEGORIES}
 
         for abs_path, lang in self.scanner.iter_source_files(repo_path):
             rel = os.path.relpath(abs_path, repo_path)
@@ -207,8 +206,8 @@ class InventoryAgent:
 
         # De-duplicate and sort.
         for cat in CATEGORIES:
-            seen: Set[Tuple[str, str, int]] = set()
-            unique: List[InventoryItem] = []
+            seen: set[tuple[str, str, int]] = set()
+            unique: list[InventoryItem] = []
             for item in buckets[cat]:
                 key = (item.name, item.file, item.line)
                 if key in seen:
@@ -217,7 +216,7 @@ class InventoryAgent:
                 unique.append(item)
             buckets[cat] = sorted(unique, key=lambda x: (x.file, x.line, x.name))
 
-        flat: List[InventoryItem] = []
+        flat: list[InventoryItem] = []
         for cat in CATEGORIES:
             flat.extend(buckets[cat])
 
@@ -236,7 +235,7 @@ class InventoryAgent:
             items=flat,
         )
 
-    def _add_configs(self, repo_path: str, buckets: Dict[str, List[InventoryItem]]) -> None:
+    def _add_configs(self, repo_path: str, buckets: dict[str, list[InventoryItem]]) -> None:
         for abs_path in self.scanner.iter_files(repo_path):
             if not self.scanner.is_config_file(abs_path):
                 continue
@@ -263,7 +262,7 @@ class InventoryAgent:
             signature=d.signature,
         )
 
-    def classify(self, d: RawDefinition, rel_path: str) -> Optional[str]:
+    def classify(self, d: RawDefinition, rel_path: str) -> str | None:
         blob = " ".join(d.decorators)
         for rx, cat in DECORATOR_CAT:
             if rx.search(blob) or rx.search(d.signature):
@@ -283,10 +282,10 @@ class InventoryAgent:
             return "classes"
         return None
 
-    def _regex_definitions(self, path: str, lang: str) -> List[RawDefinition]:
+    def _regex_definitions(self, path: str, lang: str) -> list[RawDefinition]:
         patterns = REGEX_PATTERNS.get(lang, [])
         lines = self.scanner.read_lines(path)
-        out: List[RawDefinition] = []
+        out: list[RawDefinition] = []
         for idx, line in enumerate(lines):
             for rx, kind in patterns:
                 m = rx.search(line)
@@ -311,7 +310,7 @@ class InventoryAgent:
         return out
 
     @staticmethod
-    def build_graph(items: List[InventoryItem]) -> dict:
+    def build_graph(items: list[InventoryItem]) -> dict:
         nodes = [
             {
                 "id": item.node_id(),
@@ -322,8 +321,8 @@ class InventoryAgent:
             }
             for item in items
         ]
-        edges: List[dict] = []
-        by_file: Dict[str, List[InventoryItem]] = {}
+        edges: list[dict] = []
+        by_file: dict[str, list[InventoryItem]] = {}
         for item in items:
             by_file.setdefault(item.file, []).append(item)
 
@@ -336,7 +335,7 @@ class InventoryAgent:
                     )
 
         # Link artifacts that share a directory prefix (module proximity).
-        dir_groups: Dict[str, List[InventoryItem]] = {}
+        dir_groups: dict[str, list[InventoryItem]] = {}
         for item in items:
             dir_groups.setdefault(os.path.dirname(item.file), []).append(item)
         for directory, group in dir_groups.items():
@@ -356,7 +355,7 @@ class InventoryAgent:
         return {"nodes": nodes, "edges": edges, "node_count": len(nodes), "edge_count": len(edges)}
 
     def render_markdown(self, result: InventoryResult) -> str:
-        sections: List[ReportSection] = []
+        sections: list[ReportSection] = []
         meta = ReportSection(
             title="Summary",
             body=self.report_gen.key_values(

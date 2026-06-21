@@ -8,7 +8,7 @@ from pathlib import Path
 
 from parallelops.a1_planner import A1PlannerAgent
 from parallelops.a2_executor import A2ExecutorAgent
-from parallelops.approval import is_approved, is_merge_approved, save_approval, save_merge_approval
+from parallelops.approval import is_approved, save_approval
 from parallelops.models import ExecutionPolicy
 from parallelops.plan_preview import write_plan_preview
 

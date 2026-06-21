@@ -13,7 +13,7 @@ ROOT = os.path.dirname(HERE)
 sys.path.insert(0, ROOT)
 
 from core.graph_engine import GraphEngine, GraphModel  # noqa: E402
-from core.inventory_agent import InventoryAgent, InventoryItem  # noqa: E402
+from core.inventory_agent import InventoryAgent  # noqa: E402
 from core.route_agent import RouteAgent  # noqa: E402
 
 PY_APP = os.path.join(HERE, "fixtures", "py_app")

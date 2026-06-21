@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import pytest
-
 from polyglot_eval.config import Autonomy
 from polyglot_eval.permissions import (
     _is_hard_denied,

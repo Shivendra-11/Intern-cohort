@@ -11,12 +11,11 @@ import sys
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
 
 from .config import Autonomy, resolve_model
 from .permissions import make_permission_handler, validate_repo_state
-from .tasks.registry import TASK_REGISTRY, get_task
 from .tasks.base import TaskSpec
+from .tasks.registry import TASK_REGISTRY, get_task
 
 
 @dataclass
@@ -24,8 +23,8 @@ class TaskResult:
     task_id: str
     title: str
     status: str  # "pass" | "fail" | "skipped"
-    report_path: Optional[Path] = None
-    error: Optional[str] = None
+    report_path: Path | None = None
+    error: str | None = None
     duration_seconds: float = 0.0
 
 
@@ -33,7 +32,7 @@ class TaskResult:
 class OrchestratorResult:
     repo: Path
     tasks_run: list[TaskResult] = field(default_factory=list)
-    summary_path: Optional[Path] = None
+    summary_path: Path | None = None
 
     @property
     def passed(self) -> list[TaskResult]:
@@ -72,7 +71,7 @@ async def _run_single_task(
 ) -> TaskResult:
     """Run one task as a Claude subagent and return the result."""
     try:
-        from claude_agent_sdk import query, ClaudeAgentOptions
+        from claude_agent_sdk import ClaudeAgentOptions, query
     except ImportError:
         return TaskResult(
             task_id=spec.id,
@@ -209,7 +208,7 @@ async def run_async(
         resolved_models = [resolve_model(s.id, model) for s in readonly_specs]
         tasks = [
             _run_single_task(s, repo, reports_dir, autonomy, m, mcp_server)
-            for s, m in zip(readonly_specs, resolved_models)
+            for s, m in zip(readonly_specs, resolved_models, strict=True)
         ]
         ro_results = await asyncio.gather(*tasks)
         # Preserve registry order

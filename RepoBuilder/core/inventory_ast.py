@@ -5,14 +5,16 @@ so the inventory agent can fall back to regex heuristics.
 """
 from __future__ import annotations
 
-import os
+import logging
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable, Dict, List, Optional, Tuple
 
 from core.file_scanner import FileScanner
 
+logger = logging.getLogger(__name__)
+
 # Lazy-loaded parsers: lang_key -> (Parser, language_label)
-_PARSERS: Dict[str, Tuple[object, str]] = {}
+_PARSERS: dict[str, tuple[object, str]] = {}
 _INIT_ATTEMPTED = False
 
 
@@ -24,7 +26,7 @@ class RawDefinition:
     syntactic_kind: str  # class | interface | function | enum | struct | trait | type
     line: int
     signature: str
-    decorators: Tuple[str, ...] = ()
+    decorators: tuple[str, ...] = ()
 
 
 def _node_text(source: bytes, node) -> str:
@@ -58,16 +60,19 @@ def _init_parsers() -> None:
                 lang_obj = getattr(mod, lang_attr)
             language = Language(lang_obj() if callable(lang_obj) else lang_obj)
             _PARSERS[key] = (Parser(language), key)
-        except Exception:
+        except Exception as exc:
+            # Grammar not installed or ABI mismatch — fall back to regex for this
+            # language. Logged at debug so the reason is recoverable when needed.
+            logger.debug("tree-sitter parser for %s unavailable: %s", key, exc)
             continue
 
 
-def available_parsers() -> List[str]:
+def available_parsers() -> list[str]:
     _init_parsers()
     return list(_PARSERS.keys())
 
 
-def parse_definitions(path: str, lang: str) -> Optional[List[RawDefinition]]:
+def parse_definitions(path: str, lang: str) -> list[RawDefinition] | None:
     """Parse a file with tree-sitter; return None if parser unavailable."""
     _init_parsers()
     parser_key = _lang_to_parser_key(lang)
@@ -104,8 +109,8 @@ def _walk(node, visit: Callable) -> None:
 
 # --- Python -----------------------------------------------------------------
 
-def _extract_python(source: bytes, root) -> List[RawDefinition]:
-    out: List[RawDefinition] = []
+def _extract_python(source: bytes, root) -> list[RawDefinition]:
+    out: list[RawDefinition] = []
 
     def visit(node) -> None:
         if node.type == "decorated_definition":
@@ -127,7 +132,7 @@ def _extract_python(source: bytes, root) -> List[RawDefinition]:
     return out
 
 
-def _python_def(source: bytes, node, decorators: Tuple[str, ...]) -> List[RawDefinition]:
+def _python_def(source: bytes, node, decorators: tuple[str, ...]) -> list[RawDefinition]:
     name_node = node.child_by_field_name("name")
     if not name_node:
         return []
@@ -140,8 +145,8 @@ def _python_def(source: bytes, node, decorators: Tuple[str, ...]) -> List[RawDef
 
 # --- JavaScript / TypeScript ------------------------------------------------
 
-def _extract_js_ts(source: bytes, root, *, is_ts: bool) -> List[RawDefinition]:
-    out: List[RawDefinition] = []
+def _extract_js_ts(source: bytes, root, *, is_ts: bool) -> list[RawDefinition]:
+    out: list[RawDefinition] = []
 
     def visit(node) -> None:
         if node.type == "class_declaration":
@@ -199,18 +204,18 @@ def _extract_js_ts(source: bytes, root, *, is_ts: bool) -> List[RawDefinition]:
     return out
 
 
-def _extract_javascript(source: bytes, root) -> List[RawDefinition]:
+def _extract_javascript(source: bytes, root) -> list[RawDefinition]:
     return _extract_js_ts(source, root, is_ts=False)
 
 
-def _extract_typescript(source: bytes, root) -> List[RawDefinition]:
+def _extract_typescript(source: bytes, root) -> list[RawDefinition]:
     return _extract_js_ts(source, root, is_ts=True)
 
 
 # --- Java -------------------------------------------------------------------
 
-def _extract_java(source: bytes, root) -> List[RawDefinition]:
-    out: List[RawDefinition] = []
+def _extract_java(source: bytes, root) -> list[RawDefinition]:
+    out: list[RawDefinition] = []
 
     def visit(node) -> None:
         if node.type == "class_declaration":
@@ -254,8 +259,8 @@ def _extract_java(source: bytes, root) -> List[RawDefinition]:
 
 # --- Go ---------------------------------------------------------------------
 
-def _extract_go(source: bytes, root) -> List[RawDefinition]:
-    out: List[RawDefinition] = []
+def _extract_go(source: bytes, root) -> list[RawDefinition]:
+    out: list[RawDefinition] = []
 
     def visit(node) -> None:
         if node.type == "type_declaration":
@@ -286,8 +291,8 @@ def _extract_go(source: bytes, root) -> List[RawDefinition]:
 
 # --- Rust -------------------------------------------------------------------
 
-def _extract_rust(source: bytes, root) -> List[RawDefinition]:
-    out: List[RawDefinition] = []
+def _extract_rust(source: bytes, root) -> list[RawDefinition]:
+    out: list[RawDefinition] = []
 
     def visit(node) -> None:
         mapping = {
@@ -322,7 +327,7 @@ _EXTRACTORS = {
 }
 
 
-def parser_for_file(path: str) -> Optional[str]:
+def parser_for_file(path: str) -> str | None:
     lang = FileScanner.language_of(path)
     if not lang:
         return None

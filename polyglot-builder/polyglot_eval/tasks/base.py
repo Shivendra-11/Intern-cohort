@@ -7,7 +7,7 @@ contract that the `submit_report` tool validates against.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 # Fully-qualified names of the custom MCP report tools (server name "report").
 # The SDK exposes SDK MCP tools as mcp__<server>__<tool>.

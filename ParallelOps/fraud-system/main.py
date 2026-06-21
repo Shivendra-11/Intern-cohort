@@ -8,7 +8,7 @@ import subprocess
 import sys
 import uuid
 from pathlib import Path
-from typing import List, Literal, Optional
+from typing import Literal
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -53,17 +53,17 @@ class Enqueued(BaseModel):
 class Status(BaseModel):
     txn_id: str
     stage: str
-    score: Optional[int] = None
-    verdict: Optional[str] = None
-    factors: Optional[List[str]] = None
-    amount: Optional[float] = None
-    merchant: Optional[str] = None
-    location: Optional[str] = None
-    card_type: Optional[str] = None
-    timestamp: Optional[str] = None
+    score: int | None = None
+    verdict: str | None = None
+    factors: list[str] | None = None
+    amount: float | None = None
+    merchant: str | None = None
+    location: str | None = None
+    card_type: str | None = None
+    timestamp: str | None = None
 
 
-def _read_json(path: Path) -> Optional[dict]:
+def _read_json(path: Path) -> dict | None:
     try:
         return json.loads(path.read_text())
     except (FileNotFoundError, json.JSONDecodeError):
@@ -101,10 +101,10 @@ def get_transaction(txn_id: str) -> Status:
     raise HTTPException(status_code=404, detail="unknown transaction id")
 
 
-@app.get("/transactions", response_model=List[Status])
-def list_transactions() -> List[Status]:
+@app.get("/transactions", response_model=list[Status])
+def list_transactions() -> list[Status]:
     seen: set[str] = set()
-    out: List[Status] = []
+    out: list[Status] = []
 
     for path in RESULTS.glob("*.json"):
         data = _read_json(path)
@@ -141,7 +141,7 @@ def run_tests() -> dict:
             BASE,
         ),
     ]
-    chunks: List[str] = []
+    chunks: list[str] = []
     all_passed = True
     for name, cmd, cwd in suites:
         try:

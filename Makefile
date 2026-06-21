@@ -20,7 +20,7 @@ PIP     := $(VPY) -m pip
 STAMP   := $(VENV)/.installed
 
 .DEFAULT_GOAL := help
-.PHONY: help test test-python test-node test-rust install clean distclean
+.PHONY: help test test-python test-node test-rust lint typecheck install clean distclean
 
 help:
 	@echo "Targets:"
@@ -29,6 +29,8 @@ help:
 	@echo "  make test-python  RepoBuilder + polyglot + ParallelOps (framework, A3, fraud-system)"
 	@echo "  make test-node    A3 Node worker"
 	@echo "  make test-rust    A3 Rust fraud-engine"
+	@echo "  make lint         ruff static-analysis gate (hard fail on findings)"
+	@echo "  make typecheck    mypy type-check (advisory)"
 	@echo "  make clean        delete __pycache__ and *.pyc"
 	@echo "  make distclean    also delete the .venv"
 	@echo ""
@@ -46,6 +48,8 @@ $(STAMP):
 	  -r ParallelOps/requirements-framework.txt \
 	  -r ParallelOps/a3-polyglot/requirements.txt \
 	  -r ParallelOps/fraud-system/requirements.txt
+	@echo "==> Installing static-analysis tools (ruff, mypy)"
+	$(PIP) install --quiet ruff mypy
 	@touch $(STAMP)
 	@echo "==> Environment ready."
 
@@ -76,6 +80,16 @@ test-rust:
 	@command -v cargo >/dev/null 2>&1 || { echo "==> cargo not found — skipping Rust suite"; exit 0; }
 	@echo "==> A3 Rust fraud-engine"
 	cd ParallelOps/a3-polyglot/fraud-engine && cargo test
+
+# Hard static-analysis gate — fails on any finding.
+lint: $(STAMP)
+	@echo "==> ruff check (lint gate)"
+	$(VENV)/bin/ruff check .
+
+# Advisory type-check — surfaces type debt but does not fail the build.
+typecheck: $(STAMP)
+	@echo "==> mypy (advisory)"
+	-$(VENV)/bin/mypy RepoBuilder/core polyglot-builder/polyglot_eval ParallelOps/parallelops
 
 clean:
 	find . -type d -name __pycache__ -prune -exec rm -rf {} + 2>/dev/null || true

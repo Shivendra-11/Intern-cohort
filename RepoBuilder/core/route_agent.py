@@ -5,7 +5,6 @@ import argparse
 import os
 import sys
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
 
 from core.file_scanner import FileScanner
 from core.json_writer import JsonWriter
@@ -35,13 +34,13 @@ class RouteRecord:
 class RouteDiscoveryResult:
     repo: str
     repo_name: str
-    backend: List[RouteRecord] = field(default_factory=list)
-    frontend: List[RouteRecord] = field(default_factory=list)
-    production_backend: List[RouteRecord] = field(default_factory=list)
-    production_frontend: List[RouteRecord] = field(default_factory=list)
+    backend: list[RouteRecord] = field(default_factory=list)
+    frontend: list[RouteRecord] = field(default_factory=list)
+    production_backend: list[RouteRecord] = field(default_factory=list)
+    production_frontend: list[RouteRecord] = field(default_factory=list)
 
     @property
-    def all_routes(self) -> List[RouteRecord]:
+    def all_routes(self) -> list[RouteRecord]:
         return self.backend + self.frontend
 
     def to_routes_json(self) -> dict:
@@ -78,7 +77,7 @@ class RouteAgent:
 
     def __init__(
         self,
-        scanner: Optional[FileScanner] = None,
+        scanner: FileScanner | None = None,
         workspace_root: str = "workspace",
     ) -> None:
         self.scanner = scanner or FileScanner()
@@ -86,7 +85,7 @@ class RouteAgent:
         self.json_writer = JsonWriter()
         self.report_gen = ReportGenerator()
 
-    def run(self, repo_path: str, output_dir: Optional[str] = None) -> RouteDiscoveryResult:
+    def run(self, repo_path: str, output_dir: str | None = None) -> RouteDiscoveryResult:
         repo_path = os.path.abspath(repo_path)
         if not os.path.isdir(repo_path):
             raise ValueError(f"not a directory: {repo_path}")
@@ -143,7 +142,7 @@ class RouteAgent:
         return any(part in low for part in NOISE_PATH_PARTS)
 
     @staticmethod
-    def build_route_graph(routes: List[RouteRecord]) -> dict:
+    def build_route_graph(routes: list[RouteRecord]) -> dict:
         nodes = [
             {
                 "id": r.node_id(),
@@ -156,10 +155,10 @@ class RouteAgent:
             }
             for r in routes
         ]
-        edges: List[dict] = []
+        edges: list[dict] = []
 
         # Same file adjacency.
-        by_file: Dict[str, List[RouteRecord]] = {}
+        by_file: dict[str, list[RouteRecord]] = {}
         for r in routes:
             by_file.setdefault(r.file, []).append(r)
         for file_path, group in by_file.items():
@@ -193,7 +192,7 @@ class RouteAgent:
         }
 
     def render_markdown(self, result: RouteDiscoveryResult) -> str:
-        sections: List[ReportSection] = [
+        sections: list[ReportSection] = [
             ReportSection(
                 title="Summary",
                 body=self.report_gen.key_values(

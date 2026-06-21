@@ -1,0 +1,40 @@
+# Root static-analysis gate for the hand-written framework code.
+# Generated, vendored, fixture, and scaffold-template trees are excluded so the
+# gate only judges code this repo actually authors and maintains.
+target-version = "py310"
+line-length = 120
+
+extend-exclude = [
+    ".venv",
+    ".venv-framework",
+    "venv",
+    "node_modules",
+    "target",
+    "__pycache__",
+    ".pytest_cache",
+    "dist",
+    "build",
+    # Generated / scaffolded / fixture / example trees — not maintained by hand.
+    "RepoBuilder/workspace",
+    "RepoBuilder/templates",
+    "RepoBuilder/tests/fixtures",
+    "polyglot-builder/examples",
+    "polyglot-builder/polyglot_eval/ui",
+    "examples",
+    "**/target-repo",
+    "**/fixture-repo",
+]
+
+[lint]
+# pyflakes (F), pycodestyle errors/warnings (E/W), import sorting (I),
+# pyupgrade (UP), and a subset of flake8-bugbear (B) — a pragmatic, low-churn set.
+select = ["F", "E", "W", "I", "UP", "B"]
+ignore = [
+    "E501",   # line length is enforced softly via line-length, not as a hard error
+    "B008",   # FastAPI/Depends idiom: function calls in argument defaults
+    "UP007",  # keep Optional[...] / Union[...] readable in public dataclasses
+]
+
+[lint.per-file-ignores]
+# Tests may shadow builtins and use broad fixtures.
+"**/tests/**" = ["B011"]

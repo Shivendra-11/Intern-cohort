@@ -7,7 +7,7 @@ import os
 import sys
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from core.json_writer import JsonWriter
 
@@ -22,7 +22,7 @@ class SourceRecord:
     relative_path: str
     absolute_path: str
     present: bool
-    error: Optional[str] = None
+    error: str | None = None
 
     def to_dict(self) -> dict:
         return {
@@ -40,15 +40,15 @@ class DashboardBuildResult:
     repo_path: str
     workspace_dir: str
     output_path: str
-    payload: Dict[str, Any] = field(default_factory=dict)
-    sources: List[SourceRecord] = field(default_factory=list)
+    payload: dict[str, Any] = field(default_factory=dict)
+    sources: list[SourceRecord] = field(default_factory=list)
 
     @property
     def complete_sources(self) -> int:
         return sum(1 for s in self.sources if s.present)
 
     @property
-    def missing_sources(self) -> List[str]:
+    def missing_sources(self) -> list[str]:
         return [s.key for s in self.sources if not s.present]
 
 
@@ -69,8 +69,8 @@ class DashboardDataBuilder:
         self,
         repo_path: str,
         *,
-        workspace_dir: Optional[str] = None,
-        output_path: Optional[str] = None,
+        workspace_dir: str | None = None,
+        output_path: str | None = None,
     ) -> DashboardBuildResult:
         repo_path = os.path.abspath(repo_path)
         if not os.path.isdir(repo_path):
@@ -131,7 +131,7 @@ class DashboardDataBuilder:
 
     def _load_source(
         self, key: str, path: str, workspace_dir: str
-    ) -> tuple[Optional[Any], SourceRecord]:
+    ) -> tuple[Any | None, SourceRecord]:
         path = os.path.abspath(path)
         rel = os.path.relpath(path, workspace_dir) if path.startswith(workspace_dir) else path
         if not os.path.isfile(path):
@@ -143,7 +143,7 @@ class DashboardDataBuilder:
                 error="file not found",
             )
         try:
-            with open(path, "r", encoding="utf-8") as fh:
+            with open(path, encoding="utf-8") as fh:
                 data = json.load(fh)
         except (OSError, json.JSONDecodeError) as exc:
             return None, SourceRecord(
@@ -162,10 +162,10 @@ class DashboardDataBuilder:
 
     def _load_generated_projects(
         self, workspace_dir: str
-    ) -> tuple[Dict[str, Any], List[SourceRecord]]:
+    ) -> tuple[dict[str, Any], list[SourceRecord]]:
         base = os.path.join(workspace_dir, "generated_projects")
-        projects: Dict[str, Any] = {}
-        sources: List[SourceRecord] = []
+        projects: dict[str, Any] = {}
+        sources: list[SourceRecord] = []
 
         if not os.path.isdir(base):
             sources.append(
@@ -210,12 +210,12 @@ class DashboardDataBuilder:
         repo_path: str,
         repo_name: str,
         workspace_dir: str,
-        inventory: Optional[Any],
-        routes: Optional[Any],
-        tests: Optional[Any],
-        graphs: Optional[Any],
-        generated_projects: Dict[str, Any],
-        sources: List[SourceRecord],
+        inventory: Any | None,
+        routes: Any | None,
+        tests: Any | None,
+        graphs: Any | None,
+        generated_projects: dict[str, Any],
+        sources: list[SourceRecord],
     ) -> dict:
         repo_from_sources = (
             (inventory or {}).get("repo")
@@ -253,12 +253,12 @@ class DashboardDataBuilder:
 
     @staticmethod
     def _build_summary(
-        inventory: Optional[Any],
-        routes: Optional[Any],
-        tests: Optional[Any],
-        graphs: Optional[Any],
-        generated_projects: Dict[str, Any],
-        sources: List[SourceRecord],
+        inventory: Any | None,
+        routes: Any | None,
+        tests: Any | None,
+        graphs: Any | None,
+        generated_projects: dict[str, Any],
+        sources: list[SourceRecord],
     ) -> dict:
         inv_counts = (inventory or {}).get("counts") or {}
         route_counts = (routes or {}).get("counts") or {}

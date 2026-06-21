@@ -3,12 +3,10 @@ from __future__ import annotations
 
 import os
 import time
-from pathlib import Path
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Callable, List, Optional
+from pathlib import Path
 
-from cli.paths import WORKSPACE_ROOT
-from cli.state import PlatformState, save_state
 from core.dashboard_data_builder import DashboardDataBuilder
 from core.fastapi_builder import FastAPIBuilder
 from core.graph_engine import GraphEngine
@@ -17,6 +15,9 @@ from core.node_builder import NodeBuilder
 from core.route_agent import RouteAgent
 from core.rust_builder import RustBuilder
 from core.test_agent import TestAgent
+
+from cli.paths import WORKSPACE_ROOT
+from cli.state import PlatformState, save_state
 
 
 @dataclass
@@ -33,7 +34,7 @@ class AnalyzeResult:
     repo_name: str
     workspace_dir: str
     dashboard_path: str
-    steps: List[StepResult] = field(default_factory=list)
+    steps: list[StepResult] = field(default_factory=list)
 
     @property
     def ok(self) -> bool:
@@ -57,10 +58,10 @@ def _step(name: str, fn: Callable[[], None], log: Callable[[str], None]) -> Step
 def run_analyze(
     repo_path: str,
     *,
-    workspace_root: Optional[str] = None,
+    workspace_root: str | None = None,
     run_tests: bool = True,
     builder_proof: bool = False,
-    log: Optional[Callable[[str], None]] = None,
+    log: Callable[[str], None] | None = None,
 ) -> AnalyzeResult:
     repo_path = os.path.abspath(repo_path)
     if not os.path.isdir(repo_path):
@@ -77,7 +78,7 @@ def run_analyze(
     out(f"  workspace : {os.path.join(ws, repo_name)}")
     out("")
 
-    steps: List[StepResult] = []
+    steps: list[StepResult] = []
 
     steps.append(_step("B1 inventory", lambda: InventoryAgent(workspace_root=ws).run(repo_path), out))
     steps.append(_step("B2 routes", lambda: RouteAgent(workspace_root=ws).run(repo_path), out))

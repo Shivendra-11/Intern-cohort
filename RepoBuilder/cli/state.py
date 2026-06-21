@@ -5,7 +5,7 @@ import json
 import os
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 from cli.paths import PID_FILE, STATE_DIR
 
@@ -25,7 +25,7 @@ class PlatformState:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: dict) -> "PlatformState":
+    def from_dict(cls, data: dict) -> PlatformState:
         return cls(
             repo_path=data["repo_path"],
             repo_name=data["repo_name"],
@@ -38,7 +38,7 @@ class PlatformState:
         )
 
 
-def save_state(state: PlatformState, state_dir: Optional[Path] = None) -> None:
+def save_state(state: PlatformState, state_dir: Path | None = None) -> None:
     base = state_dir or STATE_DIR
     base.mkdir(parents=True, exist_ok=True)
     path = base / "state.json"
@@ -47,7 +47,7 @@ def save_state(state: PlatformState, state_dir: Optional[Path] = None) -> None:
         fh.write("\n")
 
 
-def load_state(state_dir: Optional[Path] = None) -> Optional[PlatformState]:
+def load_state(state_dir: Path | None = None) -> PlatformState | None:
     path = (state_dir or STATE_DIR) / "state.json"
     if not path.is_file():
         return None
@@ -66,7 +66,7 @@ def save_pids(api_pid: int, ui_pid: int) -> None:
         fh.write("\n")
 
 
-def load_pids() -> Dict[str, Any]:
+def load_pids() -> dict[str, Any]:
     if not PID_FILE.is_file():
         return {}
     try:

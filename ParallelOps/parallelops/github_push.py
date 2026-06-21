@@ -57,7 +57,7 @@ def write_github_push_report(
     elif policy.push_final_branch:
         lines.append(f"- ⏳ **`{base}`** — will push after merge (Q7 auto-push=yes)")
     else:
-        lines.append(f"- _Base branch push disabled (enable Q7 auto-push)_")
+        lines.append("- _Base branch push disabled (enable Q7 auto-push)_")
     base_url = (final.url if final else None) or git_ops.github_urls(repo_root, base).get("branch_url")
     if base_url:
         lines.append(f"  - View on GitHub: {base_url}")

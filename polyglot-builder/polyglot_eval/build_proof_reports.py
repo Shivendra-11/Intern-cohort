@@ -24,14 +24,14 @@ def write_reports() -> None:
         f"# I1 Report — fixture-repo\n\n## entities\n\n"
         f"{len(i1['entities'])} entities scanned: "
         + ", ".join(e["name"] for e in i1["entities"][:10])
-        + f"\n\n## primary_keys\n\n"
+        + "\n\n## primary_keys\n\n"
         + "\n".join(
             f"- **{e['name']}**: {[c['name'] for c in e['columns'] if c.get('isPK')]}"
             for e in i1["entities"]
         )
-        + f"\n\n## relationships\n\n"
+        + "\n\n## relationships\n\n"
         + "\n".join(f"- {r['from']} → {r['to']} ({r['label']})" for r in i1.get("relationships", []))
-        + f"\n\n## sources\n\n"
+        + "\n\n## sources\n\n"
         + "\n".join(f"- `{e['sourceFile']}:{e['sourceLine']}` — {e['name']}" for e in i1["entities"])
         + f"\n\n## mermaid_diagram\n\n```mermaid\n{i1['mermaidDiagram']}\n```\n",
         encoding="utf-8",
@@ -43,9 +43,9 @@ def write_reports() -> None:
         f"`{i2['entryPoint']['file']}:{i2['entryPoint']['line']}` — `{i2['entryPoint']['function']}`\n\n"
         f"## trace_path\n\n"
         + "\n".join(f"{s['index']}. `{s['file']}:{s['line']}` **{s['function']}** — {s['description']}" for s in steps)
-        + f"\n\n## external_deps\n\n"
+        + "\n\n## external_deps\n\n"
         + "\n".join(f"- {d['name']}: {d['description']}" for d in i2.get("externalDeps", []))
-        + f"\n\n## side_effects\n\n"
+        + "\n\n## side_effects\n\n"
         + "\n".join(f"- {s['type']}: `{s['file']}`" for s in i2.get("sideEffects", []))
         + f"\n\n## sequence_diagram\n\n```mermaid\n{i2['mermaidDiagram']}\n```\n\n"
         f"## uncertainty\n\n"
@@ -89,7 +89,7 @@ def write_reports() -> None:
     )
 
     (PROOF / "I6_bug_diagnosis.md").write_text(
-        f"# I6 Report — fixture-repo\n\n## repro_steps\n\n"
+        "# I6 Report — fixture-repo\n\n## repro_steps\n\n"
         + "\n".join(f"{r['step']}. {r['action']}" for r in i6.get("reproSteps", []))
         + f"\n\n## root_cause\n\n"
         f"`{i6['rootCause']['file']}:{i6['rootCause']['line']}` — {i6['rootCause']['explanation']}\n\n"

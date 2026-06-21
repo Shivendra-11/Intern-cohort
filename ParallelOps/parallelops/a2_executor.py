@@ -11,8 +11,8 @@ from enum import Enum
 from pathlib import Path
 
 from parallelops import git_ops
-from parallelops.models import ExecutionPlan, ParallelLane
 from parallelops.approval import is_merge_approved
+from parallelops.models import ExecutionPlan, ParallelLane
 
 
 class LaneStatus(str, Enum):
@@ -295,7 +295,7 @@ A2 merges when you re-run execute after all lanes complete.
 
     def _list_commits(self, wt_path: Path, branch: str) -> list[str]:
         result = git_ops.run_git(wt_path, "log", "--oneline", "-5", branch)
-        return [l.strip() for l in result.stdout.splitlines() if l.strip()]
+        return [line.strip() for line in result.stdout.splitlines() if line.strip()]
 
     def _reconcile(
         self, session: ExecutionSession, logs_dir: Path, target: str, pause_on_conflict: bool
@@ -413,7 +413,7 @@ A2 merges when you re-run execute after all lanes complete.
     def _compute_status(self, session: ExecutionSession) -> str:
         if session.paused_for_conflict:
             return "FAILURE — paused for conflict"
-        all_lanes_ok = all(l.status == LaneStatus.COMPLETED for l in session.lanes)
+        all_lanes_ok = all(lane.status == LaneStatus.COMPLETED for lane in session.lanes)
         verify_ok = all(
             v.success
             for v in session.verification_results

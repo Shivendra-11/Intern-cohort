@@ -36,7 +36,7 @@ def file_exists(root, *names):
 def read(root, name):
     p = os.path.join(root, name)
     try:
-        with open(p, "r", encoding="utf-8", errors="ignore") as fh:
+        with open(p, encoding="utf-8", errors="ignore") as fh:
             return fh.read()
     except OSError:
         return ""

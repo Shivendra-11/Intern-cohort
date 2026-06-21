@@ -13,7 +13,6 @@ class TestGitHubPush(unittest.TestCase):
     def test_branch_url_with_slashes(self) -> None:
         url = git_ops._to_github_web("git@github.com:acme/my-repo.git")
         self.assertEqual(url, "https://github.com/acme/my-repo")
-        urls = git_ops.github_urls(Path("/tmp"), "fix/navbar-bugs")
         # no remote in /tmp — repo_url None; test path building via compare
         compare = git_ops.github_compare_url(Path("/tmp"), "main", "fix/navbar-bugs")
         self.assertIsNone(compare)

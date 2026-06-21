@@ -6,7 +6,6 @@ Each test uses an isolated temp queue via the A3_QUEUE_DIR env var.
 """
 import importlib
 import json
-import os
 import sys
 from pathlib import Path
 

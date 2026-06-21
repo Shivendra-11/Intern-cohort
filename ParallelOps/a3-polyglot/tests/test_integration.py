@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import importlib
 import json
-import os
 import subprocess
 import sys
 from pathlib import Path
@@ -45,8 +44,8 @@ def pipeline_client(tmp_path, monkeypatch):
     audit_log = tmp_path / "audit" / "log.jsonl"
     monkeypatch.setenv("A3_QUEUE_DIR", str(queue))
     monkeypatch.setenv("A3_AUDIT_LOG", str(audit_log))
-    import routers.audit as audit_mod
     import main
+    import routers.audit as audit_mod
 
     importlib.reload(audit_mod)
     importlib.reload(main)

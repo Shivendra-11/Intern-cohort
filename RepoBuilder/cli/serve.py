@@ -8,7 +8,6 @@ import subprocess
 import sys
 import time
 import webbrowser
-from typing import List, Optional, Tuple
 
 from cli.paths import (
     API_HOST,
@@ -39,11 +38,11 @@ def _ensure_dashboard_deps(log=print) -> None:
 
 
 def start_servers(
-    state: Optional[PlatformState] = None,
+    state: PlatformState | None = None,
     *,
     open_browser: bool = False,
     log=print,
-) -> Tuple[subprocess.Popen, subprocess.Popen]:
+) -> tuple[subprocess.Popen, subprocess.Popen]:
     from cli.paths import WORKSPACE_ROOT
 
     state = state or load_state()
@@ -140,12 +139,13 @@ def _wait_for_url(url: str, timeout: float = 30, log=print) -> None:
 def run_serve(
     *,
     open_browser: bool = False,
-    state: Optional[PlatformState] = None,
+    state: PlatformState | None = None,
 ) -> int:
     state = state or load_state()
     if state is None:
-        from cli.paths import WORKSPACE_ROOT
         from core.workspace_registry import WorkspaceRegistry
+
+        from cli.paths import WORKSPACE_ROOT
 
         registry = WorkspaceRegistry(str(WORKSPACE_ROOT))
         if not registry.list_repos():
@@ -156,7 +156,7 @@ def run_serve(
             )
             return 2
 
-    procs: List[subprocess.Popen] = []
+    procs: list[subprocess.Popen] = []
 
     def shutdown(*_args) -> None:
         for p in procs:

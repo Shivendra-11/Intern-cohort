@@ -13,7 +13,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from .config import Autonomy, DEFAULT_MODEL
+from .config import DEFAULT_MODEL, Autonomy
 from .tasks.registry import TASK_REGISTRY
 
 

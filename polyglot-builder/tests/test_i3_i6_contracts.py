@@ -9,11 +9,9 @@ The tests below pin those guarantees so a future edit can't silently weaken them
 from __future__ import annotations
 
 import pytest
-
 from polyglot_eval.tasks.i3_safe_change import SPEC as I3
 from polyglot_eval.tasks.i6_bug_diagnosis import SPEC as I6
 from polyglot_eval.tasks.registry import TASK_REGISTRY, get_task
-
 
 # ----------------------------------------------------------------------------- #
 # Shared safety guarantees                                                       #

@@ -32,7 +32,7 @@ def build_plan_preview(plan: ExecutionPlan) -> str:
 
     lines.extend(["", "## Merge order"])
     for i, lane_id in enumerate(plan.merge_order, 1):
-        lane = next((l for l in plan.parallel_lanes if l.id == lane_id), None)
+        lane = next((ln for ln in plan.parallel_lanes if ln.id == lane_id), None)
         name = lane.name if lane else lane_id
         lines.append(f"{i}. **{lane_id}** ({name})")
 

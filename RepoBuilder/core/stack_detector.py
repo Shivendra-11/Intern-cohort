@@ -3,12 +3,11 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Set
 
 from core.file_scanner import FileScanner, ScanResult
 
 # Stack name → manifest filenames that prove presence (checked at repo root first, then anywhere).
-STACK_MARKERS: Dict[str, List[str]] = {
+STACK_MARKERS: dict[str, list[str]] = {
     "node": ["package.json"],
     "python": ["pyproject.toml", "requirements.txt", "setup.py", "setup.cfg", "Pipfile"],
     "java": ["pom.xml", "build.gradle", "build.gradle.kts", "settings.gradle"],
@@ -17,7 +16,7 @@ STACK_MARKERS: Dict[str, List[str]] = {
 }
 
 # Map scanner language labels → platform stack names.
-LANG_TO_STACK: Dict[str, str] = {
+LANG_TO_STACK: dict[str, str] = {
     "javascript": "node",
     "typescript": "node",
     "python": "python",
@@ -33,7 +32,7 @@ class DetectedStack:
     """One detected technology stack with evidence."""
 
     name: str  # node | python | java | rust | go
-    manifest: Optional[str]  # relative path to primary manifest, if found
+    manifest: str | None  # relative path to primary manifest, if found
     source_file_count: int
     confidence: str  # high | medium | low
 
@@ -43,10 +42,10 @@ class StackProfile:
     """Full stack detection result for a repository."""
 
     root: str
-    stacks: List[DetectedStack] = field(default_factory=list)
-    primary_stack: Optional[str] = None
-    languages: Dict[str, int] = field(default_factory=dict)
-    manifests: Dict[str, str] = field(default_factory=dict)
+    stacks: list[DetectedStack] = field(default_factory=list)
+    primary_stack: str | None = None
+    languages: dict[str, int] = field(default_factory=dict)
+    manifests: dict[str, str] = field(default_factory=dict)
 
     def to_dict(self) -> dict:
         return {
@@ -69,12 +68,12 @@ class StackProfile:
 class StackDetector:
     """Identify Node, Python, Java, Rust, and Go stacks from filesystem signals."""
 
-    SUPPORTED_STACKS: Set[str] = {"node", "python", "java", "rust", "go"}
+    SUPPORTED_STACKS: set[str] = {"node", "python", "java", "rust", "go"}
 
-    def __init__(self, scanner: Optional[FileScanner] = None) -> None:
+    def __init__(self, scanner: FileScanner | None = None) -> None:
         self.scanner = scanner or FileScanner()
 
-    def detect(self, root: str, scan: Optional[ScanResult] = None) -> StackProfile:
+    def detect(self, root: str, scan: ScanResult | None = None) -> StackProfile:
         root = os.path.abspath(root)
         if not os.path.isdir(root):
             raise ValueError(f"not a directory: {root}")
@@ -84,7 +83,7 @@ class StackDetector:
         lang_counts = self._language_counts(scan)
         stack_source_counts = self._stack_source_counts(lang_counts)
 
-        detected: List[DetectedStack] = []
+        detected: list[DetectedStack] = []
         for stack_name in sorted(self.SUPPORTED_STACKS):
             manifest = manifests.get(stack_name)
             count = stack_source_counts.get(stack_name, 0)
@@ -110,8 +109,8 @@ class StackDetector:
             manifests={k: v for k, v in manifests.items() if v},
         )
 
-    def _find_manifests(self, root: str, scan: ScanResult) -> Dict[str, Optional[str]]:
-        found: Dict[str, Optional[str]] = {s: None for s in self.SUPPORTED_STACKS}
+    def _find_manifests(self, root: str, scan: ScanResult) -> dict[str, str | None]:
+        found: dict[str, str | None] = {s: None for s in self.SUPPORTED_STACKS}
 
         # Prefer manifests at repository root.
         for stack, names in STACK_MARKERS.items():
@@ -135,16 +134,16 @@ class StackDetector:
         return found
 
     @staticmethod
-    def _language_counts(scan: ScanResult) -> Dict[str, int]:
-        counts: Dict[str, int] = {}
+    def _language_counts(scan: ScanResult) -> dict[str, int]:
+        counts: dict[str, int] = {}
         for rec in scan.source_files:
             if rec.language:
                 counts[rec.language] = counts.get(rec.language, 0) + 1
         return counts
 
     @staticmethod
-    def _stack_source_counts(lang_counts: Dict[str, int]) -> Dict[str, int]:
-        totals: Dict[str, int] = {s: 0 for s in STACK_MARKERS}
+    def _stack_source_counts(lang_counts: dict[str, int]) -> dict[str, int]:
+        totals: dict[str, int] = {s: 0 for s in STACK_MARKERS}
         for lang, count in lang_counts.items():
             stack = LANG_TO_STACK.get(lang)
             if stack:
@@ -152,7 +151,7 @@ class StackDetector:
         return totals
 
     @staticmethod
-    def _confidence(manifest: Optional[str], source_count: int) -> str:
+    def _confidence(manifest: str | None, source_count: int) -> str:
         if manifest and source_count > 0:
             return "high"
         if manifest or source_count >= 5:

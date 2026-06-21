@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from parallelops.a2_executor import ExecutionSession, LaneStatus, PushRecord
 from parallelops import git_ops
+from parallelops.a2_executor import ExecutionSession, LaneStatus
 from parallelops.github_push import write_github_push_report
 
 
@@ -108,7 +108,7 @@ def build_final_report(session: ExecutionSession, repo_root: Path) -> Path:
 
     write_github_push_report(repo_root, plan, session.push_records)
 
-    lines.extend(["", f"See also: `.parallelops/reports/github_push_summary.md`"])
+    lines.extend(["", "See also: `.parallelops/reports/github_push_summary.md`"])
 
     lines.extend(["", "## Final status", f"**{session.final_status}**", ""])
     path.write_text("\n".join(lines), encoding="utf-8")

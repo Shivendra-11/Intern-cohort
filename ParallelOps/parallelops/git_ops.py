@@ -127,7 +127,7 @@ def list_conflicts(repo_root: Path) -> list[str]:
 
 def get_changed_files(repo_root: Path, branch: str, base: str = "main") -> list[str]:
     result = run_git(repo_root, "diff", "--name-only", f"{base}...{branch}")
-    return [l.strip() for l in result.stdout.splitlines() if l.strip()]
+    return [line.strip() for line in result.stdout.splitlines() if line.strip()]
 
 
 def has_remote(repo_root: Path, remote: str = "origin") -> bool:

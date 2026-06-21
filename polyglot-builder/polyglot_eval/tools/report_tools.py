@@ -14,13 +14,11 @@ from __future__ import annotations
 
 import json
 import os
-import re
 import shutil
 import subprocess
 import tempfile
 from pathlib import Path
 from typing import Any
-
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -173,12 +171,12 @@ def create_report_mcp_server(reports_dir: Path, task_specs: dict):
     Imported lazily so the module can be used without the SDK installed (e.g. in tests).
     """
     try:
-        from claude_agent_sdk import tool, create_sdk_mcp_server
-    except ImportError:
+        from claude_agent_sdk import create_sdk_mcp_server, tool
+    except ImportError as err:
         raise ImportError(
             "claude-agent-sdk is required to run polyglot-eval. "
             "Install it with: pip install claude-agent-sdk"
-        )
+        ) from err
 
     @tool
     def submit_report_tool(task_id: str, sections: str, mermaid: str) -> str:

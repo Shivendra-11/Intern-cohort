@@ -1,8 +1,9 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
 import os
+
 import psycopg2
 import psycopg2.extras
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
 
 app = FastAPI(title="DevOps Eval API")
 

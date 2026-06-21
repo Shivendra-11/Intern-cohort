@@ -1,0 +1,19 @@
+# Local static-analysis hooks. Install once with:  pre-commit install
+# Run on demand with:  pre-commit run --all-files
+# The same `ruff check` is enforced in CI (.github/workflows/ci.yml) as a hard gate.
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.18
+    hooks:
+      - id: ruff
+        name: ruff (lint)
+        args: [--fix]
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: '\.md$'
+      - id: end-of-file-fixer
+        exclude: '\.(md|json)$'
+      - id: check-yaml
+      - id: check-merge-conflict

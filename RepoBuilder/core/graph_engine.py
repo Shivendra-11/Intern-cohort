@@ -7,7 +7,7 @@ import re
 import sys
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any
 
 import networkx as nx
 
@@ -40,9 +40,9 @@ class GraphModel:
     """Serializable graph: nodes, edges, metadata."""
 
     graph_type: str
-    nodes: List[Dict[str, Any]] = field(default_factory=list)
-    edges: List[Dict[str, Any]] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    nodes: list[dict[str, Any]] = field(default_factory=list)
+    edges: list[dict[str, Any]] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict:
         return {
@@ -64,11 +64,11 @@ class GraphEngine:
         "test",
     )
 
-    def __init__(self, scanner: Optional[FileScanner] = None) -> None:
+    def __init__(self, scanner: FileScanner | None = None) -> None:
         self.scanner = scanner or FileScanner()
         self.json_writer = JsonWriter()
 
-    def build_all(self, repo_path: str) -> Dict[str, GraphModel]:
+    def build_all(self, repo_path: str) -> dict[str, GraphModel]:
         repo_path = os.path.abspath(repo_path)
         inventory = InventoryAgent(scanner=self.scanner).build_inventory(
             repo_path, InventoryAgent.repo_name(repo_path)
@@ -92,7 +92,7 @@ class GraphEngine:
 
     def build_import_graph(self, repo_path: str) -> GraphModel:
         G = nx.DiGraph()
-        module_ids: Dict[str, str] = {}
+        module_ids: dict[str, str] = {}
 
         for abs_path, lang in self.scanner.iter_source_files(repo_path):
             rel = os.path.relpath(abs_path, repo_path)
@@ -110,12 +110,12 @@ class GraphEngine:
 
     def build_class_dependency_graph(self, repo_path: str) -> GraphModel:
         G = nx.DiGraph()
-        known_classes: Dict[str, str] = {}
+        known_classes: dict[str, str] = {}
 
         for abs_path, lang in self.scanner.iter_source_files(repo_path):
             rel = os.path.relpath(abs_path, repo_path)
             text = "\n".join(self.scanner.read_lines(abs_path))
-            for cls, bases in self._extract_class_deps(text, lang):
+            for cls, _bases in self._extract_class_deps(text, lang):
                 cls_id = f"class:{rel}:{cls}"
                 G.add_node(cls_id, kind="class", name=cls, file=rel)
                 known_classes[cls] = cls_id
@@ -138,7 +138,7 @@ class GraphEngine:
             G, "class_dependencies", {"description": "Class inheritance / dependency"}
         )
 
-    def build_service_graph(self, items: List[InventoryItem]) -> GraphModel:
+    def build_service_graph(self, items: list[InventoryItem]) -> GraphModel:
         G = nx.Graph()
         service_items = [i for i in items if i.type in SERVICE_TYPES]
 
@@ -171,7 +171,7 @@ class GraphEngine:
                     G.add_edge(src, peer.node_id(), relation=rel_type)
 
         # Co-location edges within same file.
-        by_file: Dict[str, List[InventoryItem]] = {}
+        by_file: dict[str, list[InventoryItem]] = {}
         for item in service_items:
             by_file.setdefault(item.file, []).append(item)
         for file_path, group in by_file.items():
@@ -181,7 +181,7 @@ class GraphEngine:
 
         return self._export(G, "service", {"description": "Service / controller / model layer"})
 
-    def build_route_graph(self, routes: List[RouteRecord]) -> GraphModel:
+    def build_route_graph(self, routes: list[RouteRecord]) -> GraphModel:
         G = nx.DiGraph()
         for r in routes:
             G.add_node(
@@ -194,7 +194,7 @@ class GraphEngine:
                 surface=r.surface,
             )
 
-        by_file: Dict[str, List[RouteRecord]] = {}
+        by_file: dict[str, list[RouteRecord]] = {}
         for r in routes:
             by_file.setdefault(r.file, []).append(r)
         for file_path, group in by_file.items():
@@ -217,8 +217,8 @@ class GraphEngine:
 
     def build_test_graph(
         self,
-        test_files: List[str],
-        framework: Optional[str],
+        test_files: list[str],
+        framework: str | None,
         repo_path: str,
     ) -> GraphModel:
         G = nx.DiGraph()
@@ -248,7 +248,7 @@ class GraphEngine:
         )
 
     def compose_graph_data(
-        self, repo_path: str, graphs: Dict[str, GraphModel]
+        self, repo_path: str, graphs: dict[str, GraphModel]
     ) -> dict:
         repo_path = os.path.abspath(repo_path)
         repo_name = os.path.basename(repo_path.rstrip(os.sep)) or "repository"
@@ -268,7 +268,7 @@ class GraphEngine:
     def write_graph_data(
         self,
         repo_path: str,
-        output_path: Optional[str] = None,
+        output_path: str | None = None,
         workspace_root: str = "workspace",
     ) -> str:
         repo_path = os.path.abspath(repo_path)
@@ -297,9 +297,9 @@ class GraphEngine:
         }
         return GraphModel(graph_type=graph_type, nodes=nodes, edges=edges, metadata=meta)
 
-    def _extract_imports(self, path: str, lang: str) -> Set[str]:
+    def _extract_imports(self, path: str, lang: str) -> set[str]:
         text = "\n".join(self.scanner.read_lines(path))
-        imports: Set[str] = set()
+        imports: set[str] = set()
         if lang == "python":
             for m in PY_IMPORT.finditer(text):
                 imports.add(m.group(1) or m.group(2))
@@ -318,8 +318,8 @@ class GraphEngine:
                 imports.add(m.group(1))
         return {i for i in imports if i}
 
-    def _extract_class_deps(self, text: str, lang: str) -> List[Tuple[str, List[str]]]:
-        out: List[Tuple[str, List[str]]] = []
+    def _extract_class_deps(self, text: str, lang: str) -> list[tuple[str, list[str]]]:
+        out: list[tuple[str, list[str]]] = []
         if lang == "python":
             for m in PY_CLASS_BASES.finditer(text):
                 bases = [
@@ -337,11 +337,11 @@ class GraphEngine:
         return out
 
     @staticmethod
-    def _guess_test_targets(test_file: str, source_files: Set[str]) -> List[str]:
+    def _guess_test_targets(test_file: str, source_files: set[str]) -> list[str]:
         """Heuristic: map test_foo.py → foo.py, foo.test.js → foo.js."""
         base = os.path.basename(test_file)
-        candidates: List[str] = []
-        patterns: List[str] = []
+        candidates: list[str] = []
+        patterns: list[str] = []
 
         if base.startswith("test_") and base.endswith(".py"):
             patterns.append(base[5:])
@@ -351,7 +351,6 @@ class GraphEngine:
         if m:
             patterns.append(m.group(1) + "." + m.group(3))
 
-        test_dir = os.path.dirname(test_file)
         for pat in patterns:
             for src in source_files:
                 if os.path.basename(src) == pat:

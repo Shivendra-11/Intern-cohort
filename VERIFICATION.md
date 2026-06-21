@@ -91,5 +91,9 @@ scanners were also run against [`tiangolo/full-stack-fastapi-template`](https://
 @ `2a56db2`: B1/B2/B3 (`repo-intelligence analyze`) and I1/I2 (`repo_scanner`).
 Reports, captured wall-clock, and a one-command reproducer live in
 [`examples/external-repo/`](examples/external-repo/). It found 258 artifacts, 22
-entities (typed + source-cited), 19 routes, and a valid Mermaid ER + sequence
-diagram — in ~1.1 s, on a codebase outside this monorepo.
+entities (typed + source-cited), 18 routes, and a valid Mermaid ER + sequence
+diagram — in ~1.1 s, on a codebase outside this monorepo. The route scanner only
+counts real routing constructs (decorators, recognised router objects, mount
+prefixes, front-end `path=`/`to=` attributes), and the ER step reports
+relationships **only where a foreign-key column actually resolves to a discovered
+entity** — for this repo that is honestly zero, rather than placeholder edges.

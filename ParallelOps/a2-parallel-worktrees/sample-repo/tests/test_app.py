@@ -1,4 +1,4 @@
-from app import FEATURES, VERSION, get_info
+from app import VERSION, get_info
 
 
 def test_version_is_string():

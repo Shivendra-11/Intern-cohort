@@ -12,7 +12,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, ROOT)
 
-from core.fastapi_builder import FastAPIBuilder, PROJECT_FILES  # noqa: E402
+from core.fastapi_builder import PROJECT_FILES, FastAPIBuilder  # noqa: E402
 
 PY_APP = os.path.join(HERE, "fixtures", "py_app")
 

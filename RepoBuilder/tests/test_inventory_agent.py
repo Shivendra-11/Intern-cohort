@@ -23,7 +23,7 @@ class TestInventoryAgent(unittest.TestCase):
     def test_python_fixture_outputs(self):
         with tempfile.TemporaryDirectory() as tmp:
             ws = os.path.join(tmp, "workspace")
-            result = InventoryAgent(workspace_root=ws).run(PY_APP)
+            InventoryAgent(workspace_root=ws).run(PY_APP)
             out = os.path.join(ws, "py_app", "B1_inventory")
 
             self.assertTrue(os.path.isfile(os.path.join(out, "inventory.json")))
@@ -51,7 +51,6 @@ class TestInventoryAgent(unittest.TestCase):
         item = InventoryItem(
             name="FooService", type="services", file="src/foo.py", line=10
         )
-        d = InventoryAgent._item_dict if hasattr(InventoryAgent, "_item_dict") else None
         from core.inventory_agent import InventoryResult
 
         payload = InventoryResult._item_dict(item)

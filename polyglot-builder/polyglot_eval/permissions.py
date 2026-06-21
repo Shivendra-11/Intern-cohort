@@ -15,8 +15,8 @@ from __future__ import annotations
 
 import re
 import subprocess
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable
 
 from .config import Autonomy
 
@@ -156,8 +156,6 @@ def make_permission_handler(autonomy: Autonomy, repo: Path, task_id: str = "") -
 
         # Pre-built UI guard — I1 and I2 only
         if _is_prebuilt_ui_write(tool_name, tool_input, task_id):
-            path = tool_input.get("file_path", tool_input.get("path", ""))
-            basename = Path(path).name if path else tool_input.get("command", "")
             return PermissionResultDeny(
                 reason=(
                     f"Pre-built UI guard: You tried to write or scaffold UI files for task {task_id}. "

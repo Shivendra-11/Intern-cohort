@@ -138,7 +138,7 @@ def serve_all_viewers(repo: Path, *, host: str = "127.0.0.1", open_browser: bool
     dash = serve_ui("dashboard", repo=repo, host=host, open_browser=open_browser)
     urls["dashboard"] = dash["url"]
 
-    for task_id, meta in TASK_META.items():
+    for task_id in TASK_META:
         artifact_dir = repo / "reports" / "artifacts" / task_id
         json_path = artifact_dir / "data.json"
         js_path = artifact_dir / "data.js"

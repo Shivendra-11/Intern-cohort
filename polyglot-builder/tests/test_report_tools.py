@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import pytest
-
 from polyglot_eval.tools.report_tools import (
     _structural_lint,
     check_mermaid,

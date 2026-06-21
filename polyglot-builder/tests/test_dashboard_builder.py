@@ -5,8 +5,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import pytest
-
 from polyglot_eval.dashboard_builder import build_dashboard_data, load_task_data, write_dashboard_js
 from polyglot_eval.generate_all_data import generate_all
 from polyglot_eval.repo_scanner import scan_entities, scan_flow_steps

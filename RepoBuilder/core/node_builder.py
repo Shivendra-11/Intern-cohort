@@ -9,11 +9,10 @@ import sys
 import textwrap
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Dict, List, Optional
 
 from core.json_writer import JsonWriter
 
-PROJECT_FILES: Dict[str, str] = {
+PROJECT_FILES: dict[str, str] = {
     "package.json": textwrap.dedent("""\
         {
           "name": "ledger-node-api",
@@ -227,8 +226,8 @@ class BuildProof:
     smoke_command: str = ""
     smoke_exit_code: int = 1
     smoke_output: str = ""
-    passed: Optional[int] = None
-    failed: Optional[int] = None
+    passed: int | None = None
+    failed: int | None = None
 
     def to_dict(self) -> dict:
         return {
@@ -248,7 +247,7 @@ class BuildProof:
 class NodeBuildResult:
     repo_name: str
     project_path: str
-    files: List[str] = field(default_factory=list)
+    files: list[str] = field(default_factory=list)
     status: str = "FAILED"
     proof: BuildProof = field(default_factory=BuildProof)
 
@@ -286,7 +285,7 @@ class NodeBuilder:
         repo_path: str,
         *,
         run_proof: bool = True,
-        output_dir: Optional[str] = None,
+        output_dir: str | None = None,
     ) -> NodeBuildResult:
         repo_path = os.path.abspath(repo_path)
         if not os.path.isdir(repo_path):
@@ -326,8 +325,8 @@ class NodeBuilder:
     def repo_name(repo_path: str) -> str:
         return os.path.basename(repo_path.rstrip(os.sep)) or "repository"
 
-    def _write_project(self, project_path: str) -> List[str]:
-        created: List[str] = []
+    def _write_project(self, project_path: str) -> list[str]:
+        created: list[str] = []
         for rel, content in PROJECT_FILES.items():
             path = os.path.join(project_path, rel)
             os.makedirs(os.path.dirname(path) or project_path, exist_ok=True)

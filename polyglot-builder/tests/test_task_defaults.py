@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from polyglot_eval.tasks.i3_defaults import DEFAULT_I3_CHANGE
 from polyglot_eval.tasks.i3_safe_change import SPEC as I3_SPEC
-from polyglot_eval.tasks.i6_defaults import DEFAULT_I6_BUG
 from polyglot_eval.tasks.i6_bug_diagnosis import SPEC as I6_SPEC
+from polyglot_eval.tasks.i6_defaults import DEFAULT_I6_BUG
 
 
 def test_i3_kickoff_is_self_contained():

@@ -4,7 +4,7 @@ from __future__ import annotations
 import argparse
 import os
 import sys
-from typing import Any, Dict, Optional
+from typing import Any
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -26,7 +26,7 @@ class DashboardStore:
     def __init__(self, path: str, repo_id: str) -> None:
         self.path = os.path.abspath(path)
         self.repo_id = repo_id
-        self._data: Optional[Dict[str, Any]] = None
+        self._data: dict[str, Any] | None = None
         self.reload()
 
     def reload(self) -> None:
@@ -36,7 +36,7 @@ class DashboardStore:
         try:
             import json
 
-            with open(self.path, "r", encoding="utf-8") as fh:
+            with open(self.path, encoding="utf-8") as fh:
                 self._data = json.load(fh)
         except (OSError, json.JSONDecodeError):
             self._data = None
@@ -45,7 +45,7 @@ class DashboardStore:
     def loaded(self) -> bool:
         return self._data is not None
 
-    def require_loaded(self) -> Dict[str, Any]:
+    def require_loaded(self) -> dict[str, Any]:
         if not self.loaded or self._data is None:
             raise DashboardNotLoadedError(
                 f"dashboard not loaded for repo '{self.repo_id}': {self.path}"
@@ -80,7 +80,7 @@ def default_workspace_root() -> str:
     return os.path.join(root, "workspace")
 
 
-def default_repo_name() -> Optional[str]:
+def default_repo_name() -> str | None:
     env = os.environ.get("REPOBUILDER_DEFAULT_REPO")
     if env:
         return env
@@ -91,9 +91,9 @@ def default_repo_name() -> Optional[str]:
 
 
 def create_app(
-    workspace_root: Optional[str] = None,
-    dashboard_path: Optional[str] = None,
-    default_repo: Optional[str] = None,
+    workspace_root: str | None = None,
+    dashboard_path: str | None = None,
+    default_repo: str | None = None,
 ) -> FastAPI:
     ws = workspace_root or default_workspace_root()
     if dashboard_path and not workspace_root:
@@ -127,7 +127,7 @@ def create_app(
         allow_headers=["*"],
     )
 
-    def _store(repo: Optional[str] = None) -> DashboardStore:
+    def _store(repo: str | None = None) -> DashboardStore:
         try:
             path = registry.dashboard_path_for(repo)
         except FileNotFoundError as exc:
@@ -157,39 +157,39 @@ def create_app(
         }
 
     @app.get("/overview")
-    def get_overview(repo: Optional[str] = Query(None, description="workspace repo id")) -> dict:
+    def get_overview(repo: str | None = Query(None, description="workspace repo id")) -> dict:
         return _store(repo).overview()
 
     @app.get("/inventory")
-    def get_inventory(repo: Optional[str] = Query(None)) -> Any:
+    def get_inventory(repo: str | None = Query(None)) -> Any:
         data = _store(repo).section("inventory")
         if data is None:
             raise HTTPException(status_code=404, detail="inventory not available")
         return data
 
     @app.get("/routes")
-    def get_routes(repo: Optional[str] = Query(None)) -> Any:
+    def get_routes(repo: str | None = Query(None)) -> Any:
         data = _store(repo).section("routes")
         if data is None:
             raise HTTPException(status_code=404, detail="routes not available")
         return data
 
     @app.get("/tests")
-    def get_tests(repo: Optional[str] = Query(None)) -> Any:
+    def get_tests(repo: str | None = Query(None)) -> Any:
         data = _store(repo).section("tests")
         if data is None:
             raise HTTPException(status_code=404, detail="tests not available")
         return data
 
     @app.get("/graphs")
-    def get_graphs(repo: Optional[str] = Query(None)) -> Any:
+    def get_graphs(repo: str | None = Query(None)) -> Any:
         data = _store(repo).section("graphs")
         if data is None:
             raise HTTPException(status_code=404, detail="graphs not available")
         return data
 
     @app.get("/projects")
-    def get_projects(repo: Optional[str] = Query(None)) -> Any:
+    def get_projects(repo: str | None = Query(None)) -> Any:
         data = _store(repo).section("generated_projects")
         if data is None:
             raise HTTPException(status_code=404, detail="projects not available")

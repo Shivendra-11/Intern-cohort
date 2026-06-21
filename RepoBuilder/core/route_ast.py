@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from typing import List, Optional, Tuple
 
 from core.file_scanner import FileScanner
 from core.inventory_ast import _PARSERS, _init_parsers, _node_text, _walk
@@ -42,7 +41,7 @@ class AstRoute:
     handler: str = ""
 
 
-def parse_routes_ast(path: str, lang: str) -> Optional[List[AstRoute]]:
+def parse_routes_ast(path: str, lang: str) -> list[AstRoute] | None:
     """Return routes from tree-sitter walk, or None if parser unavailable."""
     _init_parsers()
     key = "typescript" if lang == "typescript" else lang
@@ -77,8 +76,8 @@ def _normalize_path(path: str) -> str:
     return path or "/"
 
 
-def _python_routes(source: bytes, root) -> List[AstRoute]:
-    routes: List[AstRoute] = []
+def _python_routes(source: bytes, root) -> list[AstRoute]:
+    routes: list[AstRoute] = []
 
     def visit(node) -> None:
         if node.type != "decorated_definition":
@@ -125,8 +124,8 @@ def _python_routes(source: bytes, root) -> List[AstRoute]:
     return routes
 
 
-def _js_routes(source: bytes, root, lang: str) -> List[AstRoute]:
-    routes: List[AstRoute] = []
+def _js_routes(source: bytes, root, lang: str) -> list[AstRoute]:
+    routes: list[AstRoute] = []
     nest_prefix = ""
 
     def visit(node) -> None:
@@ -174,8 +173,8 @@ def _js_routes(source: bytes, root, lang: str) -> List[AstRoute]:
     return routes
 
 
-def _java_routes(source: bytes, root) -> List[AstRoute]:
-    routes: List[AstRoute] = []
+def _java_routes(source: bytes, root) -> list[AstRoute]:
+    routes: list[AstRoute] = []
     class_prefix = ""
 
     def visit(node) -> None:

@@ -13,6 +13,27 @@ on:
   workflow_dispatch:
 
 jobs:
+  lint:
+    name: ruff lint gate (+ advisory mypy)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install static-analysis tools
+        run: pip install ruff mypy
+
+      - name: ruff check (hard gate)
+        run: ruff check .
+
+      - name: mypy (advisory — does not fail the build)
+        continue-on-error: true
+        run: mypy RepoBuilder/core polyglot-builder/polyglot_eval ParallelOps/parallelops
+
   make-test:
     name: make install && make test (all 201)
     runs-on: ubuntu-latest

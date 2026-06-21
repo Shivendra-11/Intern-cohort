@@ -5,7 +5,6 @@ import json
 import os
 import re
 from dataclasses import dataclass, field
-from typing import List, Optional
 
 from core.file_scanner import FileScanner
 
@@ -17,10 +16,10 @@ class TestFrameworkSetup:
     __test__ = False  # production dataclass, not a pytest test class
     framework: str
     language: str
-    config_file: Optional[str]
-    test_files: List[str] = field(default_factory=list)
-    commands: List[str] = field(default_factory=list)
-    install: List[str] = field(default_factory=list)
+    config_file: str | None
+    test_files: list[str] = field(default_factory=list)
+    commands: list[str] = field(default_factory=list)
+    install: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
         return {
@@ -38,13 +37,13 @@ class TestDiscovery:
 
     __test__ = False  # production discovery class, not a pytest test class
 
-    def __init__(self, scanner: Optional[FileScanner] = None) -> None:
+    def __init__(self, scanner: FileScanner | None = None) -> None:
         self.scanner = scanner or FileScanner()
 
-    def discover(self, root: str) -> List[TestFrameworkSetup]:
+    def discover(self, root: str) -> list[TestFrameworkSetup]:
         root = os.path.abspath(root)
         tests = self._find_test_files(root)
-        setups: List[TestFrameworkSetup] = []
+        setups: list[TestFrameworkSetup] = []
 
         py_setup = self._detect_python(root, tests["python"])
         if py_setup:
@@ -100,7 +99,7 @@ class TestDiscovery:
             "java": sorted(java),
         }
 
-    def _detect_python(self, root: str, test_files: List[str]) -> Optional[TestFrameworkSetup]:
+    def _detect_python(self, root: str, test_files: list[str]) -> TestFrameworkSetup | None:
         if not test_files:
             return None
         pyproject = self._read(root, "pyproject.toml")
@@ -143,7 +142,7 @@ class TestDiscovery:
             install=install,
         )
 
-    def _detect_js(self, root: str, test_files: List[str]) -> Optional[TestFrameworkSetup]:
+    def _detect_js(self, root: str, test_files: list[str]) -> TestFrameworkSetup | None:
         pkg_raw = self._read(root, "package.json")
         if not pkg_raw or not test_files:
             return None
@@ -188,7 +187,7 @@ class TestDiscovery:
             install=["npm install"],
         )
 
-    def _detect_junit(self, root: str, test_files: List[str]) -> Optional[TestFrameworkSetup]:
+    def _detect_junit(self, root: str, test_files: list[str]) -> TestFrameworkSetup | None:
         if self._file_exists(root, "pom.xml"):
             return TestFrameworkSetup(
                 framework="junit",
@@ -211,7 +210,7 @@ class TestDiscovery:
         return None
 
     @staticmethod
-    def _file_exists(root: str, *names: str) -> Optional[str]:
+    def _file_exists(root: str, *names: str) -> str | None:
         for name in names:
             if os.path.exists(os.path.join(root, name)):
                 return name
@@ -221,7 +220,7 @@ class TestDiscovery:
     def _read(root: str, name: str) -> str:
         path = os.path.join(root, name)
         try:
-            with open(path, "r", encoding="utf-8", errors="ignore") as fh:
+            with open(path, encoding="utf-8", errors="ignore") as fh:
                 return fh.read()
         except OSError:
             return ""

@@ -2,10 +2,8 @@
 from __future__ import annotations
 
 import argparse
-import os
 import shutil
 import sys
-from pathlib import Path
 
 from cli.paths import STATE_DIR, WORKSPACE_ROOT
 

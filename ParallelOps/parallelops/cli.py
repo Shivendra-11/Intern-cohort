@@ -5,12 +5,9 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from dataclasses import fields
 from pathlib import Path
 
-from parallelops.a1_planner import A1PlannerAgent
-from parallelops.a2_executor import A2ExecutorAgent
-from parallelops.models import ExecutionPolicy
+from parallelops.approval import save_approval, save_merge_approval
 from parallelops.orchestrator import (
     UserRequest,
     discovery_template,
@@ -19,11 +16,8 @@ from parallelops.orchestrator import (
     run_a1,
     run_a2,
     run_pipeline,
-    save_user_request_json,
 )
-from parallelops.approval import is_approved, save_approval, save_merge_approval
 from parallelops.plan_preview import build_plan_preview, write_plan_preview
-from parallelops.report_builder import build_final_report
 
 
 def _repo_root() -> Path:
@@ -282,8 +276,8 @@ def _print_dashboard_result(out: dict, port: int) -> None:
 
 
 def cmd_eval_dashboard_from_md(args: argparse.Namespace) -> int:
-    from parallelops.eval_artifacts import build_dashboard_from_markdown, finish_eval_and_dashboard
     from parallelops.dashboard_server import dashboard_url, ensure_dashboard_running
+    from parallelops.eval_artifacts import build_dashboard_from_markdown
 
     root = _repo_root()
     agents = None

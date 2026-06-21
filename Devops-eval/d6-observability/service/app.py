@@ -2,9 +2,8 @@ import time
 
 import structlog
 from fastapi import FastAPI, Response
-from starlette.middleware.base import BaseHTTPMiddleware
-
 from metrics import REQUEST_COUNT, REQUEST_LATENCY, metrics_response
+from starlette.middleware.base import BaseHTTPMiddleware
 
 structlog.configure(
     processors=[

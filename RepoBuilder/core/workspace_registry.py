@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 import os
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 @dataclass
@@ -39,13 +39,13 @@ class WorkspaceRegistry:
         self,
         workspace_root: str,
         *,
-        default_repo: Optional[str] = None,
+        default_repo: str | None = None,
     ) -> None:
         self.workspace_root = os.path.abspath(workspace_root)
         self.default_repo = default_repo
 
-    def list_repos(self) -> List[RepoEntry]:
-        entries: List[RepoEntry] = []
+    def list_repos(self) -> list[RepoEntry]:
+        entries: list[RepoEntry] = []
         if not os.path.isdir(self.workspace_root):
             return entries
 
@@ -92,7 +92,7 @@ class WorkspaceRegistry:
         except (OSError, json.JSONDecodeError):
             return {}
 
-    def resolve_default_repo(self) -> Optional[str]:
+    def resolve_default_repo(self) -> str | None:
         if self.default_repo and self._has_repo(self.default_repo):
             return self.default_repo
 
@@ -115,7 +115,7 @@ class WorkspaceRegistry:
         )
         return os.path.isfile(path)
 
-    def dashboard_path_for(self, repo_id: Optional[str] = None) -> str:
+    def dashboard_path_for(self, repo_id: str | None = None) -> str:
         rid = repo_id or self.resolve_default_repo()
         if not rid:
             raise FileNotFoundError(
@@ -126,7 +126,7 @@ class WorkspaceRegistry:
             raise FileNotFoundError(f"repository not found: {rid}")
         return path
 
-    def load_dashboard(self, repo_id: Optional[str] = None) -> Dict[str, Any]:
+    def load_dashboard(self, repo_id: str | None = None) -> dict[str, Any]:
         path = self.dashboard_path_for(repo_id)
         with open(path, encoding="utf-8") as fh:
             return json.load(fh)

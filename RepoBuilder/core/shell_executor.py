@@ -5,8 +5,9 @@ import os
 import shlex
 import subprocess
 import time
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from typing import Dict, List, Mapping, Optional, Sequence, Union
+from typing import Union
 
 CommandInput = Union[str, Sequence[str]]
 
@@ -94,9 +95,9 @@ class ShellExecutor:
     def run(
         self,
         command: CommandInput,
-        cwd: Optional[str] = None,
-        timeout: Optional[int] = None,
-        env: Optional[Mapping[str, str]] = None,
+        cwd: str | None = None,
+        timeout: int | None = None,
+        env: Mapping[str, str] | None = None,
         shell: bool = False,
     ) -> ShellResult:
         """Execute a command and capture stdout/stderr.
@@ -122,7 +123,7 @@ class ShellExecutor:
             if not os.path.isdir(cwd):
                 raise ValueError(f"cwd is not a directory: {cwd}")
 
-        merged_env: Optional[Dict[str, str]] = None
+        merged_env: dict[str, str] | None = None
         if env:
             merged_env = os.environ.copy()
             merged_env.update(dict(env))

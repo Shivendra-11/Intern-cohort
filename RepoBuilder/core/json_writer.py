@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 import os
 import tempfile
-from typing import Any, Optional, Union
+from typing import Any
 
 
 class JsonWriter:
@@ -55,7 +55,7 @@ class JsonWriter:
         )
         if os.path.isfile(path):
             try:
-                with open(path, "r", encoding="utf-8") as fh:
+                with open(path, encoding="utf-8") as fh:
                     existing = json.load(fh)
                 old_payload = json.dumps(
                     existing,
@@ -71,10 +71,10 @@ class JsonWriter:
         return True
 
 
-def read_json(path: str, default: Optional[Any] = None) -> Any:
+def read_json(path: str, default: Any | None = None) -> Any:
     """Load JSON from path; return default if missing or invalid."""
     try:
-        with open(path, "r", encoding="utf-8") as fh:
+        with open(path, encoding="utf-8") as fh:
             return json.load(fh)
     except (OSError, json.JSONDecodeError):
         if default is not None:

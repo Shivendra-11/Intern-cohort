@@ -35,17 +35,34 @@ def _rel(repo: Path, path: Path) -> str:
 
 
 def grep_routes(repo: Path) -> list[str]:
+    """Extract externally exposed routes from real routing constructs.
+
+    Each pattern targets an actual route declaration rather than any quoted
+    string that happens to start with ``/`` — so import paths, file paths, and
+    format strings are no longer mistaken for endpoints.
+    """
     routes: set[str] = set()
     patterns = [
-        re.compile(r"""['"](/[^'"]+)['"]"""),
-        re.compile(r"@(?:app|router)\.(?:get|post|put|delete|patch)\(['\"]([^'\"]+)"),
-        re.compile(r"\.(?:get|post|put|delete|patch)\(['\"]([^'\"]+)"),
+        # Python web decorators: @app.get("/x"), @router.post("/y"), @bp.route("/z")
+        re.compile(
+            r"@(?:app|router|api|blueprint|bp)\."
+            r"(?:get|post|put|delete|patch|route|websocket)\(\s*['\"](/[^'\"]*)"
+        ),
+        # JS method routing on a recognised server/router object: app.get("/x")
+        re.compile(
+            r"\b(?:app|router|api|server)\."
+            r"(?:get|post|put|delete|patch|all|use)\(\s*['\"](/[^'\"]*)"
+        ),
+        # Router mount prefixes: prefix="/api/v1", APIRouter(prefix="/users")
+        re.compile(r"\bprefix\s*=\s*['\"](/[^'\"]*)"),
+        # Front-end router declarations: <Route path="/x">, to="/y", href="/z"
+        re.compile(r"\b(?:path|to|href)\s*=\s*['\"](/[^'\"]*)"),
     ]
     for p in walk_sources(repo):
         text = p.read_text(encoding="utf-8", errors="ignore")
         for pat in patterns:
             for m in pat.finditer(text):
-                route = m.group(1) if m.lastindex else m.group(0)
+                route = m.group(1)
                 if route.startswith("/") and len(route) < 120:
                     routes.add(route)
     return sorted(routes)[:50]
@@ -154,6 +171,14 @@ def scan_entities(repo: Path) -> list[dict[str, Any]]:
 
 
 def infer_relationships(entities: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Infer relationships only where there is real FK evidence in the columns.
+
+    Every returned edge is backed by an actual foreign-key-looking column
+    (``*_id`` / ``*Id``) whose target name matches a discovered entity. We do
+    **not** synthesize placeholder edges when none are found — an empty result
+    honestly means "no cross-entity relationship could be inferred from the
+    source", rather than presenting invented structure as discovered fact.
+    """
     names = {e["name"] for e in entities}
     rels: list[dict[str, Any]] = []
     for e in entities:
@@ -172,17 +197,6 @@ def infer_relationships(entities: list[dict[str, Any]]) -> list[dict[str, Any]]:
                     "sourceFile": e["sourceFile"],
                     "sourceLine": e["sourceLine"],
                 })
-    if len(rels) < 2 and len(entities) >= 2:
-        for i in range(min(3, len(entities) - 1)):
-            a, b = entities[i], entities[i + 1]
-            rels.append({
-                "from": a["name"],
-                "to": b["name"],
-                "type": "inferred",
-                "label": "relates_to",
-                "sourceFile": a["sourceFile"],
-                "sourceLine": a["sourceLine"],
-            })
     return rels[:20]
 
 

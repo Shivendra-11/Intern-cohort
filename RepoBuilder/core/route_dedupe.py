@@ -1,7 +1,8 @@
 """Canonical route deduplication — collapse duplicate method+path across frameworks."""
 from __future__ import annotations
 
-from typing import Callable, Iterable, List, Sequence, TypeVar
+from collections.abc import Callable, Sequence
+from typing import TypeVar
 
 NOISE_PATH_PARTS = ("/test/", "/tests/", "/__tests__/", "/fixtures/", "/docs/", "/examples/")
 
@@ -62,7 +63,7 @@ T = TypeVar("T")
 def canonical_dedupe(
     routes: Sequence[T],
     key_fn: Callable[[T], tuple],
-) -> List[T]:
+) -> list[T]:
     """Keep one route per key_fn(route), choosing the highest route_priority."""
     best: dict[tuple, T] = {}
     for route in routes:
@@ -85,9 +86,9 @@ def _route_path(route) -> str:
     return route.path
 
 
-def dedupe_backend_routes(routes: Sequence[T]) -> List[T]:
+def dedupe_backend_routes(routes: Sequence[T]) -> list[T]:
     return canonical_dedupe(routes, lambda r: (_route_method(r), _route_path(r)))
 
 
-def dedupe_frontend_routes(routes: Sequence[T]) -> List[T]:
+def dedupe_frontend_routes(routes: Sequence[T]) -> list[T]:
     return canonical_dedupe(routes, lambda r: (_route_path(r),))

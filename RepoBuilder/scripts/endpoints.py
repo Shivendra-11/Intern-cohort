@@ -21,8 +21,10 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from lib import detect  # noqa: E402
-from lib import route_dedupe  # noqa: E402
+from lib import (
+    detect,  # noqa: E402
+    route_dedupe,  # noqa: E402
+)
 
 HTTP_METHODS = "get|post|put|patch|delete|head|options"
 

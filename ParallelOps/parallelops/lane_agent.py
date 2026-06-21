@@ -76,7 +76,7 @@ def _ensure_commit(wt_path: Path, message: str) -> list[str]:
     git_ops.run_git(wt_path, "add", "-A")
     git_ops.run_git(wt_path, "commit", "-m", message)
     log = git_ops.run_git(wt_path, "log", "--oneline", "-3")
-    return [l.strip() for l in log.stdout.splitlines() if l.strip()]
+    return [line.strip() for line in log.stdout.splitlines() if line.strip()]
 
 
 def _run_lane_sdk(

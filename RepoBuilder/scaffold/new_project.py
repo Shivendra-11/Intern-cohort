@@ -62,7 +62,7 @@ def apply_name(dest, template, name):
     target = os.path.join(dest, fname)
     if not os.path.exists(target):
         return
-    with open(target, "r", encoding="utf-8") as fh:
+    with open(target, encoding="utf-8") as fh:
         content = fh.read()
     with open(target, "w", encoding="utf-8") as fh:
         fh.write(content.replace(token, name))

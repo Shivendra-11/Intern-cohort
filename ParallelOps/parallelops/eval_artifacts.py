@@ -274,9 +274,9 @@ status: {result.status}
 
 # {agent} — Eval Report
 
-**Session:** `{session.session_id}`  
-**Repository:** `{session.repo_root or "unknown"}`  
-**Status:** {result.status}  
+**Session:** `{session.session_id}`\
+**Repository:** `{session.repo_root or "unknown"}`\
+**Status:** {result.status}\
 **Mode:** {result.mode}
 
 ## Summary

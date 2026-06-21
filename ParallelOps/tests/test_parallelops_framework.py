@@ -2,14 +2,13 @@
 
 from __future__ import annotations
 
-import json
 import tempfile
 import unittest
 from pathlib import Path
 
 from parallelops.a1_planner import A1PlannerAgent
-from parallelops.models import ExecutionPlan, ExecutionPolicy
 from parallelops.approval import is_approved, save_approval
+from parallelops.models import ExecutionPlan, ExecutionPolicy
 from parallelops.orchestrator import UserRequest, run_a1
 from parallelops.plan_preview import build_plan_preview
 
@@ -77,7 +76,7 @@ class TestOrchestrator(unittest.TestCase):
                 execution_policy=ExecutionPolicy(auto_generate_tasks=True),
             )
             self.assertEqual(len(plan.parallel_lanes), 3)
-            slugs = [l.branch_name.split("/")[0] for l in plan.parallel_lanes]
+            slugs = [lane.branch_name.split("/")[0] for lane in plan.parallel_lanes]
             self.assertIn("fix", slugs)
             self.assertIn("feature", slugs)
             self.assertIn("chore", slugs)

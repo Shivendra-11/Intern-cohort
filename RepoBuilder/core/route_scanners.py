@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import os
 import re
-from typing import List, Tuple
 
 from core.file_scanner import FileScanner
 from core.route_ast import AstRoute, parse_routes_ast
@@ -50,7 +49,7 @@ def normalize_path(path: str) -> str:
     return path or "/"
 
 
-def _with_file(routes: List[AstRoute], rel_file: str) -> List[AstRoute]:
+def _with_file(routes: list[AstRoute], rel_file: str) -> list[AstRoute]:
     return [
         AstRoute(
             method=r.method,
@@ -64,15 +63,15 @@ def _with_file(routes: List[AstRoute], rel_file: str) -> List[AstRoute]:
     ]
 
 
-def scan_repo(repo_path: str) -> Tuple[List[AstRoute], List[AstRoute]]:
+def scan_repo(repo_path: str) -> tuple[list[AstRoute], list[AstRoute]]:
     """Return (backend_routes, frontend_routes) for a repository."""
     scanner = FileScanner()
-    backend: List[AstRoute] = []
-    frontend: List[AstRoute] = []
+    backend: list[AstRoute] = []
+    frontend: list[AstRoute] = []
 
     for abs_path, lang in scanner.iter_source_files(repo_path):
         rel = os.path.relpath(abs_path, repo_path)
-        found: List[AstRoute] = list(_regex_backend(abs_path, lang, rel, scanner))
+        found: list[AstRoute] = list(_regex_backend(abs_path, lang, rel, scanner))
         ast_routes = parse_routes_ast(abs_path, lang)
         if ast_routes:
             found.extend(_with_file(ast_routes, rel))
@@ -86,9 +85,9 @@ def scan_repo(repo_path: str) -> Tuple[List[AstRoute], List[AstRoute]]:
 
 def _regex_backend(
     path: str, lang: str, rel_path: str, scanner: FileScanner
-) -> List[AstRoute]:
+) -> list[AstRoute]:
     lines = scanner.read_lines(path)
-    routes: List[AstRoute] = []
+    routes: list[AstRoute] = []
     controller_prefix = ""
     class_prefix = ""
 
@@ -170,10 +169,10 @@ def _regex_backend(
     return routes
 
 
-def _scan_frontend_file(path: str, rel_path: str, scanner: FileScanner) -> List[AstRoute]:
+def _scan_frontend_file(path: str, rel_path: str, scanner: FileScanner) -> list[AstRoute]:
     lines = scanner.read_lines(path)
     content = "\n".join(lines)
-    routes: List[AstRoute] = []
+    routes: list[AstRoute] = []
 
     for idx, line in enumerate(lines):
         rm = REACT_ROUTE.search(line)
@@ -204,7 +203,7 @@ def _scan_frontend_file(path: str, rel_path: str, scanner: FileScanner) -> List[
     return routes
 
 
-def _next_py_handler(lines: List[str], idx: int) -> str:
+def _next_py_handler(lines: list[str], idx: int) -> str:
     for j in range(idx + 1, min(idx + 4, len(lines))):
         m = re.search(r"def\s+(\w+)", lines[j])
         if m:
@@ -212,7 +211,7 @@ def _next_py_handler(lines: List[str], idx: int) -> str:
     return "(handler)"
 
 
-def _next_js_handler(lines: List[str], idx: int) -> str:
+def _next_js_handler(lines: list[str], idx: int) -> str:
     for j in range(idx + 1, min(idx + 4, len(lines))):
         m = re.search(r"\b(\w+)\s*\(", lines[j])
         if m:
@@ -220,7 +219,7 @@ def _next_js_handler(lines: List[str], idx: int) -> str:
     return "(handler)"
 
 
-def _next_java_handler(lines: List[str], idx: int) -> str:
+def _next_java_handler(lines: list[str], idx: int) -> str:
     for j in range(idx + 1, min(idx + 4, len(lines))):
         m = re.search(r"\b\w[\w<>\[\]]*\s+(\w+)\s*\(", lines[j])
         if m:
@@ -228,10 +227,10 @@ def _next_java_handler(lines: List[str], idx: int) -> str:
     return "(handler)"
 
 
-def dedupe_routes(routes: List[AstRoute]) -> List[AstRoute]:
+def dedupe_routes(routes: list[AstRoute]) -> list[AstRoute]:
     """Exact dedupe by file+line; prefer canonical_dedupe for cross-file collisions."""
     seen = set()
-    out: List[AstRoute] = []
+    out: list[AstRoute] = []
     for r in sorted(routes, key=lambda x: (x.path, x.method, x.file, x.line)):
         key = (r.method, r.path, r.file, r.line, r.framework)
         if key in seen:

@@ -2,7 +2,7 @@
 
 Source: `/tmp/ext-eval-repo/backend` — scanned with `polyglot_eval.repo_scanner` (AST, no model calls).
 
-**22 entities · 3 inferred relationships.**
+**22 entities · 0 inferred relationships.**
 
 ## Entities (with source citations)
 
@@ -33,11 +33,7 @@ Source: `/tmp/ext-eval-repo/backend` — scanned with `polyglot_eval.repo_scanne
 
 ## Inferred relationships
 
-| From | To | Basis |
-| --- | --- | --- |
-| `UserBase` | `UserCreate` | FK/column name |
-| `UserCreate` | `UserRegister` | FK/column name |
-| `UserRegister` | `UserUpdate` | FK/column name |
+_No cross-entity relationships inferred._
 
 ## Mermaid ER diagram
 
@@ -142,7 +138,4 @@ erDiagram
         str full_name
         bool is_verified
     }
-    UserBase }o--o{ UserCreate : "relates_to"
-    UserCreate }o--o{ UserRegister : "relates_to"
-    UserRegister }o--o{ UserUpdate : "relates_to"
 ```

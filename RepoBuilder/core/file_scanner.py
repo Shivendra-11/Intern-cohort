@@ -2,11 +2,11 @@
 from __future__ import annotations
 
 import os
+from collections.abc import Iterator
 from dataclasses import dataclass, field
-from typing import Dict, Iterator, List, Optional, Set, Tuple
 
 # Directories skipped during traversal (vendored deps, build output, VCS, caches).
-IGNORE_DIRS: Set[str] = {
+IGNORE_DIRS: set[str] = {
     ".git",
     ".hg",
     ".svn",
@@ -36,7 +36,7 @@ IGNORE_DIRS: Set[str] = {
 }
 
 # Extension → language label (stacks supported by the platform).
-EXT_LANG: Dict[str, str] = {
+EXT_LANG: dict[str, str] = {
     ".py": "python",
     ".js": "javascript",
     ".jsx": "javascript",
@@ -51,7 +51,7 @@ EXT_LANG: Dict[str, str] = {
     ".rs": "rust",
 }
 
-CONFIG_NAMES: Set[str] = {
+CONFIG_NAMES: set[str] = {
     "dockerfile",
     "docker-compose.yml",
     "docker-compose.yaml",
@@ -71,7 +71,7 @@ CONFIG_NAMES: Set[str] = {
     "settings.gradle",
 }
 
-CONFIG_EXTS: Set[str] = {".yml", ".yaml", ".toml", ".ini", ".cfg", ".env", ".properties"}
+CONFIG_EXTS: set[str] = {".yml", ".yaml", ".toml", ".ini", ".cfg", ".env", ".properties"}
 
 
 @dataclass(frozen=True)
@@ -80,7 +80,7 @@ class FileRecord:
 
     absolute_path: str
     relative_path: str
-    language: Optional[str]
+    language: str | None
     is_config: bool
     size_bytes: int
 
@@ -90,26 +90,26 @@ class ScanResult:
     """Aggregated output of a repository file scan."""
 
     root: str
-    files: List[FileRecord] = field(default_factory=list)
+    files: list[FileRecord] = field(default_factory=list)
 
     @property
     def total_files(self) -> int:
         return len(self.files)
 
     @property
-    def by_language(self) -> Dict[str, List[FileRecord]]:
-        out: Dict[str, List[FileRecord]] = {}
+    def by_language(self) -> dict[str, list[FileRecord]]:
+        out: dict[str, list[FileRecord]] = {}
         for rec in self.files:
             if rec.language:
                 out.setdefault(rec.language, []).append(rec)
         return out
 
     @property
-    def config_files(self) -> List[FileRecord]:
+    def config_files(self) -> list[FileRecord]:
         return [f for f in self.files if f.is_config]
 
     @property
-    def source_files(self) -> List[FileRecord]:
+    def source_files(self) -> list[FileRecord]:
         return [f for f in self.files if f.language is not None]
 
 
@@ -118,7 +118,7 @@ class FileScanner:
 
     def __init__(
         self,
-        ignore_dirs: Optional[Set[str]] = None,
+        ignore_dirs: set[str] | None = None,
         max_file_bytes: int = 1_500_000,
     ) -> None:
         self.ignore_dirs = ignore_dirs if ignore_dirs is not None else set(IGNORE_DIRS)
@@ -168,7 +168,7 @@ class FileScanner:
         return True
 
     @staticmethod
-    def language_of(path: str) -> Optional[str]:
+    def language_of(path: str) -> str | None:
         _, ext = os.path.splitext(path)
         return EXT_LANG.get(ext.lower())
 
@@ -182,19 +182,19 @@ class FileScanner:
             return True
         return base.startswith("settings.") or "config" in base
 
-    def read_lines(self, path: str) -> List[str]:
+    def read_lines(self, path: str) -> list[str]:
         """Read a text file as lines; return [] for unreadable or oversized files."""
         try:
             if os.path.getsize(path) > self.max_file_bytes:
                 return []
-            with open(path, "r", encoding="utf-8", errors="ignore") as fh:
+            with open(path, encoding="utf-8", errors="ignore") as fh:
                 return fh.read().splitlines()
         except (OSError, UnicodeDecodeError):
             return []
 
     def iter_source_files(
-        self, root: str, languages: Optional[Set[str]] = None
-    ) -> Iterator[Tuple[str, str]]:
+        self, root: str, languages: set[str] | None = None
+    ) -> Iterator[tuple[str, str]]:
         """Yield (absolute_path, language) for source files, optionally filtered."""
         want = languages
         for path in self.iter_files(root):

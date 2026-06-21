@@ -3,16 +3,15 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from typing import List, Optional
 
 
 @dataclass
 class TestCounts:
     __test__ = False  # production dataclass, not a pytest test class
-    passed: Optional[int] = None
-    failed: Optional[int] = None
-    skipped: Optional[int] = None
-    total: Optional[int] = None
+    passed: int | None = None
+    failed: int | None = None
+    skipped: int | None = None
+    total: int | None = None
 
 
 def parse_counts(framework: str, output: str) -> TestCounts:
@@ -78,7 +77,7 @@ def interpret_failures(
     if exit_code == 127 or "No such file or directory" in output:
         return "Test runner binary not found — install toolchain and dependencies first."
 
-    parts: List[str] = []
+    parts: list[str] = []
 
     if counts.failed:
         parts.append(f"{counts.failed} test(s) failed.")

@@ -5,7 +5,6 @@ import argparse
 import os
 import sys
 from dataclasses import dataclass, field
-from typing import List, Optional
 
 from core.json_writer import JsonWriter
 from core.report_generator import ReportGenerator, ReportSection
@@ -23,9 +22,9 @@ class TestExecutionResult:
     stderr: str = ""
     duration_ms: int = 0
     timed_out: bool = False
-    passed: Optional[int] = None
-    failed: Optional[int] = None
-    skipped: Optional[int] = None
+    passed: int | None = None
+    failed: int | None = None
+    skipped: int | None = None
     interpretation: str = ""
     status: str = "SKIPPED"  # SUCCESS | FAILED | SKIPPED
 
@@ -63,8 +62,8 @@ class TestAgentResult:
     __test__ = False  # production dataclass, not a pytest test class
     repo: str
     repo_name: str
-    frameworks: List[TestFrameworkSetup] = field(default_factory=list)
-    primary: Optional[TestFrameworkSetup] = None
+    frameworks: list[TestFrameworkSetup] = field(default_factory=list)
+    primary: TestFrameworkSetup | None = None
     execution: TestExecutionResult = field(default_factory=TestExecutionResult)
 
     def to_tests_json(self) -> dict:
@@ -94,8 +93,8 @@ class TestAgent:
     def __init__(
         self,
         workspace_root: str = "workspace",
-        executor: Optional[ShellExecutor] = None,
-        discovery: Optional[TestDiscovery] = None,
+        executor: ShellExecutor | None = None,
+        discovery: TestDiscovery | None = None,
         timeout: int = 600,
     ) -> None:
         self.workspace_root = workspace_root
@@ -108,7 +107,7 @@ class TestAgent:
     def run(
         self,
         repo_path: str,
-        output_dir: Optional[str] = None,
+        output_dir: str | None = None,
         execute: bool = True,
         skip_install: bool = False,
     ) -> TestAgentResult:
@@ -219,7 +218,7 @@ class TestAgent:
 
 
     def render_markdown(self, result: TestAgentResult) -> str:
-        sections: List[ReportSection] = []
+        sections: list[ReportSection] = []
 
         if not result.frameworks:
             sections.append(

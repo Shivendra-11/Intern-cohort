@@ -2,8 +2,6 @@
 from __future__ import annotations
 
 import json
-import sys
-from pathlib import Path
 
 from cli.paths import WORKSPACE_ROOT
 from cli.state import load_state
@@ -22,7 +20,6 @@ def run_list() -> int:
             continue
         dashboard = entry / "dashboard_data.json"
         status = "partial"
-        repo_name = entry.name
         generated_at = ""
 
         if dashboard.is_file():
@@ -36,7 +33,6 @@ def run_list() -> int:
                     for k in ("B1_inventory", "B2_routes", "B3_tests", "graphs")
                 )
                 status = "complete" if complete else "partial"
-                repo_name = data.get("repo_name", entry.name)
                 generated_at = data.get("generated_at", "")[:19]
             except (OSError, json.JSONDecodeError):
                 status = "invalid"
