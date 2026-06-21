@@ -13,7 +13,7 @@ Six-task DevOps and infrastructure evaluation harness with an AI orchestrator ag
 | **Eval dashboard** (reports) | [devopsinfra-dash.vercel.app](https://devopsinfra-dash.vercel.app/) |
 | **Services hub** (all task UIs) | [devopsinfra-dash.vercel.app/hub](https://devopsinfra-dash.vercel.app/hub) |
 
-**Current score:** 6/6 PASS · 0 WARN · 0 FAIL · **~92/100**
+**Current status:** 6/6 PASS · 0 WARN · 0 FAIL — each task re-verifiable via its `scripts/verify.sh` (exit 0) and machine-captured `duration_seconds` in `REPORT.json`. (Objective tally only; no self-assigned score.)
 
 Anyone can open these links without cloning the repo. After you run new eval tasks locally, redeploy with `./deploy.sh` to refresh the public reports.
 

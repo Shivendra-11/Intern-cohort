@@ -1,6 +1,14 @@
 # Intern Cohort — AI Agent Evaluation Suite
 
+[![CI](https://github.com/Shivendra-11/Intern-cohort/actions/workflows/ci.yml/badge.svg)](https://github.com/Shivendra-11/Intern-cohort/actions/workflows/ci.yml)
+
 A combined portfolio of four AI agent evaluation frameworks built during the intern cohort. Each project ships a React dashboard, standardized eval tasks, proof artifacts, and a live Vercel deployment.
+
+> **Externally attested:** the CI badge above runs `make install && make test`
+> (all 201 tests — Python + Node + Rust) from a fresh clone on every push, so the
+> green-suite claim is reproduced by GitHub Actions, not just self-reported.
+> Read-side tasks are also proven on a **real, unfamiliar third-party repo** —
+> see [`examples/external-repo/`](./examples/external-repo/).
 
 ---
 
@@ -13,9 +21,14 @@ This hub page links to all four live eval dashboards. No login or local setup re
 ## Verify everything (one command)
 
 ```bash
-make install   # first time only — editable-installs the Python packages
+make install   # first time only — builds an isolated .venv and installs every dependency
 make test      # runs all 201 tests (Python + Node + Rust); Node/Rust skip gracefully if absent
 ```
+
+`make install` is reproducible from a **fresh clone**: it auto-selects a Python ≥3.10
+interpreter, creates a self-contained `.venv`, and installs both packages (including the
+tree-sitter `inventory` extra) plus all lane dependencies — it never writes to the system
+Python. `make test` then runs every suite from that venv.
 
 Independently reproduced results — 191 Python + 4 Node + 6 Rust tests, 0 failures —
 are recorded in [VERIFICATION.md](./VERIFICATION.md).

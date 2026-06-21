@@ -16,7 +16,9 @@
 - FAIL: 0
 - NOT_RUN: 0
 
-**Estimated score: 92 / 100**
+> Objective tally only — no self-assigned "/100". Reproduce with the four
+> re-runnable proofs: `d2/d3/d4/d6/scripts/verify.sh` each exit 0, and each task's
+> `REPORT.json` carries a machine-captured `duration_seconds`.
 
 ## Total time: ~8 minutes (full verify)
 

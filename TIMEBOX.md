@@ -57,10 +57,30 @@ These have machine-recorded `duration_seconds` in each `REPORT.json`, all far un
 | D5 Dev env | 45 min | **60 s** | ✅ within | `Devops-eval/d5-dev-env/REPORT.json` |
 | D6 Observability | 60 min | **130 s** | ✅ within | `Devops-eval/d6-observability/REPORT.json` |
 
+## Read-side tasks on a real *unfamiliar* repo — wall-clock captured
+
+To turn "within budget" from attestation into measurement for the read-side Basics +
+Intermediate tasks, the deterministic scanners were run against a third-party repo nobody
+here authored — [`tiangolo/full-stack-fastapi-template`](https://github.com/tiangolo/full-stack-fastapi-template)
+@ `2a56db2` — and the wall-clock was machine-captured into
+[`examples/external-repo/reports/timings.json`](examples/external-repo/reports/timings.json).
+
+| Task | Doc time-box | Actual (captured) | Status | Evidence |
+|------|-------------|-------------------|--------|----------|
+| B1 + B2 + B3 (analyze) | 30 + 30 + 15 min | **~1.1 s** | ✅ within | `examples/external-repo/reports/B*_*.md` |
+| I1 ER diagram | 45 min | **~0.03 s** | ✅ within | `examples/external-repo/reports/I1_er_diagram.md` |
+| I2 flow trace | 45 min | **~0.03 s** | ✅ within | `examples/external-repo/reports/I2_flow_trace.md` |
+
+Reproduce: `.venv/bin/python examples/external-repo/run_external_proof.py /tmp/ext-eval-repo backend`
+(static analysis, zero model calls — see [`examples/external-repo/README.md`](examples/external-repo/README.md)).
+
 ## Honesty note
 
 - DevOps `duration_seconds` are the agent's task-execution wall-clock (machine-captured).
-- For Basics/Intermediate/Advanced, "within budget" attests that the verified deliverable
-  exists and passes; per-task stopwatch wall-clock was not separately logged for every one.
-  The DevOps numbers are the concrete demonstration that these tasks complete in
-  *minutes*, not hours, well inside the doc's tens-of-minutes budgets.
+- B1/B2/B3 + I1/I2 now also have **machine-captured** wall-clock from the external-repo run
+  above — on a codebase outside this monorepo, completing in seconds.
+- The remaining Basics/Intermediate/Advanced rows (B4–B6 scaffolds, I3–I6, A1–A6) still read
+  "within budget" as an attestation that the verified deliverable exists and passes; per-task
+  stopwatch wall-clock was not separately logged for each. The captured numbers above and the
+  DevOps numbers are the concrete demonstration that these tasks complete in *minutes*, not
+  hours, well inside the doc's tens-of-minutes budgets.
