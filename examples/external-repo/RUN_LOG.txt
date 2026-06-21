@@ -1,0 +1,21 @@
+External repo: /tmp/ext-eval-repo
+Pinned commit: 2a56db28b2893bff774aa7a834196cbab59ec747
+
+B1/B2/B3 — repo-intelligence analyze
+  [analyze] 1.0 s
+I1 — ER diagram
+  [scan_entities] 26 ms
+  [infer_relationships] 0 ms
+  [build_er_mermaid] 0 ms
+I2 — flow trace
+  [find_entry_points] 4 ms
+  [grep_routes] 7 ms
+  [scan_flow_steps] 15 ms
+  [build_sequence_mermaid] 0 ms
+
+Wall-clock (machine-captured):
+  B1+B2+B3 (analyze)       1.001 s
+  I1 ER diagram            0.026 s
+  I2 flow trace            0.027 s
+
+Reports written to /Users/shivendrakeshari/Desktop/Intern-cohort/examples/external-repo/reports/

@@ -1,0 +1,12 @@
+{
+  "external_repo": "/tmp/ext-eval-repo",
+  "pinned_commit": "2a56db28b2893bff774aa7a834196cbab59ec747",
+  "backend_scanned": "/tmp/ext-eval-repo/backend",
+  "wall_clock_seconds": {
+    "B1+B2+B3 (analyze)": 1.001,
+    "I1 ER diagram": 0.026,
+    "I2 flow trace": 0.027
+  },
+  "deterministic": true,
+  "model_calls": 0
+}

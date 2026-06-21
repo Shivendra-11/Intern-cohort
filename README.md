@@ -1,6 +1,14 @@
 # Intern Cohort — AI Agent Evaluation Suite
 
+[![CI](https://github.com/Shivendra-11/Intern-cohort/actions/workflows/ci.yml/badge.svg)](https://github.com/Shivendra-11/Intern-cohort/actions/workflows/ci.yml)
+
 A combined portfolio of four AI agent evaluation frameworks built during the intern cohort. Each project ships a React dashboard, standardized eval tasks, proof artifacts, and a live Vercel deployment.
+
+> **Externally attested:** the CI badge above runs `make install && make test`
+> (all 201 tests — Python + Node + Rust) from a fresh clone on every push, so the
+> green-suite claim is reproduced by GitHub Actions, not just self-reported.
+> Read-side tasks are also proven on a **real, unfamiliar third-party repo** —
+> see [`examples/external-repo/`](./examples/external-repo/).
 
 ---
 

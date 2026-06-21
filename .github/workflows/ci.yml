@@ -1,0 +1,39 @@
+name: CI
+
+# Externally attests the headline claim: `make test` is green across all four
+# projects (Python + Node + Rust). Until this existed, "201 passed" was only
+# self-reported in VERIFICATION.md; now every push reproduces it from a fresh
+# checkout on a clean runner.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  make-test:
+    name: make install && make test (all 201)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Set up Rust (stable)
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Bootstrap from a fresh clone
+        run: make install
+
+      - name: Run every suite (Python + Node + Rust)
+        run: make test

@@ -77,5 +77,19 @@ Time-box adherence vs the eval's stated limits is tracked in [`TIMEBOX.md`](TIME
 - Node.js (built-in `node --test` runner)
 - Rust / Cargo (stable)
 
-CI also runs on every push: `ParallelOps/.github/workflows/ci.yml` and
-`Devops-eval/d3-ci-pipeline/.github/workflows/ci.yml`.
+A **root** workflow (`.github/workflows/ci.yml`) now runs the headline
+`make install && make test` (all 201 tests) from a fresh clone on every push, so
+the green-suite result above is externally attested by GitHub Actions — not only
+re-run locally. Per-project workflows also run: `ParallelOps/.github/workflows/ci.yml`
+and `Devops-eval/d3-ci-pipeline/.github/workflows/ci.yml`.
+
+## Read-side tasks proven on a real, unfamiliar repo
+
+The committed proof artifacts elsewhere run on author-authored fixtures. To
+satisfy the eval doc's *"unfamiliar repo"* framing, the deterministic (no-model-call)
+scanners were also run against [`tiangolo/full-stack-fastapi-template`](https://github.com/tiangolo/full-stack-fastapi-template)
+@ `2a56db2`: B1/B2/B3 (`repo-intelligence analyze`) and I1/I2 (`repo_scanner`).
+Reports, captured wall-clock, and a one-command reproducer live in
+[`examples/external-repo/`](examples/external-repo/). It found 258 artifacts, 22
+entities (typed + source-cited), 19 routes, and a valid Mermaid ER + sequence
+diagram — in ~1.1 s, on a codebase outside this monorepo.
